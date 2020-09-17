@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import csv
+import datetime
+from random import random
 
 st.title('CovidVis User Study')
 
@@ -182,7 +184,19 @@ st.image(chart)
 
 st.header("Conclusion")
 
-st.info("Thank you so much for participating!")
+st.info("Thank you so much for participating! Click submit below.")
+
+if st.button("Submit"):
+    field_names = list(widget_values.keys())
+#    field_names.append("timestamp")
+#    field_names.append("id")
+#    now = datetime.datetime.now()
+#    widget_values["timestamp"] = now.strftime("%Y-%b-%d, %A %I:%M:%S$p")
+#    widget_values["id"] = random()
+    with open('data.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=field_names)
+        writer.writeheader()
+        writer.writerows([widget_values])
 
 
 
@@ -194,10 +208,3 @@ st.info("Thank you so much for participating!")
 
 # Plot the rate of change versus cumulative (log scale)
 st.write("Recorded values: ", widget_values)
-
-if st.button("Submit"):
-    field_names = widget_values.keys()
-    with open('data.csv', 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writeheader()
-        writer.writerows([widget_values])
