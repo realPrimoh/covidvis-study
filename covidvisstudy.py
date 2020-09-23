@@ -131,27 +131,27 @@ st.header("Phase 1")
 # NORMAL INTERVENTIONS
 # ----------------
 
-st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
-#What do you think... (TODO: language)
-
-slider1 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (Before)")
-chart_to_show = slider1("Trajectory", [i for i in range(1,7) for _ in range(5)])
-chart = "visualization/visualization" + str(int(chart_to_show)) + ".png"
-st.image(chart)
-
-i += 1
+#st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
+##What do you think... (TODO: language)
+#
+#slider1 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (Before)")
+#chart_to_show = slider1("Trajectory", [i for i in range(1,7) for _ in range(5)])
+#chart = "visualization/visualization" + str(int(chart_to_show)) + ".png"
+#st.image(chart)
+#
+#i += 1
 
 # PICK WHERE IT IS 
 # --------------------
-
-st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
-
-slider2 = record(st.select_slider, "Lockdown Order (Before)")
-chart_to_show_intervention = slider2("Lockdown Order", [i for i in range(1,4) for _ in range(5)])
-chart = "intervention/visualization" + str(int(chart_to_show_intervention) - 1) + ".png"
-st.image(chart)
-
-i += 1
+#
+#st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
+#
+#slider2 = record(st.select_slider, "Lockdown Order (Before)")
+#chart_to_show_intervention = slider2("Lockdown Order", [i for i in range(1,4) for _ in range(5)])
+#chart = "intervention/visualization" + str(int(chart_to_show_intervention) - 1) + ".png"
+#st.image(chart)
+#
+#i += 1
 
 # LOG SCALE 
 # ----------------------
@@ -199,26 +199,26 @@ st.image("ny_trendlines/actual.png", width=800)
 
 st.header("Phase 3")
 
-st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
-#What do you think... (TODO: language)
-i+=1
-
-slider0 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (After)")
-chart_to_show_traj_after = slider0("Trajectory (After)", [i for i in range(1,7) for _ in range(5)])
-chart = "visualization/visualization" + str(int(chart_to_show_traj_after)) + ".png"
-st.image(chart)
+#st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
+##What do you think... (TODO: language)
+#i+=1
+#
+#slider0 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (After)")
+#chart_to_show_traj_after = slider0("Trajectory (After)", [i for i in range(1,7) for _ in range(5)])
+#chart = "visualization/visualization" + str(int(chart_to_show_traj_after)) + ".png"
+#st.image(chart)
 
 
 # PICK WHERE IT IS 
 # --------------------
 
-st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
-
-slider6 = record(st.select_slider, "Lockdown Order (After)")
-chart_to_show_after = slider6("Lockdown Order (After)", [i for i in range(1,5) for _ in range(5)])
-chart = "intervention/visualization" + str(int(chart_to_show_after) - 1) + ".png"
-st.image(chart)
-i+=1
+#st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
+#
+#slider6 = record(st.select_slider, "Lockdown Order (After)")
+#chart_to_show_after = slider6("Lockdown Order (After)", [i for i in range(1,5) for _ in range(5)])
+#chart = "intervention/visualization" + str(int(chart_to_show_after) - 1) + ".png"
+#st.image(chart)
+#i+=1
 
 # LOG SCALE 
 # ----------------------
