@@ -34,6 +34,8 @@ age = ageSlider("Age", ('Select...', "18-24", "25-34", "35-44", "45-54", "55-64"
 
 i += 1
 
+# TODO: International or reduce target pop. to USA
+
 st.subheader(str(i) + ". What state are you from?")
 stateSelect = record(st.selectbox, "State")
 stateSelect("State", ['Select...', "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", 
@@ -44,6 +46,7 @@ stateSelect("State", ['Select...', "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC
 
 i += 1
 
+# TODO: Prefer not to say, nonbinary, etc
 st.subheader(str(i) + ". What is your gender?")
 genderSel = record(st.selectbox, "Gender")
 genderSel("Gender", ('Select...','Male', 'Female'))
@@ -62,9 +65,10 @@ raceSel("Race", ("Select...", "Asian / Pacific Islander", "White", "Black or Afr
 
 i += 1
 
-st.subheader(str(i) + ". What is your highest level of education?")
+
+st.subheader(str(i) + ". What is the highest level of education you have completed?")
 eduSel = record(st.selectbox, "Education Level")
-eduSel("Education Level", ("Select...", "No schooling completed", "High School", "Some College", "Bachelor's", "Master's", "Doctorate"))
+eduSel("Education Level", ("Select...", "No schooling completed", "High School", "Undergraduate", "Graduate"))
 
 i += 1
 
@@ -107,7 +111,8 @@ radio2("Social distancing", ["Select...", "Strongly Ineffective", "Slightly Inef
 radio3("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 radio4("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
-# TODO: Pre-viz survey. Add some control questions (ex. on this day, what was the number of confirmed cases, etc...)
+# TODO: Use a more basic graph
+
 st.subheader(str(i) + ". On Day 35, how many confirmed cases were there?")
 st.image("ny_trendlines/actual.png", width=800)
 vizcheck1 = record(st.radio, "Vizcheck 1")
@@ -153,6 +158,8 @@ st.header("Phase 1")
 #
 #i += 1
 
+#TODO: fix log scale text
+
 # LOG SCALE 
 # ----------------------
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
@@ -175,6 +182,10 @@ i += 1
 
 # NEW CASES A DAY 
 # --------------------
+
+# TODO: y-axis variable
+# TODO: have an easier sub header
+# TODO: put all on one chart
 
 st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
 slider5 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (Before)")
