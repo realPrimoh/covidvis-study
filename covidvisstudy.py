@@ -187,9 +187,9 @@ i += 1
 # TODO: have an easier sub header
 # TODO: put all on one chart
 
-st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
-slider5 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (Before)")
-chart_to_show_casesday_lockdown = slider5("Cases per Day Lockdown Order Guess", [i for i in range(1,4) for _ in range(5)])
+st.subheader("This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
+slider5 = record(st.selectbox, "Pin the Lockdown on Smoothed Average Cases (Before)")
+chart_to_show_casesday_lockdown = slider5("Cases per Day Lockdown Order Guess", [i for i in range(1,4)])
 chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown) - 1) + ".png"
 st.image(chart)
 
