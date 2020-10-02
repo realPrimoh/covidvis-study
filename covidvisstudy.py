@@ -163,9 +163,9 @@ st.header("Phase 1")
 # LOG SCALE 
 # ----------------------
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
-slider3 = record(st.select_slider, "Log Scale (Before)")
-chart_to_show_log = slider3("Log Scale Chart", [i for i in range(1,11) for _ in range(5)])
-chart = "ny_log/visualization" + str(int(chart_to_show_log) - 2) + ".png"
+slider3 = record(st.selectbox, "Log Scale (Before)")
+chart_to_show_log = slider3("Log Scale Chart", [i for i in range(1,11)])
+chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
 st.image(chart)
 
 i+=1
@@ -173,8 +173,8 @@ i+=1
 # NORMAL TRENDLINES
 # --------------------
 st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
-slider4 = record(st.select_slider, "Normal Trendline (Before)")
-chart_to_show_normal_trend = slider4("Normal Trendline Chart", [i for i in range(1,11) for _ in range(5)])
+slider4 = record(st.selectbox, "Normal Trendline (Before)")
+chart_to_show_normal_trend = slider4("Normal Trendline Chart", [i for i in range(1,11)])
 chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend) - 1) + ".png"
 st.image(chart)
 
@@ -187,11 +187,14 @@ i += 1
 # TODO: have an easier sub header
 # TODO: put all on one chart
 
-st.subheader("This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
-slider5 = record(st.selectbox, "Pin the Lockdown on Smoothed Average Cases (Before)")
-chart_to_show_casesday_lockdown = slider5("Cases per Day Lockdown Order Guess", [i for i in range(1,4)])
-chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown) - 1) + ".png"
-st.image(chart)
+st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
+# slider5 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (Before)")
+# chart_to_show_casesday_lockdown = slider5("Cases per Day Lockdown Order Guess", [i for i in range(1,4) for _ in range(5)])
+# chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown) - 1) + ".png"
+pick_img = st.radio("", ["Image 1", "Image 2", "Image 3"])
+charts = ["ny_interventions_new_day/visualization0.png", \
+"ny_interventions_new_day/visualization1.png", "ny_interventions_new_day/visualization2.png"]
+st.image(charts)
 
 i+=1
 # Random states - not every user gets the same state
