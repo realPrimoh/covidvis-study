@@ -239,7 +239,7 @@ st.header("Phase 3")
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
 slider7 = record(st.select_slider, "Log Scale (After)")
 chart_to_show_log_after = slider7("Log Scale Chart (after)", [i for i in range(1,11) for _ in range(5)])
-chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 2) + ".png"
+chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
 st.image(chart)
 i+=1
 
