@@ -3,8 +3,11 @@ import pandas as pd
 import numpy as np
 import csv
 import datetime
-from random import random
 import collections
+from random import random
+
+from scripts.generate_trendlines import *
+
 
 my_bar = st.sidebar.progress(0)
 i = 1
@@ -114,7 +117,7 @@ radio4("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slight
 # TODO: Use a more basic graph
 
 st.subheader(str(i) + ". On Day 35, how many confirmed cases were there?")
-st.image("ny_trendlines/actual.png", width=800)
+st.image("./ny_trendlines/actual.png", width=800)
 vizcheck1 = record(st.radio, "Vizcheck 1")
 vizcheck1("How many confirmed cases were on Day 35?", ("1,000", "2,000", "20,000", "100,000", "200,000", "250,000"))
 
@@ -198,6 +201,15 @@ st.image(charts)
 
 i+=1
 # Random states - not every user gets the same state
+
+st.subheader(str(i) + ". Which trendline do you think most accurately represents New York's confirmed\
+  cases of COVID-19 after the lockdown order indicated by the house?")
+ny_cases = create_state_df('New York')
+ny_image = add_image_col_to_df(ny_cases, 12) # Day 12 is when NY had a lockdown order
+alt_chart = generate_single_graph_exponential(ny_image, 12)
+st.altair_chart(alt_chart)
+
+i+=1
 
 st.header("Phase 2")
 
