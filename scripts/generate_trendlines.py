@@ -4,6 +4,8 @@ import altair as alt
 import random
 import streamlit as st
 
+
+
 def create_state_df(state):
     jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
     # grab us-specific
@@ -124,3 +126,39 @@ def generate_single_graph_exponential(df, inflection_day):
     img = create_image_layer(df, 'Day', 'Confirmed', 'image_url')
     result = result + img
     return result
+
+def generate_state_chart_normal(state, inflection_day):
+    jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
+    # grab us-specificjhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
+    state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
+    state_cases["Date"] = pd.to_datetime(state_cases["Date"])
+    state_cases = state_cases[(state_cases["Date"] < pd.to_datetime("10-20-2020"))]
+    earliest_date = state_cases.sort_values('Date')['Date'].values[0]
+    days_passed = lambda date : int((date - earliest_date) / np.timedelta64(1, 'D'))
+    state_cases['Day'] = state_cases['Date'].apply(days_passed)
+    state_cases["image_url"] = "" # Will automatically fill up all comments
+    state_cases.loc[state_cases['Date'] == inflection_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    result = alt.Chart(state_cases).mark_line().encode(
+            x='Day:Q',
+            y='Confirmed:Q',
+            color=alt.Color('Province_State', legend=alt.Legend(title="State", titleFontSize=20, labelFontSize=20, symbolStrokeWidth=10, symbolSize=1000))
+        ).properties(
+                width=750,
+                height=500,
+                
+        )
+    
+    
+    img = alt.Chart(state_cases).mark_image(
+            width=30,
+            height=30
+        ).encode(
+            x='Day'+':Q',
+            y='Confirmed'+':Q',
+            url='image_url'
+        ).properties(
+            width=600,
+            height=400
+        )
+    
+    return result + img

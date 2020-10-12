@@ -9,11 +9,29 @@ from random import random
 from scripts.generate_trendlines import *
 
 
-my_bar = st.sidebar.progress(0)
+
 i = 1
 st.title('CovidVis User Study')
 
 st.info("Welcome to the Covidvis User Study. In this study, we are trying to measure the effects of seeing visualizations of COVID's ascent throughout the world on people's opinions about COVID interventions. Your data will be kept confidential and you will maintain anonymity.")
+
+st.info("Consent to take part in the study: \n\n I am asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. I will describe this study to you and answer any of your questions. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
+
+st.info("What the study is about:\n\nThe purpose of this research is to examine the impact of visualizations on COVID-19 intervention perception.")
+
+st.info("What we will ask you to do:\n\nIf you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 15 minutes and will be conducted online.")
+
+st.info("Risks and discomforts:\n\nThere is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on a password protected laptop. None of your personal information is collected.")
+
+st.info("Benefits:\n\nThere are no direct benefits to you from this research. It is our hope that the research will benefit the scientific community and lead to a greater understanding of visualizations and their effects on people's understanding of things.")
+
+st.info("Privacy/Confidentiality/Data Security:\n\nAll data will be de-identified with identifiers. Consent forms will be kept separate from the rest of the research data. All physical data will be stored in locked cabinets accessible only by the Principal Researcher. All electronic data will be stored on password protected servers accessible only by the Principal Researcher. We anticipate that your participation in this survey presents no greater risk than everyday use of the Internet.")
+
+st.info("Taking part is voluntary\n\nYour involvement in this research is voluntary, and you may refuse to participate before the study begins or discontinue at any time. You will only receive compensation for this study if you complete all tasks and survey questions.")
+
+st.info("If you have questions:\n\nThe main researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Aditya Parameswaran at adityagp@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu. ")
+st.info("Statement of Consent:\n\nBy continuing with this survey, you are consenting to the above statements.")
+
 
 widget_values = collections.defaultdict(list)
 
@@ -117,15 +135,23 @@ vizcheck1("How many confirmed cases were on Day 35?", ("1,000", "2,000", "20,000
 
 i += 1
 
+#st.subheader(str(i) + ". The house icon represents a stay-at-home order being implemented. On approximately what day was the stay-at-home order implemented in this graph?")
+#st.image("ny_intervention_cumulative/actual.png", width=800)
+#vizcheck2 = record(st.radio, "Vizcheck 2")
+#vizcheck2("On approximately what day was the stay-at-home order implemented in this graph?", ["1", "2", "5", "8", "10", "12", "15", "18"])
+#
+#i += 1
+
 st.subheader(str(i) + ". The house icon represents a stay-at-home order being implemented. On approximately what day was the stay-at-home order implemented in this graph?")
-st.image("ny_intervention_cumulative/actual.png", width=800)
+st.image("ny_log/actual.png", width=800)
 vizcheck2 = record(st.radio, "Vizcheck 2")
-vizcheck2("On approximately what day was the stay-at-home order implemented in this graph?", ["1", "2", "5", "8", "10", "12", "15", "18"])
+vizcheck2("On approximately what day was the stay-at-home order implemented in this graph?", ["1", "2", "5", "9", "12", "15", "18"])
 
 i += 1
 
 
 st.header("Visualization Survey")
+st.info("There are three phases to this survey. In Phase 1, you will be answering questions based on visualizations presented to you. In Phase 2, you will get to interact with some visualizations. In Phase 3, you will answer questions again based on visualizations shown to you.")
 
 
 st.header("Phase 1")
@@ -211,10 +237,16 @@ st.header("Phase 2")
 # -----------------------
 
 st.header("Here are some examples of where lockdown orders were put in place.")
-st.image("ny_intervention_cumulative/actual.png", width=800)
+
+state_intervention = {"New York": '03-22-2020', "California": '03-10-2020', "Georgia": '04-02-2020', "Illinois": '03-19-2020', "Florida": '04-01-2020'}
+phase2state = st.selectbox("State", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
+alt_chart1 = generate_state_chart_normal(phase2state, state_intervention[phase2state])
+st.altair_chart(alt_chart1)
+
+
 st.image("ny_interventions_new_day/actual.png", width=800)
 st.image("ny_log/actual.png", width=800)
-st.image("ny_trendlines/actual.png", width=800)
+
 
 
 st.header("Phase 3")
@@ -263,7 +295,7 @@ i+=1
 
 st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
 slider9 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (After)")
-chart_to_show_casesday_lockdown_after = slider9("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the average number of COVID-19 cases confirmed on each day., [i for i in range(1,4) for _ in range(5)])
+chart_to_show_casesday_lockdown_after = slider9("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the average number of COVID-19 cases confirmed on each day.", [i for i in range(1,4) for _ in range(5)])
 chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown_after) - 1) + ".png"
 st.image(chart)
 i+=1
