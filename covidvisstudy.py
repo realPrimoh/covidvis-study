@@ -52,7 +52,7 @@ i += 1
 # TODO: Prefer not to say, nonbinary, etc
 st.subheader(str(i) + ". What is your gender?")
 genderSel = record(st.selectbox, "Gender")
-genderSel("Gender", ('Select...','Male', 'Female'))
+genderSel("Gender", ('Select...','Male', 'Female', 'Nonbinary', 'Prefer not to say'))
 
 i += 1
 
