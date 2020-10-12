@@ -93,12 +93,6 @@ virusInfoSel("Viewing", ("Select...", "0-3", "4-7"))
 
 i += 1
 
-st.subheader(str(i) + ". Do you believe in wearing a mask?")
-maskSel = record(st.selectbox, "Mask Belief")
-maskSel("Mask Belief", ("Select...", "Yes", "No"))
-
-i += 1
-
 # TODO: Add spam-checker questions (Select 'agree', etc...)
 
 st.subheader(str(i) + ". For each of the following orders, how effective are they?")
@@ -250,7 +244,7 @@ st.header("Phase 3")
 # ----------------------
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
 slider7 = record(st.select_slider, "Log Scale (After)")
-chart_to_show_log_after = slider7("Log Scale Chart (after)", [i for i in range(1,11) for _ in range(5)])
+chart_to_show_log_after = slider7("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases.", [i for i in range(1,11) for _ in range(5)])
 chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
 st.image(chart)
 i+=1
@@ -259,7 +253,7 @@ i+=1
 # --------------------
 st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
 slider8 = record(st.select_slider, "Normal Trendline (After)")
-chart_to_show_normal_trend_after = slider8("Normal Trendline Chart (After)", [i for i in range(1,11) for _ in range(5)])
+chart_to_show_normal_trend_after = slider8("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases. The difference here from the above question is an expanded y-axis.", [i for i in range(1,11) for _ in range(5)])
 chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend_after) - 1) + ".png"
 st.image(chart)
 i+=1
@@ -269,7 +263,7 @@ i+=1
 
 st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
 slider9 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (After)")
-chart_to_show_casesday_lockdown_after = slider9("Cases per Day Lockdown Order Guess (After)", [i for i in range(1,4) for _ in range(5)])
+chart_to_show_casesday_lockdown_after = slider9("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the average number of COVID-19 cases confirmed on each day., [i for i in range(1,4) for _ in range(5)])
 chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown_after) - 1) + ".png"
 st.image(chart)
 i+=1
