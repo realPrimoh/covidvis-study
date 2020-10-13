@@ -31,9 +31,21 @@ def create_state_df(state):
 # Returns a NEW dataframe; not a destructive method
 def add_image_col_to_df(state_cases_df, day):
     state_image = state_cases_df.copy()
-    state_image["image_url"] = "" # Will automatically fill up all comments
+    state_image["image_url"] = "" # Will automatically fill up all columns
     state_image.loc[day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    colors = ['before' if x < (day+1) else 'after' for x in range(state_image.shape[0])]
+    state_image["color"] = colors
     return state_image
+
+def add_image_col_to_df_with_date(state_cases_df, date):
+    state_image = state_cases_df.copy()
+    state_image["image_url"] = "" # Will automatically fill up all columns
+    state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    bools = state_cases_df['Date'] <= date
+    colors = ['before' if x else 'after' for x in bools]
+    state_image["color"] = colors
+    return state_image
+
 
 
 def create_image_layer(df, x_label, y_label, image_col_name):
@@ -162,3 +174,25 @@ def generate_state_chart_normal(state, inflection_day):
         )
     
     return result + img
+
+
+# ASSUMES THE INDEX HAS BEEN RESET SO BE CAREFUL
+def generate_intervention_images_new_cases_rolling(state, inflection_date):
+    df = create_state_df(state)
+    df = add_image_col_to_df_with_date(df, inflection_date)
+    df["new_cases_rolling"] = df["New_Cases"].rolling(window=7).mean().fillna(50) # KEPT FIRST 7 DAYS AS ESTIMATE OF 50
+    base = alt.Chart(df).mark_line().encode(
+        x='Day:Q',
+        y='new_cases_rolling:Q',
+        color='color',
+    ).properties(
+        width=500,
+        height=300
+    )
+
+    img = create_image_layer(df, 'Day', 'new_cases_rolling', 'image_url')
+    
+    final = base + img
+    return final
+    #print(val)
+    #display(final)

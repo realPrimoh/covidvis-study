@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
+#import geopandas as gpd
 import numpy as np
 import csv
 import datetime
 import collections
+
 from random import random
+from vega_datasets import data
+from functools import reduce
 
 from scripts.generate_trendlines import *
 
@@ -239,16 +243,113 @@ st.header("Phase 2")
 st.header("Here are some examples of where lockdown orders were put in place.")
 
 state_intervention = {"New York": '03-22-2020', "California": '03-10-2020', "Georgia": '04-02-2020', "Illinois": '03-19-2020', "Florida": '04-01-2020'}
-phase2state = st.selectbox("State", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
+phase2state = st.selectbox("State (Normal)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
 alt_chart1 = generate_state_chart_normal(phase2state, state_intervention[phase2state])
 st.altair_chart(alt_chart1)
+
+phase2stateRolling = st.selectbox("State (Rolling Average)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
+alt_chart2 = generate_intervention_images_new_cases_rolling(phase2stateRolling, state_intervention[phase2stateRolling])
+st.altair_chart(alt_chart2)
 
 
 st.image("ny_interventions_new_day/actual.png", width=800)
 st.image("ny_log/actual.png", width=800)
 
+""" TEMPORARY CODE BELOW TO TEST SOMETHING 
+footprints = pd.read_csv("./data/interventionFootprintByState.csv")
+footprints['dateBefore'] = pd.to_datetime(footprints['dateBefore']) # Makes date easier to work with
+state_geodata = alt.topo_feature(data.us_10m.url, 'states')
+hurricanes = pd.read_csv(data.population_engineers_hurricanes.url)[['state', 'id']]
+# Convert timedelta to days
+# Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
+
+earliest_date = footprints.sort_values('dateBefore')['dateBefore'].values[0]
+def days_passed(date):
+    return int((date - earliest_date) / np.timedelta64(1, 'D'))
+footprints['days_since_Feb_28th'] = footprints['dateBefore'].apply(days_passed)
+# Below, we add the ID values for states which will enable us to map to the geodata.
+footprints_with_ids = footprints.merge(hurricanes, how='left', left_on='State', right_on='state').drop(['Unnamed: 0', 'state'], axis=1)
+footprints_with_ids = footprints_with_ids.loc[: , ['interventionFootprint', 'State', 'days_since_Feb_28th', 'id']] # Isolate the values we need
+footprints_with_ids = footprints_with_ids.rename(columns={'State' : 'state'})
+def extend_state_dict(state_dict):
+    result_dict = state_dict.copy()
+    empty_list = [0 for x in range(61)]
+    interventions, states, days, ids = empty_list[:], empty_list[:], empty_list[:], empty_list[:]
+    
+    # We start by setting the existing ones
+    for key, val in state_dict['days_since_Feb_28th'].items():
+        days[val] = val
+        interventions[val] = state_dict['interventionFootprint'][key]
+        states[val] = state_dict['state'][key]
+        ids[val] = state_dict['id'][key]
+        
+    # Populate state, days and id, the easy ones as they are constant/known
+    for i in range(len(states)):
+        states[i] = list(state_dict['state'].values())[0]
+        ids[i] = list(state_dict['id'].values())[0]
+        days[i] = i
+    
+    # Now for interventions, the whole reason we are doing this
+    # We need to populate the empty days with the most recent one
+    # For days before the first intervention footprint, we use a value of 0 for now
+    
+    curr_footprint = 0
+    for i in range(len(interventions)):
+        if interventions[i] != 0:
+            curr_footprint = interventions[i]
+        else:
+            interventions[i] = curr_footprint
+    
+    result_dict['interventionFootprint'] = interventions
+    result_dict['state'] = states
+    result_dict['days_since_Feb_28th'] = days
+    result_dict['id'] = ids
+    
+    return result_dict
 
 
+def combine_state_dicts(first, second):
+    combined_dict = first.copy()
+    for key in combined_dict:
+        combined_dict[key].extend(second[key])
+    return combined_dict
+state_set = set(footprints_with_ids['state'].values) # Get all the states
+state_dicts = []
+for state in state_set:
+    state_dict = footprints_with_ids[footprints_with_ids['state'] == state].to_dict()
+    state_dicts.append(extend_state_dict(state_dict)) # Fill in the missing values
+    
+# We imported the reduce function from the functools module at the top of this notebook
+# It takes in a function and an iterable, and combines all values of the iterable together into one value using the function
+
+extended_footprint_df = pd.DataFrame.from_dict(reduce(combine_state_dicts, state_dicts))
+# I had to alter this file on my Desktop to get rid of the county data; otherwise, it would just overlook state data for some reason.
+state_geomap_data_edited = gpd.read_file('./data/us-10m.json', driver='TopoJSON')
+# Ensures consistency of types when we merge
+state_geomap_data_edited.id = state_geomap_data_edited.id.astype(int)
+extended_footprint_df.id = extended_footprint_df.id.astype(int)
+footprints_with_geodata_df = state_geomap_data_edited.merge(extended_footprint_df, on='id', how='inner') # Keep on the left to maintain geodataframe
+slider = alt.binding_range(min=0, max=60, step=1) # We set the range of our time slider (60 days in this case)
+
+select_day = alt.selection_single(name="days_since_Feb_28th", fields=['days_since_Feb_28th'],
+                                   bind=slider, init={'days_since_Feb_28th': 0})
+
+cpleth = alt.Chart(footprints_with_geodata_df).mark_geoshape().encode(
+    alt.Color('interventionFootprint:Q', scale=alt.Scale(domain=(0.0, 1.02))) # We set the possible range for intervention footprint values
+).properties(
+    width=700,
+    height=500
+).add_selection(
+    select_day
+).project(
+    type='albersUsa'
+).transform_filter(
+    select_day
+).resolve_scale(
+    color='independent'
+)
+st.altair_chart(cpleth)
+"""
 st.header("Phase 3")
 
 #st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
@@ -274,10 +375,14 @@ st.header("Phase 3")
 
 # LOG SCALE 
 # ----------------------
+@st.cache
+def generate_log(chart_to_show):
+  chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
+  return chart
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
 slider7 = record(st.select_slider, "Log Scale (After)")
 chart_to_show_log_after = slider7("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases.", [i for i in range(1,11) for _ in range(5)])
-chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
+chart = generate_log(chart_to_show_log_after)
 st.image(chart)
 i+=1
 
