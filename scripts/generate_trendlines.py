@@ -3,6 +3,7 @@ import numpy as np
 import altair as alt
 import random
 import streamlit as st
+import math
 
 
 
@@ -116,6 +117,9 @@ def generate_single_graph_exponential(df, inflection_day):
     final = pd.concat(trends)
     final = final.reset_index()
     final = final.drop(["index"], axis=1)
+    recalibrate = lambda x : math.ceil(x/2) # So we do not have every other number anymore
+    final['Option'] = final['Option'].apply(recalibrate)
+    st.write(final)
     selector = alt.selection_single(empty='all', fields=['Option'])
     color = alt.condition(selector,
                           alt.Color('Option:N'),
@@ -134,9 +138,16 @@ def generate_single_graph_exponential(df, inflection_day):
             width=600,
             height=400
     )
+    labels = alt.Chart(final).mark_text(align='left', dx=3).encode(
+        alt.X('Day:Q', aggregate='max'),
+        alt.Y('Confirmed:Q', aggregate={'argmax': 'Day'}),
+        alt.Text('Option'),
+        alt.Color('Option:N', legend=None)
+    )
+    st.altair_chart(labels)
     
     img = create_image_layer(df, 'Day', 'Confirmed', 'image_url')
-    result = result + img
+    result = result + img + labels
     return result
 
 def generate_state_chart_normal(state, inflection_day):

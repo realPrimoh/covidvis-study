@@ -205,13 +205,13 @@ i+=1
 
 # NORMAL TRENDLINES
 # --------------------
-st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
-slider4 = record(st.selectbox, "Normal Trendline (Before)")
-chart_to_show_normal_trend = slider4("Normal Trendline Chart", [i for i in range(1,11)])
-chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend) - 1) + ".png"
-st.image(chart)
+# st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
+# slider4 = record(st.selectbox, "Normal Trendline (Before)")
+# chart_to_show_normal_trend = slider4("Normal Trendline Chart", [i for i in range(1,11)])
+# chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend) - 1) + ".png"
+# st.image(chart)
 
-i += 1
+# i += 1
 
 # NEW CASES A DAY 
 # --------------------
@@ -238,6 +238,7 @@ ny_cases = create_state_df('New York')
 ny_image = add_image_col_to_df(ny_cases, 12) # Day 12 is when NY had a lockdown order
 alt_chart = generate_single_graph_exponential(ny_image, 12)
 st.altair_chart(alt_chart)
+pick_img = st.radio("", ["1", "2", "3", "4", "5"])
 
 i+=1
 
@@ -396,12 +397,12 @@ i+=1
 
 # NORMAL TRENDLINES
 # --------------------
-st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
-slider8 = record(st.select_slider, "Normal Trendline (After)")
-chart_to_show_normal_trend_after = slider8("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases. The difference here from the above question is an expanded y-axis.", [i for i in range(1,11) for _ in range(5)])
-chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend_after) - 1) + ".png"
-st.image(chart)
-i+=1
+# st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
+# slider8 = record(st.select_slider, "Normal Trendline (After)")
+# chart_to_show_normal_trend_after = slider8("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases. The difference here from the above question is an expanded y-axis.", [i for i in range(1,11) for _ in range(5)])
+# chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend_after) - 1) + ".png"
+# st.image(chart)
+# i+=1
 
 # NEW CASES A DAY 
 # --------------------
