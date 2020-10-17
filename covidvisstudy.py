@@ -243,6 +243,8 @@ i+=1
 
 st.header("Phase 2")
 
+st.info("Why do we use a log scale graph for disease modeling? https://www.weforum.org/agenda/2020/04/covid-19-spread-logarithmic-graph/")
+
 # MIDDLE
 # -----------------------
 
