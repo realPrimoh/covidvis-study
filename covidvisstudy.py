@@ -7,12 +7,18 @@ import datetime
 import collections
 
 from random import random
-from vega_datasets import data
+#from vega_datasets import data
 from functools import reduce
 
 from scripts.generate_trendlines import *
 
+# TODO: we don't need to show too much after lockdown.
+# TODO: local neighborhood, show difference before/after lockdown order begins, ends
+# TODO: Check re-opening data (collected manually) 
 
+# B. Aditya: Track epidemic until reopening starts (too many factors after re-opening, reopening happens in phases, more nuanced, more confounding factors)
+
+# Randomization of state (in phase 1, phase 3). It is only needed if there is a learning effect. User would like to see own state possibly.
 
 i = 1
 st.title('CovidVis User Study')
