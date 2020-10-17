@@ -12,7 +12,7 @@ def create_state_df(state):
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
     state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[state_cases["Date"] < pd.to_datetime("05-03-2020")]
+    state_cases = state_cases[state_cases["Date"] < pd.to_datetime("05-31-2020")]
     # Convert timedelta to days
     # Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
     earliest_date = state_cases.sort_values('Date')['Date'].values[0]
@@ -140,19 +140,21 @@ def generate_single_graph_exponential(df, inflection_day):
     return result
 
 def generate_state_chart_normal(state, inflection_day):
-    jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
-    # grab us-specificjhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
-    state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
-    state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[(state_cases["Date"] < pd.to_datetime("10-20-2020"))]
-    earliest_date = state_cases.sort_values('Date')['Date'].values[0]
-    days_passed = lambda date : int((date - earliest_date) / np.timedelta64(1, 'D'))
-    state_cases['Day'] = state_cases['Date'].apply(days_passed)
-    state_cases["image_url"] = "" # Will automatically fill up all comments
-    state_cases.loc[state_cases['Date'] == inflection_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    # jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
+    # # grab us-specificjhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
+    # state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
+    # state_cases["Date"] = pd.to_datetime(state_cases["Date"])
+    # state_cases = state_cases[(state_cases["Date"] < pd.to_datetime("05-31-2020")) & (state_cases["Date"] > pd.to_datetime("02-01-2020"))]
+    # earliest_date = state_cases.sort_values('Date')['Date'].values[0]
+    # days_passed = lambda date : int((date - earliest_date) / np.timedelta64(1, 'D'))
+    # state_cases['Day'] = state_cases['Date'].apply(days_passed)
+    # state_cases["image_url"] = "" # Will automatically fill up all comments
+    # state_cases.loc[state_cases['Date'] == inflection_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    state_cases = create_state_df(state)
+    state_cases = add_image_col_to_df_with_date(state_cases, inflection_day)
     result = alt.Chart(state_cases).mark_line().encode(
             x='Day:Q',
-            y='Confirmed:Q',
+            y=alt.Y('Confirmed:Q', scale=alt.Scale(type='log')),
             color=alt.Color('Province_State', legend=alt.Legend(title="State", titleFontSize=20, labelFontSize=20, symbolStrokeWidth=10, symbolSize=1000))
         ).properties(
                 width=750,
@@ -183,7 +185,7 @@ def generate_intervention_images_new_cases_rolling(state, inflection_date):
     df["new_cases_rolling"] = df["New_Cases"].rolling(window=7).mean().fillna(50) # KEPT FIRST 7 DAYS AS ESTIMATE OF 50
     base = alt.Chart(df).mark_line().encode(
         x='Day:Q',
-        y='new_cases_rolling:Q',
+        y=alt.Y('new_cases_rolling:Q', scale=alt.Scale(domain=[0, 10000])),
         color='color',
     ).properties(
         width=500,
@@ -193,6 +195,7 @@ def generate_intervention_images_new_cases_rolling(state, inflection_date):
     img = create_image_layer(df, 'Day', 'new_cases_rolling', 'image_url')
     
     final = base + img
+    final.properties
     return final
     #print(val)
     #display(final)
