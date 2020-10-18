@@ -34,8 +34,8 @@ def add_image_col_to_df(state_cases_df, day):
     state_image = state_cases_df.copy()
     state_image["image_url"] = "" # Will automatically fill up all columns
     state_image.loc[day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
-    colors = ['before' if x < (day+1) else 'after' for x in range(state_image.shape[0])]
-    state_image["color"] = colors
+    colors = ['Before' if x < (day+1) else 'After' for x in range(state_image.shape[0])]
+    state_image["Color"] = colors
     return state_image
 
 def add_image_col_to_df_with_date(state_cases_df, date):
@@ -43,8 +43,8 @@ def add_image_col_to_df_with_date(state_cases_df, date):
     state_image["image_url"] = "" # Will automatically fill up all columns
     state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
     bools = state_cases_df['Date'] <= date
-    colors = ['before' if x else 'after' for x in bools]
-    state_image["color"] = colors
+    colors = ['Before' if x else 'After' for x in bools]
+    state_image["Color"] = colors
     return state_image
 
 
@@ -58,8 +58,8 @@ def create_image_layer(df, x_label, y_label, image_col_name):
             y=y_label+':Q',
             url=image_col_name
         ).properties(
-            width=500,
-            height=300
+            width=800,
+            height=600
         )
     return img
 
@@ -119,7 +119,7 @@ def generate_single_graph_exponential(df, inflection_day):
     final = final.drop(["index"], axis=1)
     recalibrate = lambda x : math.ceil(x/2) # So we do not have every other number anymore
     final['Option'] = final['Option'].apply(recalibrate)
-    st.write(final)
+#    st.write(final)
     selector = alt.selection_single(empty='all', fields=['Option'])
     color = alt.condition(selector,
                           alt.Color('Option:N'),
@@ -135,8 +135,8 @@ def generate_single_graph_exponential(df, inflection_day):
         size=alt.Size('size:Q', legend=None)
     ).add_selection(selector
     ).properties(
-            width=600,
-            height=400
+            width=800,
+            height=600
     )
     labels = alt.Chart(final).mark_text(align='left', dx=3).encode(
         alt.X('Day:Q', aggregate='max'),
@@ -144,7 +144,7 @@ def generate_single_graph_exponential(df, inflection_day):
         alt.Text('Option'),
         alt.Color('Option:N', legend=None)
     )
-    st.altair_chart(labels)
+#    st.altair_chart(labels)
     
     img = create_image_layer(df, 'Day', 'Confirmed', 'image_url')
     result = result + img + labels
@@ -168,8 +168,8 @@ def generate_state_chart_normal(state, inflection_day):
             y=alt.Y('Confirmed:Q', scale=alt.Scale(type='log')),
             color=alt.Color('Province_State', legend=alt.Legend(title="State", titleFontSize=20, labelFontSize=20, symbolStrokeWidth=10, symbolSize=1000))
         ).properties(
-                width=750,
-                height=500,
+                width=800,
+                height=600,
                 
         )
     
@@ -182,8 +182,8 @@ def generate_state_chart_normal(state, inflection_day):
             y='Confirmed'+':Q',
             url='image_url'
         ).properties(
-            width=600,
-            height=400
+            width=800,
+            height=600
         )
     
     return result + img
@@ -197,10 +197,10 @@ def generate_intervention_images_new_cases_rolling(state, inflection_date):
     base = alt.Chart(df).mark_line().encode(
         x='Day:Q',
         y=alt.Y('new_cases_rolling:Q', scale=alt.Scale(domain=[0, 10000])),
-        color='color',
+        color='Color',
     ).properties(
-        width=500,
-        height=300
+        width=800,
+        height=600
     )
 
     img = create_image_layer(df, 'Day', 'new_cases_rolling', 'image_url')

@@ -21,26 +21,33 @@ from scripts.generate_trendlines import *
 # Randomization of state (in phase 1, phase 3). It is only needed if there is a learning effect. User would like to see own state possibly.
 
 i = 1
-st.title('CovidVis User Study')
+st.title('CovidVis: The Impact of Visualizations on Perception of COVID-19 Intervention Measures')
 
-st.info("Welcome to the Covidvis User Study. In this study, we are trying to measure the effects of seeing visualizations of COVID's ascent throughout the world on people's opinions about COVID interventions. Your data will be kept confidential and you will maintain anonymity.")
+st.info("Welcome to the Covidvis User Study. In this study, we are trying to measure the effects of seeing visualizations of COVID's ascent throughout the world on people's opinions about COVID interventions. Your data will be kept as confidential as possible.")
 
-st.info("Consent to take part in the study: \n\n I am asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. I will describe this study to you and answer any of your questions. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
+st.subheader("Consent to take part in the study")
+st.markdown("We are asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. We will describe this study to you and answer any of your questions. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
 
-st.info("What the study is about:\n\nThe purpose of this research is to examine the impact of visualizations on COVID-19 intervention perception.")
+st.subheader("What the study is about")
+st.markdown("The purpose of this research is to examine the impact of visualizations on COVID-19 intervention perception.")
 
-st.info("What we will ask you to do:\n\nIf you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 15 minutes and will be conducted online.")
+st.subheader("What we will ask you to do")
+st.markdown("If you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 15 minutes and will be conducted online.")
 
-st.info("Risks and discomforts:\n\nThere is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on a password protected laptop. None of your personal information is collected.")
+st.subheader("Risks and discomforts")
+st.markdown("There is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on a password protected laptop. None of your personal information is collected.")
 
-st.info("Benefits:\n\nThere are no direct benefits to you from this research. It is our hope that the research will benefit the scientific community and lead to a greater understanding of visualizations and their effects on people's understanding of things.")
+st.subheader("Benefits")
+st.markdown("There are no direct benefits to you from this research. It is our hope that the research will benefit the scientific community and lead to a greater understanding of visualizations and their effects on people's understanding of COVID interventions.")
 
-st.info("Privacy/Confidentiality/Data Security:\n\nAll data will be de-identified with identifiers. Consent forms will be kept separate from the rest of the research data. All physical data will be stored in locked cabinets accessible only by the Principal Researcher. All electronic data will be stored on password protected servers accessible only by the Principal Researcher. We anticipate that your participation in this survey presents no greater risk than everyday use of the Internet.")
+st.subheader("Taking part is voluntary")
+st.markdown("Your involvement in this research is voluntary, and you may refuse to participate before the study begins or discontinue at any time. You will only receive compensation for this study if you complete all tasks and survey questions.")
 
-st.info("Taking part is voluntary\n\nYour involvement in this research is voluntary, and you may refuse to participate before the study begins or discontinue at any time. You will only receive compensation for this study if you complete all tasks and survey questions.")
+st.subheader("If you have questions")
+st.markdown("The main researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
 
-st.info("If you have questions:\n\nThe main researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Aditya Parameswaran at adityagp@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu. ")
-st.info("Statement of Consent:\n\nBy continuing with this survey, you are consenting to the above statements.")
+st.subheader("Statement of Consent")
+st.markdown("By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
 
 
 widget_values = collections.defaultdict(list)
@@ -197,9 +204,9 @@ st.header("Phase 1")
 # ----------------------
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
 slider3 = record(st.selectbox, "Log Scale (Before)")
-chart_to_show_log = slider3("Log Scale Chart", [i for i in range(1,11)])
+chart_to_show_log = slider3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
 chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
-st.image(chart)
+st.image(chart, width=800)
 
 i+=1
 
@@ -227,7 +234,7 @@ st.subheader(str(i) + ". This chart shows the amount of new cases per day. At so
 pick_img = st.radio("", ["Image 1", "Image 2", "Image 3"])
 charts = ["ny_interventions_new_day/visualization0.png", \
 "ny_interventions_new_day/visualization1.png", "ny_interventions_new_day/visualization2.png"]
-st.image(charts)
+st.image(charts, width=800)
 
 i+=1
 # Random states - not every user gets the same state
@@ -261,104 +268,6 @@ alt_chart2 = generate_intervention_images_new_cases_rolling(phase2stateRolling, 
 st.altair_chart(alt_chart2)
 
 
-st.image("ny_interventions_new_day/actual.png", width=800)
-st.image("ny_log/actual.png", width=800)
-
-""" TEMPORARY CODE BELOW TO TEST SOMETHING 
-footprints = pd.read_csv("./data/interventionFootprintByState.csv")
-footprints['dateBefore'] = pd.to_datetime(footprints['dateBefore']) # Makes date easier to work with
-state_geodata = alt.topo_feature(data.us_10m.url, 'states')
-hurricanes = pd.read_csv(data.population_engineers_hurricanes.url)[['state', 'id']]
-# Convert timedelta to days
-# Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
-
-earliest_date = footprints.sort_values('dateBefore')['dateBefore'].values[0]
-def days_passed(date):
-    return int((date - earliest_date) / np.timedelta64(1, 'D'))
-footprints['days_since_Feb_28th'] = footprints['dateBefore'].apply(days_passed)
-# Below, we add the ID values for states which will enable us to map to the geodata.
-footprints_with_ids = footprints.merge(hurricanes, how='left', left_on='State', right_on='state').drop(['Unnamed: 0', 'state'], axis=1)
-footprints_with_ids = footprints_with_ids.loc[: , ['interventionFootprint', 'State', 'days_since_Feb_28th', 'id']] # Isolate the values we need
-footprints_with_ids = footprints_with_ids.rename(columns={'State' : 'state'})
-def extend_state_dict(state_dict):
-    result_dict = state_dict.copy()
-    empty_list = [0 for x in range(61)]
-    interventions, states, days, ids = empty_list[:], empty_list[:], empty_list[:], empty_list[:]
-    
-    # We start by setting the existing ones
-    for key, val in state_dict['days_since_Feb_28th'].items():
-        days[val] = val
-        interventions[val] = state_dict['interventionFootprint'][key]
-        states[val] = state_dict['state'][key]
-        ids[val] = state_dict['id'][key]
-        
-    # Populate state, days and id, the easy ones as they are constant/known
-    for i in range(len(states)):
-        states[i] = list(state_dict['state'].values())[0]
-        ids[i] = list(state_dict['id'].values())[0]
-        days[i] = i
-    
-    # Now for interventions, the whole reason we are doing this
-    # We need to populate the empty days with the most recent one
-    # For days before the first intervention footprint, we use a value of 0 for now
-    
-    curr_footprint = 0
-    for i in range(len(interventions)):
-        if interventions[i] != 0:
-            curr_footprint = interventions[i]
-        else:
-            interventions[i] = curr_footprint
-    
-    result_dict['interventionFootprint'] = interventions
-    result_dict['state'] = states
-    result_dict['days_since_Feb_28th'] = days
-    result_dict['id'] = ids
-    
-    return result_dict
-
-
-def combine_state_dicts(first, second):
-    combined_dict = first.copy()
-    for key in combined_dict:
-        combined_dict[key].extend(second[key])
-    return combined_dict
-state_set = set(footprints_with_ids['state'].values) # Get all the states
-state_dicts = []
-for state in state_set:
-    state_dict = footprints_with_ids[footprints_with_ids['state'] == state].to_dict()
-    state_dicts.append(extend_state_dict(state_dict)) # Fill in the missing values
-    
-# We imported the reduce function from the functools module at the top of this notebook
-# It takes in a function and an iterable, and combines all values of the iterable together into one value using the function
-
-extended_footprint_df = pd.DataFrame.from_dict(reduce(combine_state_dicts, state_dicts))
-# I had to alter this file on my Desktop to get rid of the county data; otherwise, it would just overlook state data for some reason.
-state_geomap_data_edited = gpd.read_file('./data/us-10m.json', driver='TopoJSON')
-# Ensures consistency of types when we merge
-state_geomap_data_edited.id = state_geomap_data_edited.id.astype(int)
-extended_footprint_df.id = extended_footprint_df.id.astype(int)
-footprints_with_geodata_df = state_geomap_data_edited.merge(extended_footprint_df, on='id', how='inner') # Keep on the left to maintain geodataframe
-slider = alt.binding_range(min=0, max=60, step=1) # We set the range of our time slider (60 days in this case)
-
-select_day = alt.selection_single(name="days_since_Feb_28th", fields=['days_since_Feb_28th'],
-                                   bind=slider, init={'days_since_Feb_28th': 0})
-
-cpleth = alt.Chart(footprints_with_geodata_df).mark_geoshape().encode(
-    alt.Color('interventionFootprint:Q', scale=alt.Scale(domain=(0.0, 1.02))) # We set the possible range for intervention footprint values
-).properties(
-    width=700,
-    height=500
-).add_selection(
-    select_day
-).project(
-    type='albersUsa'
-).transform_filter(
-    select_day
-).resolve_scale(
-    color='independent'
-)
-st.altair_chart(cpleth)
-"""
 st.header("Phase 3")
 
 #st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
@@ -386,13 +295,13 @@ st.header("Phase 3")
 # ----------------------
 @st.cache
 def generate_log(chart_to_show):
-  chart = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
-  return chart
+  c = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
+  return c
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
 slider7 = record(st.select_slider, "Log Scale (After)")
 chart_to_show_log_after = slider7("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases.", [i for i in range(1,11) for _ in range(5)])
 chart = generate_log(chart_to_show_log_after)
-st.image(chart)
+st.image(chart, width=800)
 i+=1
 
 # NORMAL TRENDLINES
@@ -411,12 +320,13 @@ st.subheader(str(i) + ". This chart shows the amount of new cases per day. At so
 slider9 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (After)")
 chart_to_show_casesday_lockdown_after = slider9("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the average number of COVID-19 cases confirmed on each day.", [i for i in range(1,4) for _ in range(5)])
 chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown_after) - 1) + ".png"
-st.image(chart)
+st.image(chart, width=800)
 i+=1
 
 st.header("Conclusion")
 
-st.info("Thank you so much for participating! Click submit below.")
+
+st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
 
 if st.button("Submit"):
     field_names = list(widget_values.keys())
@@ -444,4 +354,4 @@ if st.button("Submit"):
 # Random sample of trends (reduce bias of the true line, ex. no median picking should be the answer)
 
 # Plot the rate of change versus cumulative (log scale)
-st.write("Recorded values: ", widget_values)
+#st.write("Recorded values: ", widget_values)
