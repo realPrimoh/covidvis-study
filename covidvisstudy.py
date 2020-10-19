@@ -258,12 +258,12 @@ st.info("Why do we use a log scale graph for disease modeling? https://www.wefor
 
 st.header("Here are some examples of where lockdown orders were put in place.")
 
-state_intervention = {"New York": '03-22-2020', "California": '03-10-2020', "Georgia": '04-02-2020', "Illinois": '03-19-2020', "Florida": '04-01-2020'}
-phase2state = st.selectbox("State (Normal)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
+state_intervention = {"New York": '03-22-2020', "California": '03-10-2020', "Georgia": '04-02-2020', "Illinois": '03-19-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
+phase2state = st.selectbox("State (Normal)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
 alt_chart1 = generate_state_chart_normal(phase2state, state_intervention[phase2state])
 st.altair_chart(alt_chart1)
 
-phase2stateRolling = st.selectbox("State (Rolling Average)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida'))
+phase2stateRolling = st.selectbox("State", ('New York', 'California', 'Georgia', 'Illinois', 'Florida', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
 alt_chart2 = generate_intervention_images_new_cases_rolling(phase2stateRolling, state_intervention[phase2stateRolling])
 st.altair_chart(alt_chart2)
 
