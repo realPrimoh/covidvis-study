@@ -47,6 +47,21 @@ def add_image_col_to_df_with_date(state_cases_df, date):
     state_image["color"] = colors
     return state_image
 
+def create_base_log_layer(df, x_label, y_label):
+    base = alt.Chart(df).mark_line().encode(
+            alt.X('Day:Q',
+                 scale=alt.Scale(domain=(0, max(df[x_label])))
+            ),
+            alt.Y('Confirmed:Q',
+                 scale=alt.Scale(type='log', base=10, domain=[1, 10000000])
+            ),
+            color=alt.Color('color:N', legend=None),
+            ).properties(
+                width=600,
+                height=400
+            )
+    return base
+
 
 
 def create_image_layer(df, x_label, y_label, image_col_name):
@@ -58,8 +73,8 @@ def create_image_layer(df, x_label, y_label, image_col_name):
             y=y_label+':Q',
             url=image_col_name
         ).properties(
-            width=500,
-            height=300
+            width=600,
+            height=400
         )
     return img
 

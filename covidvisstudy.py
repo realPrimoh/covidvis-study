@@ -172,6 +172,27 @@ st.info("There are three phases to this survey. In Phase 1, you will be answerin
 
 
 st.header("Phase 1")
+st.subheader("New York Trendline Test")
+
+
+def display_chart(type):
+  test = ny_generated_trendlines[ny_generated_trendlines["Type"] == type]
+  test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
+  base = create_base_log_layer(test, 'Day', 'Confirmed')
+  img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
+  st.altair_chart(base + img)
+
+ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+selectbox1 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox1('Select a color of the rainbow',
+                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
+                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
+                  "steeper_3", "steeper_4", "steeper_5"])
+
+display_chart(type)
+
+
+
 
 # NORMAL INTERVENTIONS
 # ----------------
@@ -203,8 +224,8 @@ st.header("Phase 1")
 # LOG SCALE 
 # ----------------------
 st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
-slider3 = record(st.selectbox, "Log Scale (Before)")
-chart_to_show_log = slider3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
+selectbox3 = record(st.selectbox, "Log Scale (Before)")
+chart_to_show_log = selectbox3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
 chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
 st.image(chart, width=800)
 
