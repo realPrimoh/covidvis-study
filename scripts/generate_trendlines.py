@@ -66,8 +66,8 @@ def create_base_log_layer(df, x_label, y_label):
 
 def create_image_layer(df, x_label, y_label, image_col_name):
     img = alt.Chart(df).mark_image(
-            width=50,
-            height=50
+            width=25,
+            height=25
         ).encode(
             x=x_label+':Q',
             y=y_label+':Q',

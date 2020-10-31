@@ -172,11 +172,52 @@ st.info("There are three phases to this survey. In Phase 1, you will be answerin
 
 
 st.header("Phase 1")
-st.subheader("New York Trendline Test")
+st.subheader("Can you predict the most accurate trajectory for each state?")
+slot1 = st.empty()
+slot2 = st.empty()
+slot3 = st.empty()
+states = ["ny", "flor", "tex"]
+random.shuffle(states)
+
+# We want to display them in a random order for each user
+i = 1
+options = ["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
+                      "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
+                      "steeper_3", "steeper_4", "steeper_5"]
+full_names = {"ny" : "New York", "flor" : "Florida", "tex" : "Texas"}
+
+"""
+def display_chart(state_trendlines_df, type, slot):
+  test = state_trendlines_df[state_trendlines_df["Type"] == type]
+  test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
+  base = create_base_log_layer(test, 'Day', 'Confirmed')
+  img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
+  slot.altair_chart(base + img)
+
+for state in states:
+  generated_trendlines = pd.read_csv("data/{state_name}_generated_trendlines.csv".format(state_name=state))
+  if i == 1:
+    selectbox1 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox1('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+    display_chart(generated_trendlines, type, slot1)
+    i += 1
+  elif i == 2:
+    selectbox2 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox2('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+    display_chart(generated_trendlines, type, slot2)
+    i += 1
+  elif i == 3:
+    selectbox3 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox3('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+    display_chart(generated_trendlines, type, slot3)
+    i += 1
 
 
-def display_chart(type):
-  test = ny_generated_trendlines[ny_generated_trendlines["Type"] == type]
+
+
+"""
+def display_chart(state_trendlines_df, type):
+  test = state_trendlines_df[state_trendlines_df["Type"] == type]
   test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
   base = create_base_log_layer(test, 'Day', 'Confirmed')
   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
@@ -184,12 +225,32 @@ def display_chart(type):
 
 ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
 selectbox1 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox1('Select a color of the rainbow',
+type = selectbox1('Select an option for New York.',
                   options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
                   "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
                   "steeper_3", "steeper_4", "steeper_5"])
 
-display_chart(type)
+display_chart(ny_generated_trendlines, type)
+
+flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
+selectbox2 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox2('Select an option for Florida.',
+                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
+                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
+                  "steeper_3", "steeper_4", "steeper_5"])
+
+display_chart(flor_generated_trendlines, type)
+
+tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
+selectbox3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox3('Select an option for Texas.',
+                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
+                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
+                  "steeper_3", "steeper_4", "steeper_5"])
+
+display_chart(tex_generated_trendlines, type)
+
+
 
 
 
