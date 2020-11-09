@@ -13,7 +13,7 @@ def create_state_df(state):
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
     state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[state_cases["Date"] < pd.to_datetime("05-31-2020")]
+    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("05-31-2020"))]
     # Convert timedelta to days
     # Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
     earliest_date = state_cases.sort_values('Date')['Date'].values[0]
@@ -47,8 +47,9 @@ def add_image_col_to_df_with_date(state_cases_df, date):
     state_image["color"] = colors
     return state_image
 
-def create_base_log_layer(df, x_label, y_label):
-    base = alt.Chart(df).mark_line().encode(
+def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=None):
+    if is_selection:
+        base = alt.Chart(df).mark_line().encode(
             alt.X('Day:Q',
                  scale=alt.Scale(domain=(0, max(df[x_label])))
             ),
@@ -59,15 +60,32 @@ def create_base_log_layer(df, x_label, y_label):
             ).properties(
                 width=600,
                 height=400
+            ).add_selection(
+                selection
+            ).transform_filter(
+                selection
             )
+    else:
+        base = alt.Chart(df).mark_line().encode(
+                alt.X('Day:Q',
+                     scale=alt.Scale(domain=(0, max(df[x_label])))
+                ),
+                alt.Y('Confirmed:Q',
+                     scale=alt.Scale(type='log', base=10, domain=[1, 10000000])
+                ),
+                color=alt.Color('color:N', legend=None),
+                ).properties(
+                    width=600,
+                    height=400
+                )
     return base
 
 
 
 def create_image_layer(df, x_label, y_label, image_col_name):
     img = alt.Chart(df).mark_image(
-            width=25,
-            height=25
+            width=28,
+            height=28
         ).encode(
             x=x_label+':Q',
             y=y_label+':Q',
@@ -77,6 +95,58 @@ def create_image_layer(df, x_label, y_label, image_col_name):
             height=400
         )
     return img
+
+# Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
+def generate_altair_slider_log_chart(df):
+    df_trimmed = df[df["Type"] != "actual"] # We do not want to display the actual trendline
+    for i in range(1, 6):
+        df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace(
+          "steeper_" + str(i), "steeper_" + str(i + 5))
+    df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace("[^0-9]", "").apply(lambda x : int(x)) # We need numbers for altair slider
+    df_trimmed.loc[:, ["image_url"]] = df_trimmed["image_url"].fillna("") # Empty string signifies no image for those rows
+    slider = alt.binding_range(min=1, max=10, step=1)
+    select_trend = alt.selection_single(name="Trendline", fields=['Type'],
+                                       bind=slider, init={'Type': 1})
+    base = create_base_log_layer(df_trimmed, "Day", "Confirmed", is_selection=True, selection=select_trend)
+    # We only use the head for the image layer because the images are in the same position for each trendlines
+    # and we do not need a bunch of them overlaid
+    img = create_image_layer(df_trimmed.head(60), "Day", "Confirmed","image_url")
+    final = base + img
+    return final
+
+def generate_new_cases_rolling(state, intervention_day):
+    df = create_state_df(state)
+    df = add_image_col_to_df(df, intervention_day)
+    # df["image_url"] = ""
+    # df.loc[val, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+    colors = ['before' if x < intervention_day else 'after' for x in range(df.shape[0])]
+    df["color"] = colors
+    df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
+
+    # We do not use the methods above because these charts are slightly different
+    base = alt.Chart(df).mark_line().encode(
+        x='Day:Q',
+        y='New_Cases_Rolling:Q',
+        color=alt.Color('color:N', legend=None),
+    ).properties(
+        width=600,
+        height=400
+    )
+
+    img = alt.Chart(df).mark_image(
+        width=45,
+        height=45
+    ).encode(
+        x='Day:Q',
+        y='New_Cases_Rolling:Q',
+        url='image_url'
+    ).properties(
+        width=600,
+        height=400
+    )
+    final = base + img
+    return final
+
 
 # Function below takes in dataframe with at least two numerical columns: x & y
 def generate_single_graph_exponential(df, inflection_day):
@@ -166,43 +236,13 @@ def generate_single_graph_exponential(df, inflection_day):
     result = result + img + labels
     return result
 
-def generate_state_chart_normal(state, inflection_day):
-    # jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
-    # # grab us-specificjhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
-    # state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
-    # state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    # state_cases = state_cases[(state_cases["Date"] < pd.to_datetime("05-31-2020")) & (state_cases["Date"] > pd.to_datetime("02-01-2020"))]
-    # earliest_date = state_cases.sort_values('Date')['Date'].values[0]
-    # days_passed = lambda date : int((date - earliest_date) / np.timedelta64(1, 'D'))
-    # state_cases['Day'] = state_cases['Date'].apply(days_passed)
-    # state_cases["image_url"] = "" # Will automatically fill up all comments
-    # state_cases.loc[state_cases['Date'] == inflection_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+def generate_actual_state_log_chart(state, inflection_date):
     state_cases = create_state_df(state)
-    state_cases = add_image_col_to_df_with_date(state_cases, inflection_day)
-    result = alt.Chart(state_cases).mark_line().encode(
-            x='Day:Q',
-            y=alt.Y('Confirmed:Q', scale=alt.Scale(type='log')),
-            color=alt.Color('Province_State', legend=alt.Legend(title="State", titleFontSize=20, labelFontSize=20, symbolStrokeWidth=10, symbolSize=1000))
-        ).properties(
-                width=750,
-                height=500,
-                
-        )
+    state_cases = add_image_col_to_df_with_date(state_cases, inflection_date)
+    base = create_base_log_layer(state_cases, "Day", "Confirmed")
+    img = create_image_layer(state_cases, "Day", "Confirmed", "image_url")
     
-    
-    img = alt.Chart(state_cases).mark_image(
-            width=30,
-            height=30
-        ).encode(
-            x='Day'+':Q',
-            y='Confirmed'+':Q',
-            url='image_url'
-        ).properties(
-            width=600,
-            height=400
-        )
-    
-    return result + img
+    return base + img
 
 
 # ASSUMES THE INDEX HAS BEEN RESET SO BE CAREFUL

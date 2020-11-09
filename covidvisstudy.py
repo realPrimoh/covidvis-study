@@ -144,27 +144,27 @@ radio3("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective",
 radio4("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
 # TODO: Use a more basic graph
-
-st.subheader(str(i) + ". On Day 35, how many confirmed cases were there?")
-st.image("./ny_trendlines/actual.png", width=800)
-vizcheck1 = record(st.radio, "Vizcheck 1")
-vizcheck1("How many confirmed cases were on Day 35?", ("1,000", "2,000", "20,000", "100,000", "200,000", "250,000"))
-
-i += 1
-
-#st.subheader(str(i) + ". The house icon represents a stay-at-home order being implemented. On approximately what day was the stay-at-home order implemented in this graph?")
-#st.image("ny_intervention_cumulative/actual.png", width=800)
-#vizcheck2 = record(st.radio, "Vizcheck 2")
-#vizcheck2("On approximately what day was the stay-at-home order implemented in this graph?", ["1", "2", "5", "8", "10", "12", "15", "18"])
-#
-#i += 1
+st.subheader("Below, we present the trajectory for confirmed cases in Georgia on a logarithmic scale. Once you have\
+              studied it, please answer the questions below.")
+georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
+georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+st.altair_chart(base + img)
 
 st.subheader(str(i) + ". The house icon represents a stay-at-home order being implemented. On approximately what day was the stay-at-home order implemented in this graph?")
-st.image("ny_log/actual.png", width=800)
-vizcheck2 = record(st.radio, "Vizcheck 2")
-vizcheck2("On approximately what day was the stay-at-home order implemented in this graph?", ["1", "2", "5", "9", "12", "15", "18"])
+vizcheck1 = record(st.radio, "Vizcheck 1")
+vizcheck1("Please make a selection", ["1", "7", "23", "40", "55", "70", "18"])
 
 i += 1
+
+st.subheader(str(i) + ". On Day 20, approximately how many confirmed cases were there?")
+vizcheck2 = record(st.radio, "Vizcheck 2")
+vizcheck2("Please make a selection.", ("100", "30,000", "8,000", "3,000", "100,000", "250,000"))
+
+i += 1
+
+
 
 
 st.header("Visualization Survey")
@@ -172,86 +172,81 @@ st.info("There are three phases to this survey. In Phase 1, you will be answerin
 
 
 st.header("Phase 1")
-st.subheader("Can you predict the most accurate trajectory for each state?")
-slot1 = st.empty()
-slot2 = st.empty()
-slot3 = st.empty()
-states = ["ny", "flor", "tex"]
-random.shuffle(states)
+st.subheader("Below, you will be presented with a choice of potential trendlines for three states. The house image\
+              signifies when that state put a lockdown order in place (Day 0 indicates the first set of meaningful\
+              available data regarding COVID-19 cases). Your job is to identify which trendlines most accurately\
+              captures the state's trajectory of confirmed cases after the lockdown order. Use the slider to view\
+              the range of different options, and make your selection using the drop-down menu.")
+# slot1 = st.empty()
+# slot2 = st.empty()
+# slot3 = st.empty()
+# states = ["ny", "flor", "tex"]
+# random.shuffle(states)
 
-# We want to display them in a random order for each user
-i = 1
-options = ["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
-                      "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
-                      "steeper_3", "steeper_4", "steeper_5"]
-full_names = {"ny" : "New York", "flor" : "Florida", "tex" : "Texas"}
-
-"""
-def display_chart(state_trendlines_df, type, slot):
-  test = state_trendlines_df[state_trendlines_df["Type"] == type]
-  test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
-  base = create_base_log_layer(test, 'Day', 'Confirmed')
-  img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
-  slot.altair_chart(base + img)
-
-for state in states:
-  generated_trendlines = pd.read_csv("data/{state_name}_generated_trendlines.csv".format(state_name=state))
-  if i == 1:
-    selectbox1 = record(st.selectbox, "Log Scale (Before)")
-    type = selectbox1('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    display_chart(generated_trendlines, type, slot1)
-    i += 1
-  elif i == 2:
-    selectbox2 = record(st.selectbox, "Log Scale (Before)")
-    type = selectbox2('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    display_chart(generated_trendlines, type, slot2)
-    i += 1
-  elif i == 3:
-    selectbox3 = record(st.selectbox, "Log Scale (Before)")
-    type = selectbox3('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    display_chart(generated_trendlines, type, slot3)
-    i += 1
+# # We want to display them in a random order for each user
+# i = 1
+# options = ["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
+#                       "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
+#                       "steeper_3", "steeper_4", "steeper_5"]
+# full_names = {"ny" : "New York", "flor" : "Florida", "tex" : "Texas"}
 
 
+# def display_chart(state_trendlines_df, type, slot):
+#   test = state_trendlines_df[state_trendlines_df["Type"] == type]
+#   test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
+#   base = create_base_log_layer(test, 'Day', 'Confirmed')
+#   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
+#   slot.altair_chart(base + img)
+
+# for state in states:
+#   generated_trendlines = pd.read_csv("data/{state_name}_generated_trendlines.csv".format(state_name=state))
+#   if i == 1:
+#     selectbox1 = record(st.selectbox, "Log Scale (Before)")
+#     type = selectbox1('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+#     display_chart(generated_trendlines, type, slot1)
+#     i += 1
+#   elif i == 2:
+#     selectbox2 = record(st.selectbox, "Log Scale (Before)")
+#     type = selectbox2('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+#     display_chart(generated_trendlines, type, slot2)
+#     i += 1
+#   elif i == 3:
+#     selectbox3 = record(st.selectbox, "Log Scale (Before)")
+#     type = selectbox3('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
+#     display_chart(generated_trendlines, type, slot3)
+#     i += 1
 
 
-"""
-def display_chart(state_trendlines_df, type):
-  test = state_trendlines_df[state_trendlines_df["Type"] == type]
-  test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
-  base = create_base_log_layer(test, 'Day', 'Confirmed')
-  img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
-  st.altair_chart(base + img)
 
-ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+
+
+# def display_chart(state_trendlines_df, type):
+#   test = state_trendlines_df[state_trendlines_df["Type"] == type]
+#   test.loc[:, ["image_url"]] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
+#   base = create_base_log_layer(test, 'Day', 'Confirmed')
+#   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
+#   st.altair_chart(base + img)
+
 selectbox1 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox1('Select an option for New York.',
-                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
-                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
-                  "steeper_3", "steeper_4", "steeper_5"])
+type = selectbox1('Select an option for State A.', # Users should not know what the state is
+                  options=range(1, 11))
+ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+st.altair_chart(ny_chart)
 
-display_chart(ny_generated_trendlines, type)
-
-flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
 selectbox2 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox2('Select an option for Florida.',
-                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
-                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
-                  "steeper_3", "steeper_4", "steeper_5"])
+type = selectbox2('Select an option for State B.',
+                  options=range(1, 11))
+flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
+flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
+st.altair_chart(flor_chart)
 
-display_chart(flor_generated_trendlines, type)
-
-tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
 selectbox3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox3('Select an option for Texas.',
-                  options=["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
-                  "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
-                  "steeper_3", "steeper_4", "steeper_5"])
-
-display_chart(tex_generated_trendlines, type)
-
-
-
+type = selectbox3('Select an option for State C.',
+                  options=range(1, 11))
+tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
+tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
+st.altair_chart(tex_chart)
 
 
 
@@ -284,13 +279,13 @@ display_chart(tex_generated_trendlines, type)
 
 # LOG SCALE 
 # ----------------------
-st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
-selectbox3 = record(st.selectbox, "Log Scale (Before)")
-chart_to_show_log = selectbox3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
-chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
-st.image(chart, width=800)
+# st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
+# selectbox3 = record(st.selectbox, "Log Scale (Before)")
+# chart_to_show_log = selectbox3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
+# chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
+# st.image(chart, width=800)
 
-i+=1
+# i+=1
 
 # NORMAL TRENDLINES
 # --------------------
@@ -309,27 +304,40 @@ i+=1
 # TODO: have an easier sub header
 # TODO: put all on one chart
 
-st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
-# slider5 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (Before)")
-# chart_to_show_casesday_lockdown = slider5("Cases per Day Lockdown Order Guess", [i for i in range(1,4) for _ in range(5)])
-# chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown) - 1) + ".png"
-pick_img = st.radio("", ["Image 1", "Image 2", "Image 3"])
-charts = ["ny_interventions_new_day/visualization0.png", \
-"ny_interventions_new_day/visualization1.png", "ny_interventions_new_day/visualization2.png"]
-st.image(charts, width=800)
+st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
+                       Choose which day you think it occurred.")
+pick_ny_img = st.radio("", ["Day 12", "Day 31", "Day 50"])
+ny_new_cases_actual = generate_new_cases_rolling("New York", 12)
+st.altair_chart(ny_new_cases_actual)
+ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31)
+st.altair_chart(ny_new_cases_fake1)
+ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50)
+st.altair_chart(ny_new_cases_fake2)
+
+i+=1
+
+st.subheader(str(i) + ". This is the same question as above, but for State B.")
+pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 55"])
+flor_new_cases_actual = generate_new_cases_rolling("Florida", 22)
+st.altair_chart(flor_new_cases_actual)
+flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34)
+st.altair_chart(flor_new_cases_fake1)
+flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55)
+st.altair_chart(flor_new_cases_fake2)
+
 
 i+=1
 # Random states - not every user gets the same state
 
-st.subheader(str(i) + ". Which trendline do you think most accurately represents New York's confirmed\
-  cases of COVID-19 after the lockdown order indicated by the house?")
-ny_cases = create_state_df('New York')
-ny_image = add_image_col_to_df(ny_cases, 12) # Day 12 is when NY had a lockdown order
-alt_chart = generate_single_graph_exponential(ny_image, 12)
-st.altair_chart(alt_chart)
-pick_img = st.radio("", ["1", "2", "3", "4", "5"])
+# st.subheader(str(i) + ". Which trendline do you think most accurately represents New York's confirmed\
+#   cases of COVID-19 after the lockdown order indicated by the house?")
+# ny_cases = create_state_df('New York')
+# ny_image = add_image_col_to_df(ny_cases, 12) # Day 12 is when NY had a lockdown order
+# alt_chart = generate_single_graph_exponential(ny_image, 12)
+# st.altair_chart(alt_chart)
+# pick_img = st.radio("", ["1", "2", "3", "4", "5"])
 
-i+=1
+# i+=1
 
 st.header("Phase 2")
 
@@ -338,72 +346,78 @@ st.info("Why do we use a log scale graph for disease modeling? https://www.wefor
 # MIDDLE
 # -----------------------
 
-st.header("Here are some examples of where lockdown orders were put in place.")
+st.subheader("Below, we present you with some actual trajectories of confirmed cases for various states. Please study them\
+              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
+              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
 
-state_intervention = {"New York": '03-22-2020', "California": '03-10-2020', "Georgia": '04-02-2020', "Illinois": '03-19-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
-phase2state = st.selectbox("State (Normal)", ('New York', 'California', 'Georgia', 'Illinois', 'Florida', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-alt_chart1 = generate_state_chart_normal(phase2state, state_intervention[phase2state])
+state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
+phase2state = st.selectbox("State (Normal)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
+alt_chart1 = generate_actual_state_log_chart(phase2state, state_intervention[phase2state])
 st.altair_chart(alt_chart1)
 
-phase2stateRolling = st.selectbox("State", ('New York', 'California', 'Georgia', 'Illinois', 'Florida', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-alt_chart2 = generate_intervention_images_new_cases_rolling(phase2stateRolling, state_intervention[phase2stateRolling])
+st.subheader("Below, we present you with some actual trajectories of average daily cases for various states. Please study them\
+              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
+              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
+state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
+phase2stateRolling = st.selectbox("State (Rolling)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
+alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling])
 st.altair_chart(alt_chart2)
 
 
 st.header("Phase 3")
-
-#st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
-##What do you think... (TODO: language)
-#i+=1
-#
-#slider0 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (After)")
-#chart_to_show_traj_after = slider0("Trajectory (After)", [i for i in range(1,7) for _ in range(5)])
-#chart = "visualization/visualization" + str(int(chart_to_show_traj_after)) + ".png"
-#st.image(chart)
+st.subheader("Below, you will be presented with a choice of potential trendlines for three states. The house image\
+              signifies when that state put a lockdown order in place (Day 0 indicates the first set of meaningful\
+              available data regarding COVID-19 cases). Your job is to identify which trendlines most accurately\
+              captures the state's trajectory of confirmed cases after the lockdown order. Use the slider to view\
+              the range of different options, and make your selection using the drop-down menu.")
 
 
-# PICK WHERE IT IS 
-# --------------------
 
-#st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
-#
-#slider6 = record(st.select_slider, "Lockdown Order (After)")
-#chart_to_show_after = slider6("Lockdown Order (After)", [i for i in range(1,5) for _ in range(5)])
-#chart = "intervention/visualization" + str(int(chart_to_show_after) - 1) + ".png"
-#st.image(chart)
-#i+=1
+selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox1('Select your revised option for State A.', # Users should not know what the state is
+                  options=range(1, 11))
+ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+st.altair_chart(ny_chart)
 
-# LOG SCALE 
-# ----------------------
-@st.cache
-def generate_log(chart_to_show):
-  c = "ny_log/visualization" + str(int(chart_to_show_log_after) - 1) + ".png"
-  return c
-st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
-slider7 = record(st.select_slider, "Log Scale (After)")
-chart_to_show_log_after = slider7("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases.", [i for i in range(1,11) for _ in range(5)])
-chart = generate_log(chart_to_show_log_after)
-st.image(chart, width=800)
+selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox2('Select your revised option for State B.',
+                  options=range(1, 11))
+flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
+flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
+st.altair_chart(flor_chart)
+
+selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox3('Select your revised option for State C.',
+                  options=range(1, 11))
+tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
+tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
+st.altair_chart(tex_chart)
+
+st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
+                       Choose which day you think it occurred.")
+pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
+ny_new_cases_actual = generate_new_cases_rolling("New York", 12)
+st.altair_chart(ny_new_cases_actual)
+ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31)
+st.altair_chart(ny_new_cases_fake1)
+ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50)
+st.altair_chart(ny_new_cases_fake2)
+
 i+=1
 
-# NORMAL TRENDLINES
-# --------------------
-# st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
-# slider8 = record(st.select_slider, "Normal Trendline (After)")
-# chart_to_show_normal_trend_after = slider8("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the number of COVID-19 cases. The difference here from the above question is an expanded y-axis.", [i for i in range(1,11) for _ in range(5)])
-# chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend_after) - 1) + ".png"
-# st.image(chart)
-# i+=1
+st.subheader(str(i) + ". This is the same question as above, but for State B.")
+pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
+flor_new_cases_actual = generate_new_cases_rolling("Florida", 22)
+st.altair_chart(flor_new_cases_actual)
+flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34)
+st.altair_chart(flor_new_cases_fake1)
+flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55)
+st.altair_chart(flor_new_cases_fake2)
 
-# NEW CASES A DAY 
-# --------------------
 
-st.subheader(str(i) + ". This chart shows the amount of new cases per day. At some point, a lockdown order was put in place. Can you guess where?")
-slider9 = record(st.select_slider, "Pin the Lockdown on Smoothed Average Cases (After)")
-chart_to_show_casesday_lockdown_after = slider9("Pick the chart that seems the most correct to you. The x-axis represents the number of days, while the y-axis represents the average number of COVID-19 cases confirmed on each day.", [i for i in range(1,4) for _ in range(5)])
-chart = "ny_interventions_new_day/visualization" + str(int(chart_to_show_casesday_lockdown_after) - 1) + ".png"
-st.image(chart, width=800)
 i+=1
+
 
 st.header("Conclusion")
 
