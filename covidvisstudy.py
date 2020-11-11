@@ -227,28 +227,54 @@ st.subheader("Below, you will be presented with a choice of potential trendlines
 #   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
 #   st.altair_chart(base + img)
 
-selectbox1 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox1('Select an option for State A.', # Users should not know what the state is
-                  options=range(1, 11))
+
 ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
 ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
 st.altair_chart(ny_chart)
-
-selectbox2 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox2('Select an option for State B.',
+selectbox1 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox1('Please confirm your selection for State A.', # Users should not know what the state is
                   options=range(1, 11))
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
 flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
 flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
 st.altair_chart(flor_chart)
-
-selectbox3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox3('Select an option for State C.',
+selectbox2 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox2('Please confirm your selection for State B.',
                   options=range(1, 11))
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
 tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
 tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
 st.altair_chart(tex_chart)
+selectbox3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox3('Please confirm your selection for State C.',
+                  options=range(1, 11))
 
-
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
 
 # NORMAL INTERVENTIONS
 # ----------------
@@ -365,34 +391,63 @@ st.altair_chart(alt_chart2)
 
 
 st.header("Phase 3")
-st.subheader("Below, you will be presented with a choice of potential trendlines for three states. The house image\
-              signifies when that state put a lockdown order in place (Day 0 indicates the first set of meaningful\
-              available data regarding COVID-19 cases). Your job is to identify which trendlines most accurately\
-              captures the state's trajectory of confirmed cases after the lockdown order. Use the slider to view\
-              the range of different options, and make your selection using the drop-down menu.")
+st.subheader("Below, you will be presented with the same questions you answered from Phase 1. You should revise your choices based\
+              on the actual trajectories you studied in Phase 2. If your answers have not changed, please make \
+              the same selections again. Use the slider to view the range of different options, and make your selection\
+              using the drop-down menu.")
 
 
 
-selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox1('Select your revised option for State A.', # Users should not know what the state is
-                  options=range(1, 11))
+
 ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
 ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
 st.altair_chart(ny_chart)
-
-selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox2('Select your revised option for State B.',
+selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox1('Please confirm your revised option for State A.', # Users should not know what the state is
                   options=range(1, 11))
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
 flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
 flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
 st.altair_chart(flor_chart)
-
-selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox3('Select your revised option for State C.',
+selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox2('Please confirm your revised option for State B.',
                   options=range(1, 11))
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+
 tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
 tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
 st.altair_chart(tex_chart)
+selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
+type = selectbox3('Please confirm your revised option for State C.',
+                  options=range(1, 11))
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.text("")
 
 st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                        Choose which day you think it occurred.")
