@@ -5,6 +5,7 @@ import numpy as np
 import csv
 import datetime
 import collections
+import requests
 
 from random import random
 #from vega_datasets import data
@@ -478,7 +479,7 @@ st.header("Conclusion")
 
 
 st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
-
+import json 
 if st.button("Submit"):
     field_names = list(widget_values.keys())
 #    field_names.append("timestamp")
@@ -490,6 +491,9 @@ if st.button("Submit"):
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
         writer.writerows([widget_values])
+        
+    requests.post('http://covidvis-api.herokuapp.com/send/', data=json.dumps(test1))
+
 
         
 # TODO: Collect more feedback from the study
