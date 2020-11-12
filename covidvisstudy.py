@@ -424,7 +424,7 @@ st.header("Conclusion")
 
 
 st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
-widget_values["id"] = random()
+widget_values["id"] = 10
 import json 
 if st.button("Submit"):
     field_names = list(widget_values.keys())
