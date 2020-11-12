@@ -445,7 +445,7 @@ if st.button("Submit"):
     response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
     st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
     
-    st.info(str(response.content))
+    st.info(str(response.content.decode('UTF-8')))
 
 
         
