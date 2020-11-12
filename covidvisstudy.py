@@ -424,6 +424,7 @@ st.header("Conclusion")
 
 
 st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
+widget_values["id"] = random()
 import json 
 if st.button("Submit"):
     field_names = list(widget_values.keys())
@@ -437,7 +438,7 @@ if st.button("Submit"):
         writer.writeheader()
         writer.writerows([widget_values])
         
-    requests.post('http://covidvis-api.herokuapp.com/send/', data=json.dumps(widget_values))
+    requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
 
 
         
