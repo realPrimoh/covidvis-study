@@ -443,7 +443,7 @@ if st.button("Submit"):
         writer.writerows([widget_values])
         
     response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
-    Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.
+    st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
     
     st.info(response)
     st.info(hash(str(response)))
