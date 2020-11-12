@@ -437,7 +437,7 @@ if st.button("Submit"):
         writer.writeheader()
         writer.writerows([widget_values])
         
-    requests.post('http://covidvis-api.herokuapp.com/send/', data=json.dumps(test1))
+    requests.post('http://covidvis-api.herokuapp.com/send/', data=json.dumps(widget_values))
 
 
         
