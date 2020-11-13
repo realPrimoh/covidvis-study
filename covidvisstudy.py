@@ -65,6 +65,10 @@ def record(f, widgetLabel):
 
     return wrapper
 
+st.subheader("Enter your MTurk ID here.")
+mturkSel = record(st.text_input, "MTurk ID")
+mturk = mturkSel("MTurk ID")
+
 st.header("Demographical Information")
 
 st.subheader(str(i) + ". What is your age?")
@@ -489,6 +493,7 @@ st.header("Conclusion")
 
 
 st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
+widget_values["id"] = 10
 import json 
 if st.button("Submit"):
     field_names = list(widget_values.keys())
@@ -502,7 +507,10 @@ if st.button("Submit"):
         writer.writeheader()
         writer.writerows([widget_values])
         
-    requests.post('http://covidvis-api.herokuapp.com/send/', data=json.dumps(test1))
+    response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
+    st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+    
+    st.info(str(response.content.decode('UTF-8')))
 
 
         
