@@ -229,7 +229,7 @@ st.subheader("Below, you will be presented with a choice of potential trendlines
 #   st.altair_chart(base + img)
 
 
-ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
 ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
 st.altair_chart(ny_chart)
 selectbox1 = record(st.selectbox, "Log Scale (Before)")
@@ -245,7 +245,7 @@ st.text("")
 st.text("")
 st.text("")
 
-flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
+flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
 flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
 st.altair_chart(flor_chart)
 selectbox2 = record(st.selectbox, "Log Scale (Before)")
@@ -261,7 +261,7 @@ st.text("")
 st.text("")
 st.text("")
 
-tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
+tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
 tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
 st.altair_chart(tex_chart)
 selectbox3 = record(st.selectbox, "Log Scale (Before)")
@@ -334,22 +334,28 @@ st.text("")
 st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                        Choose which day you think it occurred.")
 pick_ny_img = st.radio("", ["Day 12", "Day 31", "Day 50"])
-ny_new_cases_actual = generate_new_cases_rolling("New York", 12)
-st.altair_chart(ny_new_cases_actual)
-ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31)
-st.altair_chart(ny_new_cases_fake1)
-ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50)
+
+col1, col2, col3 = st.beta_columns(3)
+ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
+col1.altair_chart(ny_new_cases_actual)
+col2.text("")
+ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
+col3.altair_chart(ny_new_cases_fake1)
+ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
 st.altair_chart(ny_new_cases_fake2)
 
 i+=1
 
 st.subheader(str(i) + ". This is the same question as above, but for State B.")
 pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 55"])
-flor_new_cases_actual = generate_new_cases_rolling("Florida", 22)
-st.altair_chart(flor_new_cases_actual)
-flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34)
-st.altair_chart(flor_new_cases_fake1)
-flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55)
+
+col1, col2, col3 = st.beta_columns(3)
+flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
+col1.altair_chart(flor_new_cases_actual)
+col2.text("")
+flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
+col3.altair_chart(flor_new_cases_fake1)
+flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
 st.altair_chart(flor_new_cases_fake2)
 
 
@@ -387,7 +393,7 @@ st.subheader("Below, we present you with some actual trajectories of average dai
               In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
 state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
 phase2stateRolling = st.selectbox("State (Rolling)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling])
+alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling], width=600, height=400)
 st.altair_chart(alt_chart2)
 
 
@@ -400,7 +406,7 @@ st.subheader("Below, you will be presented with the same questions you answered 
 
 
 
-ny_generated_trendlines = pd.read_csv("data/ny_generated_trendlines.csv")
+ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
 ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
 st.altair_chart(ny_chart)
 selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
@@ -417,7 +423,7 @@ st.text("")
 st.text("")
 
 
-flor_generated_trendlines = pd.read_csv("data/flor_generated_trendlines.csv")
+flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
 flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
 st.altair_chart(flor_chart)
 selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
@@ -434,7 +440,7 @@ st.text("")
 st.text("")
 
 
-tex_generated_trendlines = pd.read_csv("data/tex_generated_trendlines.csv")
+tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
 tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
 st.altair_chart(tex_chart)
 selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
@@ -453,22 +459,26 @@ st.text("")
 st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                        Choose which day you think it occurred.")
 pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
-ny_new_cases_actual = generate_new_cases_rolling("New York", 12)
-st.altair_chart(ny_new_cases_actual)
-ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31)
-st.altair_chart(ny_new_cases_fake1)
-ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50)
+col1, col2, col3 = st.beta_columns(3)
+ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
+col1.altair_chart(ny_new_cases_actual)
+col2.text("")
+ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
+col3.altair_chart(ny_new_cases_fake1)
+ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
 st.altair_chart(ny_new_cases_fake2)
 
 i+=1
 
 st.subheader(str(i) + ". This is the same question as above, but for State B.")
 pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
-flor_new_cases_actual = generate_new_cases_rolling("Florida", 22)
-st.altair_chart(flor_new_cases_actual)
-flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34)
-st.altair_chart(flor_new_cases_fake1)
-flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55)
+col1, col2, col3 = st.beta_columns(3)
+flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
+col1.altair_chart(flor_new_cases_actual)
+col2.text("")
+flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
+col3.altair_chart(flor_new_cases_fake1)
+flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
 st.altair_chart(flor_new_cases_fake2)
 
 

@@ -8,7 +8,7 @@ import math
 
 
 def create_state_df(state):
-    jhu_df = pd.read_csv('./data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
+    jhu_df = pd.read_csv('./final_data/jhu-data.csv') # B/C this gets called from ../../covidvisstudy.py
     # grab us-specific
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
@@ -114,7 +114,7 @@ def generate_altair_slider_log_chart(df):
     final = base + img
     return final
 
-def generate_new_cases_rolling(state, intervention_day):
+def generate_new_cases_rolling(state, intervention_day, width, height):
     df = create_state_df(state)
     df = add_image_col_to_df(df, intervention_day)
     # df["image_url"] = ""
@@ -129,8 +129,8 @@ def generate_new_cases_rolling(state, intervention_day):
         y='New_Cases_Rolling:Q',
         color=alt.Color('color:N', legend=None),
     ).properties(
-        width=600,
-        height=400
+        width=width,
+        height=height
     )
 
     img = alt.Chart(df).mark_image(
@@ -141,8 +141,8 @@ def generate_new_cases_rolling(state, intervention_day):
         y='New_Cases_Rolling:Q',
         url='image_url'
     ).properties(
-        width=600,
-        height=400
+        width=width,
+        height=height
     )
     final = base + img
     return final
