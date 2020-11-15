@@ -351,7 +351,7 @@ st.altair_chart(ny_new_cases_fake2)
 i+=1
 
 st.subheader(str(i) + ". This is the same question as above, but for State B.")
-pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 55"])
+pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 50"])
 
 col1, col2, col3 = st.beta_columns(3)
 flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
@@ -359,7 +359,7 @@ col1.altair_chart(flor_new_cases_actual)
 col2.text("")
 flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
 col3.altair_chart(flor_new_cases_fake1)
-flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
+flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 50, width=400, height=300)
 st.altair_chart(flor_new_cases_fake2)
 
 

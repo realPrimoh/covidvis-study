@@ -13,7 +13,7 @@ def create_state_df(state):
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
     state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("05-31-2020"))]
+    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("05-1-2020"))]
     # Convert timedelta to days
     # Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
     earliest_date = state_cases.sort_values('Date')['Date'].values[0]
