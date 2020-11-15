@@ -511,6 +511,8 @@ if st.button("Submit"):
     st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
     
     st.info(str(response.content.decode('UTF-8')))
+    
+    st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
 
 
         
