@@ -114,6 +114,26 @@ def generate_altair_slider_log_chart(df):
     final = base + img
     return final
 
+# Same as above, but retains the actual trendline as well
+def generate_altair_slider_log_chart_KEEP_ACTUAL(df):
+    df_trimmed = df.copy()
+    df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace("actual", "6") # We want the actual one as trendline 0
+    for i in range(1, 6):
+        df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace(
+          "steeper_" + str(i), "steeper_" + str(i + 6)) # Because we want number 6 to be the actual one
+    df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace("[^0-9]", "").apply(lambda x : int(x)) # We need numbers for altair slider
+    df_trimmed.loc[:, ["image_url"]] = df_trimmed["image_url"].fillna("") # Empty string signifies no image for those rows
+    st.dataframe(df_trimmed )
+    slider = alt.binding_range(min=1, max=11, step=1)
+    select_trend = alt.selection_single(name="Trendline", fields=['Type'],
+                                       bind=slider, init={'Type': 1})
+    base = create_base_log_layer(df_trimmed, "Day", "Confirmed", is_selection=True, selection=select_trend)
+    # We only use the head for the image layer because the images are in the same position for each trendlines
+    # and we do not need a bunch of them overlaid
+    img = create_image_layer(df_trimmed.head(60), "Day", "Confirmed","image_url")
+    final = base + img
+    return final
+
 def generate_new_cases_rolling(state, intervention_day, width, height):
     df = create_state_df(state)
     df = add_image_col_to_df(df, intervention_day)

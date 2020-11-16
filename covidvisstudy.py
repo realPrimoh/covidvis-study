@@ -280,59 +280,6 @@ st.text("")
 st.text("")
 st.text("")
 
-# NORMAL INTERVENTIONS
-# ----------------
-
-#st.subheader(str(i) + ". State A hadn't implemented a stay-at-home order at any point shown on the graph. Here, the graph's x-axis shows the number of days after the first case is recorded. What do you think is the trajectory of virus cases?")
-##What do you think... (TODO: language)
-#
-#slider1 = record(st.select_slider, "Trajectory w/ No Stay-At-Home Order (Before)")
-#chart_to_show = slider1("Trajectory", [i for i in range(1,7) for _ in range(5)])
-#chart = "visualization/visualization" + str(int(chart_to_show)) + ".png"
-#st.image(chart)
-#
-#i += 1
-
-# PICK WHERE IT IS 
-# --------------------
-#
-#st.subheader(str(i) + ". In this situation, State B implemented a lockdown order. Where on the curve do you think the lockdown order was put in place?")
-#
-#slider2 = record(st.select_slider, "Lockdown Order (Before)")
-#chart_to_show_intervention = slider2("Lockdown Order", [i for i in range(1,4) for _ in range(5)])
-#chart = "intervention/visualization" + str(int(chart_to_show_intervention) - 1) + ".png"
-#st.image(chart)
-#
-#i += 1
-
-#TODO: fix log scale text
-
-# LOG SCALE 
-# ----------------------
-# st.subheader(str(i) + ". In this situation, State C implemented a lockdown order. How do you think the trajectory for the number of cases changed afterwards? The lockdown order is marked by the house icon on the graph.")
-# selectbox3 = record(st.selectbox, "Log Scale (Before)")
-# chart_to_show_log = selectbox3("Please predict the trajectory of cases after the lockdown order. You can see and choose the different options by using the dropdown menu.", [i for i in range(1,11)])
-# chart = "ny_log/visualization" + str(int(chart_to_show_log) - 1) + ".png"
-# st.image(chart, width=800)
-
-# i+=1
-
-# NORMAL TRENDLINES
-# --------------------
-# st.subheader(str(i) + ". This is the same question as above with an expanded y-axis.")
-# slider4 = record(st.selectbox, "Normal Trendline (Before)")
-# chart_to_show_normal_trend = slider4("Normal Trendline Chart", [i for i in range(1,11)])
-# chart = "ny_trendlines/visualization" + str(int(chart_to_show_normal_trend) - 1) + ".png"
-# st.image(chart)
-
-# i += 1
-
-# NEW CASES A DAY 
-# --------------------
-
-# TODO: y-axis variable
-# TODO: have an easier sub header
-# TODO: put all on one chart
 
 st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                        Choose which day you think it occurred.")
@@ -399,33 +346,36 @@ if not session_state._next:
         session_state.looked_at += 1
         if session_state.looked_at >= 3:
             st.info("Nice job!")
-            st.subheader("Below, we present the trajectory for confirmed cases in Georgia on a logarithmic scale. Once you have\
-              studied it, please answer the questions below.")
+            st.subheader("Below, we present a choice of possible trajectories for Georgia, identical to what you saw in Phase 1.\
+                          Please choose the trajectory you think is correct.")
             # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines
             georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-            georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-            base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-            img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-            st.altair_chart(base + img)
+            georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
+            # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+            # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+            # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+            st.altair_chart(georgia_chart)
             # TODO (Murtaza): Change the wording of "Is this correct?"
-            x = st.selectbox("Is this correct?", ["Select...", "Yes", "No"])
-            if x == "Yes":
+            x = st.selectbox("Which number is the correct trendline for Georgia?", ["Select...", ] + [str(i) for i in range(1, 12)])
+            if x == "6":
                 st.info("Correct! Try one more.")
                  # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
                 georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-                georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-                base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-                img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-                st.altair_chart(base + img)
-                y = st.selectbox("Is this correct? ", ["Select...", "Yes", "No"])
-                if y == "Yes":
+                georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
+                # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+                # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+                # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+                st.altair_chart(georgia_chart)
+                # TODO (Murtaza): Change the wording of "Is this correct?"
+                y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
+                if y == '6': # May need to change for different state
                     st.info("Correct! Now, you can move on to Phase 3.")
                     show_phase3 = True
-                elif y == "No":
+                elif y in [str(i) for i in range(1, 12) if i != 6]:
                     st.info("Try again!")
                 else:
                     pass
-            elif x == "No":
+            elif x in [str(i) for i in range(1, 12) if i != 6]:
                 st.info("Try again!")
             else:
                 pass
