@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-#import geopandas as gpd
 import numpy as np
 import csv
 import datetime
@@ -8,7 +7,7 @@ import collections
 import requests
 
 from random import random
-#from vega_datasets import data
+import SessionState
 from functools import reduce
 
 from scripts.generate_trendlines import *
@@ -376,143 +375,196 @@ i+=1
 
 # i+=1
 
+show_phase3 = False
+
 st.header("Phase 2")
 
 st.info("Why do we use a log scale graph for disease modeling? https://www.weforum.org/agenda/2020/04/covid-19-spread-logarithmic-graph/")
 
 # MIDDLE
 # -----------------------
+session_state = SessionState.get(looked_at=0, _next = False)
 
-st.subheader("Below, we present you with some actual trajectories of confirmed cases for various states. Please study them\
-              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
-              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
 
 state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
-phase2state = st.selectbox("State (Normal)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-alt_chart1 = generate_actual_state_log_chart(phase2state, state_intervention[phase2state])
-st.altair_chart(alt_chart1)
+states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
+st.write("Look through the states and try to see if you can find a pattern with the effects of lockdowns on the COVID-19 case trendline.")
+phase2_look1 = st.selectbox("Pick a state",  ["Select..."] + states)
+but = False
+if not session_state._next:
+    if phase2_look1 in states:
+        st.info("Observe the trajectory for the COVID-19 cases.")
+        alt_chart1_ = generate_actual_state_log_chart(phase2_look1, state_intervention[phase2_look1])
+        st.altair_chart(alt_chart1_)
+        session_state.looked_at += 1
+        if session_state.looked_at >= 3:
+            st.info("Nice job!")
+            st.subheader("Below, we present the trajectory for confirmed cases in Georgia on a logarithmic scale. Once you have\
+              studied it, please answer the questions below.")
+            # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines
+            georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
+            georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+            base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+            img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+            st.altair_chart(base + img)
+            # TODO (Murtaza): Change the wording of "Is this correct?"
+            x = st.selectbox("Is this correct?", ["Select...", "Yes", "No"])
+            if x == "Yes":
+                st.info("Correct! Try one more.")
+                 # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
+                georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
+                georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+                base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+                img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+                st.altair_chart(base + img)
+                y = st.selectbox("Is this correct? ", ["Select...", "Yes", "No"])
+                if y == "Yes":
+                    st.info("Correct! Now, you can move on to Phase 3.")
+                    show_phase3 = True
+                elif y == "No":
+                    st.info("Try again!")
+                else:
+                    pass
+            elif x == "No":
+                st.info("Try again!")
+            else:
+                pass
 
-st.subheader("Below, we present you with some actual trajectories of average daily cases for various states. Please study them\
-              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
-              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
-state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
-phase2stateRolling = st.selectbox("State (Rolling)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling], width=600, height=400)
-st.altair_chart(alt_chart2)
-
-
-st.header("Phase 3")
-st.subheader("Below, you will be presented with the same questions you answered from Phase 1. You should revise your choices based\
-              on the actual trajectories you studied in Phase 2. If your answers have not changed, please make \
-              the same selections again. Use the slider to view the range of different options, and make your selection\
-              using the drop-down menu.")
-
-
-
-
-ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
-ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
-st.altair_chart(ny_chart)
-selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox1('Please confirm your revised option for State A.', # Users should not know what the state is
-                  options=range(1, 11))
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-
-flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
-flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
-st.altair_chart(flor_chart)
-selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox2('Please confirm your revised option for State B.',
-                  options=range(1, 11))
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-
-tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
-tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
-st.altair_chart(tex_chart)
-selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
-type = selectbox3('Please confirm your revised option for State C.',
-                  options=range(1, 11))
-
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-st.text("")
-
-st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
-                       Choose which day you think it occurred.")
-pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
-col1, col2, col3 = st.beta_columns(3)
-ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
-col1.altair_chart(ny_new_cases_actual)
-col2.text("")
-ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
-col3.altair_chart(ny_new_cases_fake1)
-ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
-st.altair_chart(ny_new_cases_fake2)
-
-i+=1
-
-st.subheader(str(i) + ". This is the same question as above, but for State B.")
-pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
-col1, col2, col3 = st.beta_columns(3)
-flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
-col1.altair_chart(flor_new_cases_actual)
-col2.text("")
-flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
-col3.altair_chart(flor_new_cases_fake1)
-flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
-st.altair_chart(flor_new_cases_fake2)
-
-
-i+=1
-
-
-st.header("Conclusion")
-
-
-st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
-widget_values["id"] = 10
-import json 
-if st.button("Submit"):
-    field_names = list(widget_values.keys())
-#    field_names.append("timestamp")
-#    field_names.append("id")
-#    now = datetime.datetime.now()
-#    widget_values["timestamp"] = now.strftime("%Y-%b-%d, %A %I:%M:%S$p")
-#    widget_values["id"] = random()
-    with open('data.csv', 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writeheader()
-        writer.writerows([widget_values])
-        
-    response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
-    st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
     
-    st.info(str(response.content.decode('UTF-8')))
     
-    st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+# FLOW: 1. Pick a state:
+# 2. Here's the trajectory of the state. Once you're done looking, click next.
+# 3. What is the trajectory closest to you
+
+#st.subheader("Below, we present you with some actual trajectories of confirmed cases for various states. Please study them\
+#              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
+#              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
+#
+#phase2state = st.selectbox("State (Normal)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
+#alt_chart1 = generate_actual_state_log_chart(phase2state, state_intervention[phase2state])
+#st.altair_chart(alt_chart1)
+#
+#st.subheader("Below, we present you with some actual trajectories of average daily cases for various states. Please study them\
+#              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
+#              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
+#state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
+#phase2stateRolling = st.selectbox("State (Rolling)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
+#alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling], width=600, height=400)
+#st.altair_chart(alt_chart2)
+
+if show_phase3:
+    st.header("Phase 3")
+    st.subheader("Below, you will be presented with the same questions you answered from Phase 1. You should revise your choices based\
+                  on the actual trajectories you studied in Phase 2. If your answers have not changed, please make \
+                  the same selections again. Use the slider to view the range of different options, and make your selection\
+                  using the drop-down menu.")
+
+
+
+
+    ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
+    ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+    st.altair_chart(ny_chart)
+    selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox1('Please confirm your revised option for State A.', # Users should not know what the state is
+                      options=range(1, 11))
+
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+
+
+    flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
+    flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
+    st.altair_chart(flor_chart)
+    selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox2('Please confirm your revised option for State B.',
+                      options=range(1, 11))
+
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+
+
+    tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
+    tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
+    st.altair_chart(tex_chart)
+    selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
+    type = selectbox3('Please confirm your revised option for State C.',
+                      options=range(1, 11))
+
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+    st.text("")
+
+    st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
+                           Choose which day you think it occurred.")
+    pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
+    col1, col2, col3 = st.beta_columns(3)
+    ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
+    col1.altair_chart(ny_new_cases_actual)
+    col2.text("")
+    ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
+    col3.altair_chart(ny_new_cases_fake1)
+    ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
+    st.altair_chart(ny_new_cases_fake2)
+
+    i+=1
+
+    st.subheader(str(i) + ". This is the same question as above, but for State B.")
+    pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
+    col1, col2, col3 = st.beta_columns(3)
+    flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
+    col1.altair_chart(flor_new_cases_actual)
+    col2.text("")
+    flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
+    col3.altair_chart(flor_new_cases_fake1)
+    flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
+    st.altair_chart(flor_new_cases_fake2)
+
+
+    i+=1
+
+
+    st.header("Conclusion")
+
+
+    st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
+    widget_values["id"] = 10
+    import json 
+    if st.button("Submit"):
+        field_names = list(widget_values.keys())
+    #    field_names.append("timestamp")
+    #    field_names.append("id")
+    #    now = datetime.datetime.now()
+    #    widget_values["timestamp"] = now.strftime("%Y-%b-%d, %A %I:%M:%S$p")
+    #    widget_values["id"] = random()
+        with open('data.csv', 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows([widget_values])
+
+        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
+        st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+
+        st.info(str(response.content.decode('UTF-8')))
+
+        st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
 
 
         
