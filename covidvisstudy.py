@@ -330,23 +330,24 @@ if consent:
                 # TODO (Murtaza): Change the wording of "Is this correct?"
                 x = st.selectbox("Which number is the correct trendline for Georgia?", ["Select...", ] + [str(i) for i in range(1, 12)])
                 if x == "6":
-                    st.info("Correct! Try one more.")
-                     # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
-                    georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-                    georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
-                    # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-                    # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-                    # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-                    st.altair_chart(georgia_chart)
-                    # TODO (Murtaza): Change the wording of "Is this correct?"
-                    y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
-                    if y == '6': # May need to change for different state
-                        st.info("Correct! Now, you can move on to Phase 3.")
-                        session_state._rolling = True
-                    elif y in [str(i) for i in range(1, 12) if i != 6]:
-                        st.info("Try again!")
-                    else:
-                        pass
+                    st.info("Correct! Nice work.")
+                    session_state._rolling = True
+                    #  # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
+                    # georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
+                    # georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
+                    # # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+                    # # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+                    # # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+                    # st.altair_chart(georgia_chart)
+                    # # TODO (Murtaza): Change the wording of "Is this correct?"
+                    # y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
+                    # if y == '6': # May need to change for different state
+                    #     st.info("Correct! Now, you can move on to Phase 3.")
+                    #     session_state._rolling = True
+                    # elif y in [str(i) for i in range(1, 12) if i != 6]:
+                    #     st.info("Try again!")
+                    # else:
+                    #     pass
                 elif x in [str(i) for i in range(1, 12) if i != 6]:
                     st.info("Try again!")
                 else:
@@ -533,6 +534,8 @@ if consent:
 
 
         st.header("Conclusion")
+
+        st.text_input("Is there anything else you would like to share with us regarding this study?")
 
 
         st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
