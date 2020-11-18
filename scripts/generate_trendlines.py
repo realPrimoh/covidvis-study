@@ -138,7 +138,7 @@ def generate_altair_slider_log_chart_KEEP_ACTUAL(df):
     final = base + img
     return final
 
-def generate_new_cases_rolling(state, intervention_day, width, height):
+def generate_new_cases_rolling(state, intervention_day, width, height, title=""):
     df = create_state_df(state)
     df = add_image_col_to_df(df, intervention_day)
     # df["image_url"] = ""
@@ -154,7 +154,8 @@ def generate_new_cases_rolling(state, intervention_day, width, height):
         color=alt.Color('color:N', legend=None),
     ).properties(
         width=width,
-        height=height
+        height=height,
+        title=title
     )
 
     img = alt.Chart(df).mark_image(
