@@ -79,13 +79,13 @@ if consent:
 
     st.subheader("What platform are you using?")
     platformSel = record(st.radio, "Platform")
-    platform = st.radio("Platform", ("MTurk", "Prolific", "Other"))
+    platform = platformSel("Platform", ("MTurk", "Prolific", "Other"))
 
     if platform != "Other":
         st.subheader("Enter your " + platform + " ID here.")
         mturkSel = record(st.text_input, platform + " ID")
         mturk = mturkSel(platform + " ID")
-
+    
     st.header("Demographical Information")
 
     st.subheader(str(i) + ". What is your age?")
@@ -119,8 +119,8 @@ if consent:
 
     i += 1
 
-    st.subheader(str(i) + ". What is your ethnicity?")
-    raceSel = record(st.selectbox, "Ethnicity")
+    st.subheader(str(i) + ". What is your race?")
+    raceSel = record(st.selectbox, "Race")
     raceSel("Race", ("Select...", "Asian / Pacific Islander", "White", "Black or African-American", "Native American or American Indian", "Hispanic or Latino", "Other"))
 
     i += 1
