@@ -47,7 +47,7 @@ def add_image_col_to_df_with_date(state_cases_df, date):
     state_image["color"] = colors
     return state_image
 
-def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=None):
+def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=None, title=""):
     if is_selection:
         base = alt.Chart(df).mark_line().encode(
             alt.X('Day:Q',
@@ -59,7 +59,8 @@ def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=No
             color=alt.Color('color:N', legend=None),
             ).properties(
                 width=600,
-                height=400
+                height=400,
+                title=title
             ).add_selection(
                 selection
             ).transform_filter(
@@ -76,7 +77,8 @@ def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=No
                 color=alt.Color('color:N', legend=None),
                 ).properties(
                     width=600,
-                    height=400
+                    height=400,
+                    title=title
                 )
     return base
 
@@ -97,7 +99,7 @@ def create_image_layer(df, x_label, y_label, image_col_name):
     return img
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
-def generate_altair_slider_log_chart(df):
+def generate_altair_slider_log_chart(df, title=""):
     df_trimmed = df[df["Type"] != "actual"] # We do not want to display the actual trendline
     for i in range(1, 6):
         df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace(
@@ -111,7 +113,7 @@ def generate_altair_slider_log_chart(df):
     slider = alt.binding_range(min=1, max=10, step=1)
     select_trend = alt.selection_single(name="Trendline", fields=['Type'],
                                        bind=slider, init={'Type': 1})
-    base = create_base_log_layer(df_trimmed, "Day", "Confirmed", is_selection=True, selection=select_trend)
+    base = create_base_log_layer(df_trimmed, "Day", "Confirmed", is_selection=True, selection=select_trend, title=title)
     # We only use the head for the image layer because the images are in the same position for each trendlines
     # and we do not need a bunch of them overlaid
     img = create_image_layer(df_trimmed.head(60), "Day", "Confirmed","image_url")
