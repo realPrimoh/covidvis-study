@@ -234,6 +234,8 @@ st.subheader("Below, you will be presented with a choice of potential trendlines
 
 ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
 ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+click_chart = alt.selection_single()
+ny_chart.add_selection(click_chart)
 st.altair_chart(ny_chart)
 selectbox1 = record(st.selectbox, "Log Scale (Before)")
 type = selectbox1('Please confirm your selection for State A.', # Users should not know what the state is
