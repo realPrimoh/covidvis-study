@@ -207,7 +207,7 @@ if consent:
     ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
     ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines, "State A")
     st.altair_chart(ny_chart)
-    selectbox1 = record(st.selectbox, "Log Scale (Before)")
+    selectbox1 = record(st.selectbox, "Log Scale, State A (Before)")
     type = selectbox1('Please confirm your selection for State A.', # Users should not know what the state is
                       options=range(1, 11))
 
@@ -223,7 +223,7 @@ if consent:
     flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
     flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines, "State B")
     st.altair_chart(flor_chart)
-    selectbox2 = record(st.selectbox, "Log Scale (Before)")
+    selectbox2 = record(st.selectbox, "Log Scale, State B (Before)")
     type = selectbox2('Please confirm your selection for State B.',
                       options=range(1, 11))
 
@@ -239,7 +239,7 @@ if consent:
     tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
     tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines, "State C")
     st.altair_chart(tex_chart)
-    selectbox3 = record(st.selectbox, "Log Scale (Before)")
+    selectbox3 = record(st.selectbox, "Log Scale, State C (Before)")
     type = selectbox3('Please confirm your selection for State C.',
                       options=range(1, 11))
 
@@ -255,7 +255,8 @@ if consent:
 
     st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                            Choose which day you think it occurred.")
-    pick_ny_img = st.radio("", ["-", "Day 12", "Day 31", "Day 50"])
+    record_avg_day_before_stateA = record(st.radio, "Daily Avg, State A (Before)")
+    pick_ny_img = record_avg_day_before_stateA("", ["-", "Day 12", "Day 31", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
     ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
@@ -269,7 +270,8 @@ if consent:
     i+=1
 
     st.subheader(str(i) + ". This is the same question as above, but for State B.")
-    pick_flor_img = st.radio("", ["-", "Day 22", "Day 34", "Day 50"])
+    record_avg_day_before_stateB = record(st.radio, "Daily Avg, State B (Before)")
+    pick_flor_img = record_avg_day_before_stateB("", ["-", "Day 22", "Day 34", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
     flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
@@ -445,7 +447,7 @@ if consent:
         ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
         ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines, title="State A")
         st.altair_chart(ny_chart)
-        selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
+        selectbox1_phase3 = record(st.selectbox, "Log Scale, State A (After)")
         type = selectbox1('Please confirm your revised option for State A.', # Users should not know what the state is
                           options=range(1, 11))
 
@@ -462,7 +464,7 @@ if consent:
         flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
         flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines, title="State B")
         st.altair_chart(flor_chart)
-        selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
+        selectbox2_phase3 = record(st.selectbox, "Log Scale, State B (After)")
         type = selectbox2('Please confirm your revised option for State B.',
                           options=range(1, 11))
 
@@ -479,7 +481,7 @@ if consent:
         tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
         tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines, title="State C")
         st.altair_chart(tex_chart)
-        selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
+        selectbox3_phase3 = record(st.selectbox, "Log Scale, State C (After)")
         type = selectbox3('Please confirm your revised option for State C.',
                           options=range(1, 11))
 
@@ -494,7 +496,8 @@ if consent:
 
         st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                                Choose which day you think it occurred.")
-        pick_ny_img_phase3 = st.radio("Pick a revised option.", ["-", "Day 12", "Day 31", "Day 50"])
+        radio_dailyAvg_phase3 = record(st.radio, "Daily Avg, State A  (After)")
+        pick_ny_img_phase3 = radio_dailyAvg_phase3("Pick a revised option.", ["-", "Day 12", "Day 31", "Day 50"])
         col1, col2, col3 = st.beta_columns(3)
         ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
         col1.altair_chart(ny_new_cases_actual)
@@ -507,7 +510,8 @@ if consent:
         i+=1
 
         st.subheader(str(i) + ". This is the same question as above, but for State B.")
-        pick_flor_img_phase3 = st.radio("Pick a revised option", ["-", "Day 22", "Day 34", "Day 55"])
+        radio_dailyAvg_b_phase3 = record(st.radio, "Daily Avg, State B  (After)")
+        pick_flor_img_phase3 = radio_dailyAvg_b_phase3("Pick a revised option", ["-", "Day 22", "Day 34", "Day 55"])
         col1, col2, col3 = st.beta_columns(3)
         flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
         col1.altair_chart(flor_new_cases_actual)
