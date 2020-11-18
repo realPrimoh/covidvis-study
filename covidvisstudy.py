@@ -241,7 +241,7 @@ if consent:
 
 
     ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
-    ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+    ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines, "State A")
     st.altair_chart(ny_chart)
     selectbox1 = record(st.selectbox, "Log Scale (Before)")
     type = selectbox1('Please confirm your selection for State A.', # Users should not know what the state is
@@ -257,7 +257,7 @@ if consent:
     st.text("")
 
     flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
-    flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
+    flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines, "State B")
     st.altair_chart(flor_chart)
     selectbox2 = record(st.selectbox, "Log Scale (Before)")
     type = selectbox2('Please confirm your selection for State B.',
@@ -273,7 +273,7 @@ if consent:
     st.text("")
 
     tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
-    tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
+    tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines, "State C")
     st.altair_chart(tex_chart)
     selectbox3 = record(st.selectbox, "Log Scale (Before)")
     type = selectbox3('Please confirm your selection for State C.',
