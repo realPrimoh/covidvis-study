@@ -181,7 +181,7 @@ if consent:
     st.info("There are three phases to this survey. In Phase 1, you will be answering questions based on visualizations presented to you. In Phase 2, you will get to interact with some visualizations. In Phase 3, you will answer questions again based on visualizations shown to you.")
 
 
-<<<<<<< HEAD
+
 st.header("Phase 1")
 st.subheader("Below, you will be presented with a choice of potential trendlines for three states. The house image\
               signifies when that state put a lockdown order in place (Day 0 indicates the first set of meaningful\

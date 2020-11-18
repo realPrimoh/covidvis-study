@@ -104,6 +104,10 @@ def generate_altair_slider_log_chart(df):
           "steeper_" + str(i), "steeper_" + str(i + 5))
     df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace("[^0-9]", "").apply(lambda x : int(x)) # We need numbers for altair slider
     df_trimmed.loc[:, ["image_url"]] = df_trimmed["image_url"].fillna("") # Empty string signifies no image for those rows
+
+    # We want 7 options instead of 10, so we trim down
+    #df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].isin(trendlines_to_keep)
+
     slider = alt.binding_range(min=1, max=10, step=1)
     select_trend = alt.selection_single(name="Trendline", fields=['Type'],
                                        bind=slider, init={'Type': 1})
