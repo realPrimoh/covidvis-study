@@ -20,6 +20,18 @@ from scripts.generate_trendlines import *
 
 # Randomization of state (in phase 1, phase 3). It is only needed if there is a learning effect. User would like to see own state possibly.
 
+# Hides first radio obutton option, which we set to "-"
+# Allows us to avoid a pre-selected value
+st.markdown(
+    """ <style>
+            div[role="radiogroup"] >  :first-child{
+                display: none !important;
+            }
+        </style>
+        """,
+    unsafe_allow_html=True
+)
+
 i = 1
 st.title('CovidVis: The Impact of Visualizations on Perception of COVID-19 Intervention Measures')
 
@@ -189,55 +201,7 @@ if consent:
                   available data regarding COVID-19 cases). Your job is to identify which trendlines most accurately\
                   captures the state's trajectory of confirmed cases after the lockdown order. Use the slider to view\
                   the range of different options, and make your selection using the drop-down menu.")
-    # slot1 = st.empty()
-    # slot2 = st.empty()
-    # slot3 = st.empty()
-    # states = ["ny", "flor", "tex"]
-    # random.shuffle(states)
-
-    # # We want to display them in a random order for each user
-    # i = 1
-    # options = ["actual", "less_steep_1", "less_steep_2", "less_steep_3", 
-    #                       "less_steep_4", "less_steep_5", "steeper_1", "steeper_2", 
-    #                       "steeper_3", "steeper_4", "steeper_5"]
-    # full_names = {"ny" : "New York", "flor" : "Florida", "tex" : "Texas"}
-
-
-    # def display_chart(state_trendlines_df, type, slot):
-    #   test = state_trendlines_df[state_trendlines_df["Type"] == type]
-    #   test["image_url"] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
-    #   base = create_base_log_layer(test, 'Day', 'Confirmed')
-    #   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
-    #   slot.altair_chart(base + img)
-
-    # for state in states:
-    #   generated_trendlines = pd.read_csv("data/{state_name}_generated_trendlines.csv".format(state_name=state))
-    #   if i == 1:
-    #     selectbox1 = record(st.selectbox, "Log Scale (Before)")
-    #     type = selectbox1('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    #     display_chart(generated_trendlines, type, slot1)
-    #     i += 1
-    #   elif i == 2:
-    #     selectbox2 = record(st.selectbox, "Log Scale (Before)")
-    #     type = selectbox2('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    #     display_chart(generated_trendlines, type, slot2)
-    #     i += 1
-    #   elif i == 3:
-    #     selectbox3 = record(st.selectbox, "Log Scale (Before)")
-    #     type = selectbox3('Select an option for {full_state_name}.'.format(full_state_name=full_names[state]), options=options)
-    #     display_chart(generated_trendlines, type, slot3)
-    #     i += 1
-
-
-
-
-
-    # def display_chart(state_trendlines_df, type):
-    #   test = state_trendlines_df[state_trendlines_df["Type"] == type]
-    #   test.loc[:, ["image_url"]] = test["image_url"].fillna("") #necessary because dataframe gets messed up when exporting
-    #   base = create_base_log_layer(test, 'Day', 'Confirmed')
-    #   img = create_image_layer(test, 'Day', 'Confirmed', 'image_url')
-    #   st.altair_chart(base + img)
+    
 
 
     ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
@@ -291,7 +255,7 @@ if consent:
 
     st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                            Choose which day you think it occurred.")
-    pick_ny_img = st.radio("", ["Day 12", "Day 31", "Day 50"])
+    pick_ny_img = st.radio("", ["-", "Day 12", "Day 31", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
     ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
@@ -305,7 +269,7 @@ if consent:
     i+=1
 
     st.subheader(str(i) + ". This is the same question as above, but for State B.")
-    pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 50"])
+    pick_flor_img = st.radio("", ["-", "Day 22", "Day 34", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
     flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
@@ -338,21 +302,21 @@ if consent:
 
     # MIDDLE
     # -----------------------
-    session_state = SessionState.get(looked_at=0, _next = False)
+    session_state = SessionState.get(traj_looked_at=0, roll_looked_at=0, _next = False, _rolling = False)
 
 
     state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
     states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
     st.write("Look through at least 3 states' graphs and try to see if you can find a pattern with the effects of lockdowns on the COVID-19 case trendline.")
-    phase2_look1 = st.selectbox("Pick a state",  ["Select..."] + states)
-    but = False
+    phase2_look1 = st.selectbox("Pick a state to view its trajectory.",  ["Select..."] + states)
+    #but = False
     if not session_state._next:
         if phase2_look1 in states:
             st.info("Observe the trajectory for the COVID-19 cases.")
             alt_chart1_ = generate_actual_state_log_chart(phase2_look1, state_intervention[phase2_look1])
             st.altair_chart(alt_chart1_)
-            session_state.looked_at += 1
-            if session_state.looked_at >= 3:
+            session_state.traj_looked_at += 1
+            if session_state.traj_looked_at >= 3:
                 st.info("Nice job!")
                 st.subheader("Below, we present a choice of possible trajectories for Georgia, identical to what you saw in Phase 1.\
                               Please choose the trajectory you think is correct.")
@@ -378,7 +342,7 @@ if consent:
                     y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
                     if y == '6': # May need to change for different state
                         st.info("Correct! Now, you can move on to Phase 3.")
-                        show_phase3 = True
+                        session_state._rolling = True
                     elif y in [str(i) for i in range(1, 12) if i != 6]:
                         st.info("Try again!")
                     else:
@@ -387,6 +351,63 @@ if consent:
                     st.info("Try again!")
                 else:
                     pass
+
+    if session_state._rolling:
+      state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
+      states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
+      st.write("Now, take a look at a minimum of 3 graphs below, which show the rolling average of daily cases in each state,\
+                along with when the lockdown order was placed.")
+      phase2_look1_roll = st.selectbox("Pick a state to view its rolling average chart.",  ["Select..."] + states)
+      #but = False
+      #if not session_state._next:
+      if phase2_look1_roll in states:
+          st.info("Consider the rate of change of daily cases with respect to the lockdown measure.")
+          rolling_chart1_ = generate_new_cases_rolling(phase2_look1_roll, state_intervention_day[phase2_look1_roll], width=600, height=400)
+          #alt_chart1_ = generate_actual_state_log_chart(phase2_look1, state_intervention[phase2_look1])
+          st.altair_chart(rolling_chart1_)
+          session_state.roll_looked_at += 1
+          if session_state.roll_looked_at >= 3:
+              st.info("Nice job!")
+              st.subheader("Below, we present a choice of possible lockdown dates for Arizona's chart of daily cases, identical to what you saw in Phase 1.\
+                            Please choose the option you think is correct.")
+              pick_az_img = st.radio("", ["-", "Day 10", "Day 21", "Day 38"])
+              col1, col2, col3 = st.beta_columns(3)
+              az_new_cases_fake1 = generate_new_cases_rolling("Arizona", 10, width=400, height=300, title="Day 10")
+              col1.altair_chart(az_new_cases_fake1)
+              col2.text("")
+              az_new_cases_actual = generate_new_cases_rolling("Arizona", 21, width=400, height=300, title="Day 21")
+              col3.altair_chart(az_new_cases_actual)
+              az_new_cases_fake2 = generate_new_cases_rolling("Arizona", 38, width=400, height=300, title="Day 38")
+              st.altair_chart(az_new_cases_fake2)
+              if pick_az_img == "Day 21":
+                  st.info("Correct! Nice job.")
+                  show_phase3 = True
+              elif pick_az_img in ["Day 10", "Day 38"]:
+                  st.info("Try again!")
+              else:
+                  pass
+              #      # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
+              #     georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
+              #     georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
+              #     # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
+              #     # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
+              #     # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
+              #     st.altair_chart(georgia_chart)
+              #     # TODO (Murtaza): Change the wording of "Is this correct?"
+              #     y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
+              #     if y == '6': # May need to change for different state
+              #         st.info("Correct! Now, you can move on to Phase 3.")
+              #         session_state._rolling = True
+              #     elif y in [str(i) for i in range(1, 12) if i != 6]:
+              #         st.info("Try again!")
+              #     else:
+              #         pass
+              # elif x in [str(i) for i in range(1, 12) if i != 6]:
+              #     st.info("Try again!")
+              # else:
+              #     pass
+
+
 
 
 
@@ -472,7 +493,7 @@ if consent:
 
         st.subheader(str(i) + ". The charts below shows the average number of new cases per day in State A. At some point, a lockdown order was put in place.\
                                Choose which day you think it occurred.")
-        pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
+        pick_ny_img_phase3 = st.radio("Pick a revised option.", ["-", "Day 12", "Day 31", "Day 50"])
         col1, col2, col3 = st.beta_columns(3)
         ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
         col1.altair_chart(ny_new_cases_actual)
@@ -485,7 +506,7 @@ if consent:
         i+=1
 
         st.subheader(str(i) + ". This is the same question as above, but for State B.")
-        pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
+        pick_flor_img_phase3 = st.radio("Pick a revised option", ["-", "Day 22", "Day 34", "Day 55"])
         col1, col2, col3 = st.beta_columns(3)
         flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
         col1.altair_chart(flor_new_cases_actual)

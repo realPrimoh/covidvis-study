@@ -129,7 +129,6 @@ def generate_altair_slider_log_chart_KEEP_ACTUAL(df):
           "steeper_" + str(i), "steeper_" + str(i + 6)) # Because we want number 6 to be the actual one
     df_trimmed.loc[:, ["Type"]] = df_trimmed["Type"].str.replace("[^0-9]", "").apply(lambda x : int(x)) # We need numbers for altair slider
     df_trimmed.loc[:, ["image_url"]] = df_trimmed["image_url"].fillna("") # Empty string signifies no image for those rows
-    st.dataframe(df_trimmed )
     slider = alt.binding_range(min=1, max=11, step=1)
     select_trend = alt.selection_single(name="Trendline", fields=['Type'],
                                        bind=slider, init={'Type': 1})
