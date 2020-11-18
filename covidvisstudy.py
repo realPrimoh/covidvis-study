@@ -308,12 +308,12 @@ if consent:
     pick_flor_img = st.radio("", ["Day 22", "Day 34", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
-    flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
+    flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
     col1.altair_chart(flor_new_cases_actual)
     col2.text("")
-    flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
+    flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300, title="Day 34")
     col3.altair_chart(flor_new_cases_fake1)
-    flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 50, width=400, height=300)
+    flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 50, width=400, height=300, title="Day 50")
     st.altair_chart(flor_new_cases_fake2)
 
 
@@ -421,7 +421,7 @@ if consent:
 
 
         ny_generated_trendlines = pd.read_csv("final_data/ny_generated_trendlines.csv")
-        ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines)
+        ny_chart = generate_altair_slider_log_chart(ny_generated_trendlines, title="State A")
         st.altair_chart(ny_chart)
         selectbox1_phase3 = record(st.selectbox, "Log Scale (Before)")
         type = selectbox1('Please confirm your revised option for State A.', # Users should not know what the state is
@@ -438,7 +438,7 @@ if consent:
 
 
         flor_generated_trendlines = pd.read_csv("final_data/flor_generated_trendlines.csv")
-        flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines)
+        flor_chart = generate_altair_slider_log_chart(flor_generated_trendlines, title="State B")
         st.altair_chart(flor_chart)
         selectbox2_phase3 = record(st.selectbox, "Log Scale (Before)")
         type = selectbox2('Please confirm your revised option for State B.',
@@ -455,7 +455,7 @@ if consent:
 
 
         tex_generated_trendlines = pd.read_csv("final_data/tex_generated_trendlines.csv")
-        tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines)
+        tex_chart = generate_altair_slider_log_chart(tex_generated_trendlines, title="State C")
         st.altair_chart(tex_chart)
         selectbox3_phase3 = record(st.selectbox, "Log Scale (Before)")
         type = selectbox3('Please confirm your revised option for State C.',
@@ -474,12 +474,12 @@ if consent:
                                Choose which day you think it occurred.")
         pick_ny_img_phase3 = st.radio("Pick a revised option.", ["Day 12", "Day 31", "Day 50"])
         col1, col2, col3 = st.beta_columns(3)
-        ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
+        ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
         col1.altair_chart(ny_new_cases_actual)
         col2.text("")
-        ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
+        ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300, title="Day 31")
         col3.altair_chart(ny_new_cases_fake1)
-        ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
+        ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300, title="Day 50")
         st.altair_chart(ny_new_cases_fake2)
 
         i+=1
@@ -487,12 +487,12 @@ if consent:
         st.subheader(str(i) + ". This is the same question as above, but for State B.")
         pick_flor_img_phase3 = st.radio("Pick a revised option", ["Day 22", "Day 34", "Day 55"])
         col1, col2, col3 = st.beta_columns(3)
-        flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300)
+        flor_new_cases_actual = generate_new_cases_rolling("Florida", 22, width=400, height=300, title="Day 22")
         col1.altair_chart(flor_new_cases_actual)
         col2.text("")
-        flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300)
+        flor_new_cases_fake1 = generate_new_cases_rolling("Florida", 34, width=400, height=300, title="Day 34")
         col3.altair_chart(flor_new_cases_fake1)
-        flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300)
+        flor_new_cases_fake2 = generate_new_cases_rolling("Florida", 55, width=400, height=300, title="Day 55")
         st.altair_chart(flor_new_cases_fake2)
 
 
@@ -518,11 +518,12 @@ if consent:
                 writer.writerows([widget_values])
 
             response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
-            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+            if platform == "MTurk":
+                st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
 
-            st.info(str(response.content.decode('UTF-8')))
-
-            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+                st.info(str(response.content.decode('UTF-8')))
+            elif platform == "Prolific":
+                st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
 
 
 
