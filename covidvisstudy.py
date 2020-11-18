@@ -294,12 +294,12 @@ if consent:
     pick_ny_img = st.radio("", ["Day 12", "Day 31", "Day 50"])
 
     col1, col2, col3 = st.beta_columns(3)
-    ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300)
+    ny_new_cases_actual = generate_new_cases_rolling("New York", 12, width=400, height=300, title="Day 12")
     col1.altair_chart(ny_new_cases_actual)
     col2.text("")
-    ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300)
+    ny_new_cases_fake1 = generate_new_cases_rolling("New York", 31, width=400, height=300, title="Day 31")
     col3.altair_chart(ny_new_cases_fake1)
-    ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300)
+    ny_new_cases_fake2 = generate_new_cases_rolling("New York", 50, width=400, height=300, title="Day 50")
     st.altair_chart(ny_new_cases_fake2)
 
     i+=1
