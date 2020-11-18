@@ -497,6 +497,18 @@ if consent:
 
 
         i+=1
+        
+        st.subheader(str(i) + ". For each of the following orders, how effective are they to you?")
+        radio1phase3 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
+        radio2phase3 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3)")
+        radio3phase3 = record(st.selectbox, "Mask On Effectiveness (Phase 3)")
+        radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
+        i += 1
+        
+        radio1phase3("Stay-at-home (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio2phase3("Social distancing (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3("Masks on (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio4phase3("Closing bars/restaurants (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
 
         st.header("Conclusion")
