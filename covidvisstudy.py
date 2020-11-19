@@ -79,7 +79,7 @@ if consent:
 
     st.subheader("What platform are you using?")
     platformSel = record(st.radio, "Platform")
-    platform = platformSel("Platform", ("MTurk", "Prolific", "Other"))
+    platform = platformSel("Platform", ("-", "MTurk", "Prolific", "Other"))
 
     if platform != "Other":
         st.subheader("Enter your " + platform + " ID here.")
@@ -132,12 +132,6 @@ if consent:
 
     i += 1
 
-    st.subheader(str(i) + ". Attention check: Do you agree with this?")
-    agree1 = record(st.radio, "Botcheck 1")
-    agree1("Select Slightly Agree.", ["Strongly Disagree", "Slightly Disagree", "Neutral", "Slightly Agree", "Strongly Agree"])
-
-    i += 1
-
     st.subheader(str(i) + ". What is your occupation?")
     occupationSel = record(st.text_input, "Occupation")
     occupation = occupationSel("Occupation")
@@ -176,13 +170,13 @@ if consent:
 
     st.subheader(str(i) + ". The house icon represents a stay-at-home order being implemented. On approximately what day was the stay-at-home order implemented in this graph?")
     vizcheck1 = record(st.radio, "Vizcheck 1")
-    vizcheck1("Please make a selection", ["1", "7", "23", "40", "55", "70", "18"])
+    vizcheck1("Please make a selection", ["-", "1", "7", "23", "40", "55", "70", "18"])
 
     i += 1
 
     st.subheader(str(i) + ". On Day 20, approximately how many confirmed cases were there?")
     vizcheck2 = record(st.radio, "Vizcheck 2")
-    vizcheck2("Please make a selection.", ("100", "30,000", "8,000", "3,000", "100,000", "250,000"))
+    vizcheck2("Please make a selection.", ("-", "100", "30,000", "8,000", "3,000", "100,000", "250,000"))
 
     i += 1
 
