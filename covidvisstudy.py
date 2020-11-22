@@ -316,12 +316,12 @@ if consent:
     state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
     states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
     st.write("Look through at least 3 states' graphs and try to see if you can find a pattern with the effects of lockdowns on the COVID-19 case trendline.")
-    phase2_look1 = st.selectbox("Pick a state to view its trajectory.",  ["Select..."] + states)
+    phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
     #but = False
     if not session_state._next:
         if phase2_look1 in states:
             st.info("Observe the trajectory for the COVID-19 cases.")
-            alt_chart1_ = generate_actual_state_log_chart(phase2_look1, state_intervention[phase2_look1])
+            alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_intervention[phase2_look1])
             st.altair_chart(alt_chart1_)
             session_state.traj_looked_at += 1
             if session_state.traj_looked_at >= 3:

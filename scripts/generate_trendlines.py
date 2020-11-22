@@ -30,13 +30,22 @@ def create_state_df(state):
 # The method below takes in a processed state_cases df and adds an image column
 # based on the day of the stay_at_home order
 # Returns a NEW dataframe; not a destructive method
-def add_image_col_to_df(state_cases_df, day):
-    state_image = state_cases_df.copy()
-    state_image["image_url"] = "" # Will automatically fill up all columns
-    state_image.loc[day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
-    colors = ['before' if x < (day+1) else 'after' for x in range(state_image.shape[0])]
-    state_image["color"] = colors
-    return state_image
+def add_image_col_to_df(state_cases_df, start_day, end_day=None):
+    if end_day:
+        state_image = state_cases_df.copy()
+        state_image["image_url"] = "" # Will automatically fill up all columns
+        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        colors = ['lockdown_off' if (x < (start_day + 1) or x > (end_day - 1)) else 'lockdown_on' for x in range(state_image.shape[0])]
+        state_image["color"] = colors
+        return state_image
+    else:
+        state_image = state_cases_df.copy()
+        state_image["image_url"] = "" # Will automatically fill up all columns
+        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        colors = ['before' if x < (start_day+1) else 'after' for x in range(state_image.shape[0])]
+        state_image["color"] = colors
+        return state_image
 
 def add_image_col_to_df_with_date(state_cases_df, date):
     state_image = state_cases_df.copy()
@@ -97,6 +106,63 @@ def create_image_layer(df, x_label, y_label, image_col_name):
             height=400
         )
     return img
+
+# The below function creates an area chart that simulates "shading" for our charts
+# Note that "max_y_axis" may be larger than the actual max for y--it is basically the max the chart shows
+def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day):
+    x_axis = list(range(max_x + 1))
+    y_axis = [max_y] * len(x_axis)
+    colors = ([0] * lockdown_start_day) + ([1] * (lockdown_end_day - lockdown_start_day)) + ([0] * (len(x_axis) - lockdown_end_day))
+    data = {"x" : x_axis[:], "y" : y_axis[:], "colors" : colors[:]}
+    shade_df = pd.DataFrame(data)
+    shading_chart = alt.Chart(shade_df).mark_area(
+                        opacity=0.3
+                    ).encode(
+                        x="x:Q",
+                        y="y:Q",
+                        color=alt.Color(
+                            scale=alt.Scale(
+                                domain=[0, 1],
+                                range=['white', 'pink']
+                            )
+                        )
+                    ).properties(
+                        width=600,
+                        height=400
+                    )
+    return shading_chart
+
+
+# Function below generates interactive brush selection chart for rolling cases
+def generate_rolling_cases_interactive(state, inflection_date):
+    df = create_state_df(state)
+    df = add_image_col_to_df_with_date(df, inflection_date)
+    df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
+    brush = alt.selection_interval(encodings=['x'], empty='all', mark=alt.BrushConfig(fill='red'))
+    base = alt.Chart(df).mark_line().encode(
+                x='Day:Q',
+                y='New_Cases_Rolling:Q',
+            ).properties(
+                width=600,
+                height=400
+            ).add_selection(
+                brush
+            )
+
+    img = create_image_layer(df, 'Day', 'New_Cases_Rolling', 'image_url')
+
+    bars = alt.Chart(df).mark_bar().encode(
+        alt.Y('Province_State:N'),
+        alt.X('sum(New_Cases_Rolling):Q'),
+        opacity=alt.value(0.9)
+    ).transform_filter(
+        brush
+    ).properties(
+        width=600,
+        height=40
+    )
+
+    return (base + img) & bars
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
 def generate_altair_slider_log_chart(df, title=""):
@@ -173,7 +239,40 @@ def generate_new_cases_rolling(state, intervention_day, width, height, title="")
     final = base + img
     return final
 
+def generate_actual_state_log_chart(state, inflection_date):
+    state_cases = create_state_df(state)
+    state_cases = add_image_col_to_df_with_date(state_cases, inflection_date)
+    base = create_base_log_layer(state_cases, "Day", "Confirmed")
+    img = create_image_layer(state_cases, "Day", "Confirmed", "image_url")
+    
+    return base + img
 
+
+# ASSUMES THE INDEX HAS BEEN RESET SO BE CAREFUL
+def generate_intervention_images_new_cases_rolling(state, inflection_date):
+    df = create_state_df(state)
+    df = add_image_col_to_df_with_date(df, inflection_date)
+    df["new_cases_rolling"] = df["New_Cases"].rolling(window=7).mean().fillna(50) # KEPT FIRST 7 DAYS AS ESTIMATE OF 50
+    base = alt.Chart(df).mark_line().encode(
+        x='Day:Q',
+        y=alt.Y('new_cases_rolling:Q', scale=alt.Scale(domain=[0, 10000])),
+        color='color',
+    ).properties(
+        width=500,
+        height=300
+    )
+
+    img = create_image_layer(df, 'Day', 'new_cases_rolling', 'image_url')
+    
+    final = base + img
+    final.properties
+    return final
+    #print(val)
+    #display(final)
+
+
+
+"""
 # Function below takes in dataframe with at least two numerical columns: x & y
 def generate_single_graph_exponential(df, inflection_day):
     # Source: https://stackoverflow.com/questions/33186740/fitting-exponential-function-through-two-data-points-with-scipy-curve-fit
@@ -261,34 +360,5 @@ def generate_single_graph_exponential(df, inflection_day):
     img = create_image_layer(df, 'Day', 'Confirmed', 'image_url')
     result = result + img + labels
     return result
+"""
 
-def generate_actual_state_log_chart(state, inflection_date):
-    state_cases = create_state_df(state)
-    state_cases = add_image_col_to_df_with_date(state_cases, inflection_date)
-    base = create_base_log_layer(state_cases, "Day", "Confirmed")
-    img = create_image_layer(state_cases, "Day", "Confirmed", "image_url")
-    
-    return base + img
-
-
-# ASSUMES THE INDEX HAS BEEN RESET SO BE CAREFUL
-def generate_intervention_images_new_cases_rolling(state, inflection_date):
-    df = create_state_df(state)
-    df = add_image_col_to_df_with_date(df, inflection_date)
-    df["new_cases_rolling"] = df["New_Cases"].rolling(window=7).mean().fillna(50) # KEPT FIRST 7 DAYS AS ESTIMATE OF 50
-    base = alt.Chart(df).mark_line().encode(
-        x='Day:Q',
-        y=alt.Y('new_cases_rolling:Q', scale=alt.Scale(domain=[0, 10000])),
-        color='color',
-    ).properties(
-        width=500,
-        height=300
-    )
-
-    img = create_image_layer(df, 'Day', 'new_cases_rolling', 'image_url')
-    
-    final = base + img
-    final.properties
-    return final
-    #print(val)
-    #display(final)
