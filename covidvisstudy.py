@@ -12,14 +12,6 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-# TODO: we don't need to show too much after lockdown.
-# TODO: local neighborhood, show difference before/after lockdown order begins, ends
-# TODO: Check re-opening data (collected manually) 
-
-# B. Aditya: Track epidemic until reopening starts (too many factors after re-opening, reopening happens in phases, more nuanced, more confounding factors)
-
-# Randomization of state (in phase 1, phase 3). It is only needed if there is a learning effect. User would like to see own state possibly.
-
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
 st.markdown(
@@ -126,38 +118,49 @@ if consent:
     i += 1
 
 
-    st.subheader(str(i) + ". What is the highest level of education you have completed?")
+    st.subheader(str(i) + ". What is the highest level of education you have completed or are currently completing?")
     eduSel = record(st.selectbox, "Education Level")
     eduSel("Education Level", ("Select...", "No schooling completed", "High School", "Undergraduate", "Graduate"))
 
     i += 1
 
-    st.subheader(str(i) + ". What is your occupation?")
+    st.subheader(str(i) + ". What is your occupation, if any?")
     occupationSel = record(st.text_input, "Occupation")
     occupation = occupationSel("Occupation")
 
     i += 1
+#
+#    st.subheader(str(i) + ". How many times a week do you view coronavirus related info (articles, data, press releases, etc.)?")
+#    virusInfoSel = record(st.selectbox, "Times a week consuming virus information")
+#    virusInfoSel("Viewing", ("Select...", "0-5", "5-10", "10+"))
+#
+#    i += 1
 
-    st.subheader(str(i) + ". How many times a week do you view coronavirus related info (articles, data, press releases, etc.)?")
-    virusInfoSel = record(st.selectbox, "Times a week consuming virus information")
-    virusInfoSel("Viewing", ("Select...", "0-5", "5-10", "10+"))
-
-    i += 1
-
-    # TODO: Add spam-checker questions (Select 'agree', etc...)
-
-    st.subheader(str(i) + ". For each of the following orders, how effective are they to you?")
-    radio1 = record(st.selectbox, "Stay-at-home Effectiveness")
-    radio2 = record(st.selectbox, "Social Distancing Effectiveness")
-    radio3 = record(st.selectbox, "Mask On Effectiveness")
-    radio4 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness")
+    st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
+    radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
+    radio2 = record(st.selectbox, "Social Distancing Effectiveness (Phase 1-effective)")
+    radio3 = record(st.selectbox, "Mask On Effectiveness (Phase 1-effective)")
+    radio4 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 1-effective)")
 
     i += 1
-
+    
     radio1("Stay-at-home", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio2("Social distancing", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio3("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio4("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    
+    st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented today (if you feel there is a difference)?")
+    radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
+    radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
+    radio3_1 = record(st.selectbox, "Mask On Effectiveness")
+    radio4_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness")
+
+    i += 1
+
+    radio1_1("Stay-at-home", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio2_1("Social distancing", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3_1("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio4_1("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
     # TODO: Use a more basic graph
     st.subheader("Below, we present the trajectory for confirmed cases in Georgia on a logarithmic scale. Once you have\
@@ -176,7 +179,7 @@ if consent:
 
     st.subheader(str(i) + ". On Day 20, approximately how many confirmed cases were there?")
     vizcheck2 = record(st.radio, "Vizcheck 2")
-    vizcheck2("Please make a selection.", ("-", "100", "30,000", "8,000", "3,000", "100,000", "250,000"))
+    vizcheck2("Please make a selection.", ("-", "100", "3,000", "30,000", "8,000", "100,000", "250,000"))
 
     i += 1
 
@@ -190,6 +193,15 @@ if consent:
     show_phase2 = False
     
     st.header("Phase 1")
+    
+    
+    st.subheader("NEW: Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
+    
+    # TODO: ADD INTERACTIVE TRENDLINE HERE
+    
+    
+    # TODO: SELECT AN AREA WHERE YOU THINK MASKS WERE MANDATED
+    
     st.subheader("Below, you will be presented with a choice of potential trendlines for three states. The house image\
                   signifies when that state put a lockdown order in place (Day 0 indicates the first set of meaningful\
                   available data regarding COVID-19 cases). Your job is to identify which trendlines most accurately\
@@ -294,14 +306,14 @@ if consent:
 
     st.header("Phase 2")
 
-    st.info("Why do we use a log scale graph for disease modeling? Log scales allow us to assess the trend of a disease, which is whether the spread is getting faster, slower, or staying the same. For more information, see here: https://www.weforum.org/agenda/2020/04/covid-19-spread-logarithmic-graph/")
-
     # MIDDLE
     # -----------------------
     session_state = SessionState.get(traj_looked_at=0, roll_looked_at=0, _next = False, _rolling = False)
 
 
-    state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
+    state_restaurant_close_dates = {"New York": '03-17-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'} # Bars/nightclubs in Florida = March 17
+    state_restaurant_end_dates = {"New York": '06-22-2020', "California": '05-26-2020', "Georgia": '04-24-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
+    state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
     states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
     st.write("Look through at least 3 states' graphs and try to see if you can find a pattern with the effects of lockdowns on the COVID-19 case trendline.")
     phase2_look1 = st.selectbox("Pick a state to view its trajectory.",  ["Select..."] + states)
@@ -316,26 +328,25 @@ if consent:
                 st.info("Nice job!")
                 st.subheader("Below, we present a choice of possible trajectories for Georgia, identical to what you saw in Phase 1.\
                               Please choose the trajectory you think is correct.")
-                # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines
+                #These lines below signify where to put in your code for the "Phase 2 Questions" trendlines
                 georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
                 georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
                 # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
                 # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
                 # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
                 st.altair_chart(georgia_chart)
-                # TODO (Murtaza): Change the wording of "Is this correct?"
                 x = st.selectbox("Which number is the correct trendline for Georgia?", ["Select...", ] + [str(i) for i in range(1, 12)])
                 if x == "6":
                     st.info("Correct! Nice work.")
                     session_state._rolling = True
-                    #  # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
+                    #  These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
                     # georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
                     # georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
                     # # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
                     # # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
                     # # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
                     # st.altair_chart(georgia_chart)
-                    # # TODO (Murtaza): Change the wording of "Is this correct?"
+                    #Change the wording of "Is this correct?"
                     # y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
                     # if y == '6': # May need to change for different state
                     #     st.info("Correct! Now, you can move on to Phase 3.")
@@ -383,14 +394,12 @@ if consent:
                   st.info("Try again!")
               else:
                   pass
-              #      # TODO (Murtaza): These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
               #     georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
               #     georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
               #     # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
               #     # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
               #     # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
               #     st.altair_chart(georgia_chart)
-              #     # TODO (Murtaza): Change the wording of "Is this correct?"
               #     y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
               #     if y == '6': # May need to change for different state
               #         st.info("Correct! Now, you can move on to Phase 3.")
@@ -430,9 +439,7 @@ if consent:
 
     if show_phase3:
         st.header("Phase 3")
-        st.subheader("Below, you will be presented with the same questions you answered from Phase 1. You should revise your choices based\
-                      on the actual trajectories you studied in Phase 2. If your answers have not changed, please make \
-                      the same selections again. Use the slider to view the range of different options, and make your selection\
+        st.subheader("Below, you will be presented with the same questions you answered from Phase 1. If your answers to these questions are the same as in Phase 1, please select them again. Use the slider to view the range of different options, and make your selection\
                       using the drop-down menu.")
 
 
@@ -518,17 +525,29 @@ if consent:
 
         i+=1
         
-        st.subheader(str(i) + ". For each of the following orders, how effective are they to you?")
-        radio1phase3 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
-        radio2phase3 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3)")
-        radio3phase3 = record(st.selectbox, "Mask On Effectiveness (Phase 3)")
-        radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
+        st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
+        radio1phase3 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3-effective)")
+        radio2phase3 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3-effective)")
+        radio3phase3 = record(st.selectbox, "Mask On Effectiveness (Phase 3-effective)")
+        radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3-effective)")
         i += 1
         
         radio1phase3("Stay-at-home (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio2phase3("Social distancing (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio3phase3("Masks on (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio4phase3("Closing bars/restaurants (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        
+        st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
+        radio1phase3_1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
+        radio2phase3_1 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3)")
+        radio3phase3_1 = record(st.selectbox, "Mask On Effectiveness (Phase 3)")
+        radio4phase3_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
+        i += 1
+        
+        radio1phase3_1("Stay-at-home (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio2phase3_1("Social distancing (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3_1("Masks on (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio4phase3_1("Closing bars/restaurants (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
 
         st.header("Conclusion")
@@ -558,12 +577,6 @@ if consent:
                 st.info(str(response.content.decode('UTF-8')))
             elif platform == "Prolific":
                 st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-
-
-
-    # TODO: Collect more feedback from the study
-    # TODO: Number the questions
-    # TODO: Add progress bar
 
 
 
