@@ -54,7 +54,6 @@ st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
 
 consent = st.checkbox("I consent")
-consent = True
 if consent:
     widget_values = collections.defaultdict(list)
 
@@ -176,9 +175,9 @@ if consent:
     
     phase1_rolling = generate_rolling_cases_interactive('Arizona', '01-10-2020', '01-10-2020', False)
     x = st.altair_chart(phase1_rolling)
-    st.write(dir(x))
-    st.write(dir(phase1_rolling))
-    st.write(x.vega_lite_chart)
+#    st.write(dir(x))
+#    st.write(dir(phase1_rolling))
+#    st.write(x.vega_lite_chart)
     # TODO: ADD INTERACTIVE TRENDLINE HERE
     
     
