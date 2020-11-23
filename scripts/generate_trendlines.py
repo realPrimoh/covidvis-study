@@ -120,7 +120,7 @@ def create_image_layer(df, x_label, y_label, image_col_name):
 
 # The below function creates an area chart that simulates "shading" for our charts
 # Note that "max_y_axis" may be larger than the actual max for y--it is basically the max the chart shows
-def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day):
+def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
     x_axis = list(range(max_x + 1))
     y_axis = [max_y] * len(x_axis)
     colors = ([0] * lockdown_start_day) + ([1] * (lockdown_end_day - lockdown_start_day)) + ([0] * (len(x_axis) - lockdown_end_day))
@@ -135,7 +135,8 @@ def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day
                             scale=alt.Scale(
                                 domain=[0, 1],
                                 range=['white', 'pink']
-                            )
+                            ),
+                            type="quantitative"
                         )
                     ).properties(
                         width=600,
@@ -145,7 +146,7 @@ def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day
 
 
 # Function below generates interactive brush selection chart for rolling cases
-def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True):
+def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
@@ -158,6 +159,15 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
                 height=400
             ).add_selection(
                 brush
+            )
+    
+    if not interactive:
+        base = alt.Chart(df).mark_line().encode(
+                x='Day:Q',
+                y=alt.Y('New_Cases_Rolling:Q', axis=alt.Axis(title="New COVID-19 Cases per Day")),
+            ).properties(
+                width=600,
+                height=400
             )
 
     img = create_image_layer(df, 'Day', 'New_Cases_Rolling', 'image_url')

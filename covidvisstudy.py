@@ -54,6 +54,7 @@ st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
 
 consent = st.checkbox("I consent")
+consent = True
 if consent:
     widget_values = collections.defaultdict(list)
 
@@ -148,7 +149,7 @@ if consent:
     
     radio1("Stay-at-home if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio2("Social distancing if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio3("Masks on if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3("Mandatory masks in public if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio4("Closing bars/restaurants if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     
     st.subheader(str(i) + ". For each of the following orders, how effective are they to you in reality (if you feel there is a difference)?")
@@ -161,7 +162,7 @@ if consent:
 
     radio1_1("Stay-at-home in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio2_1("Social distancing in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio3_1("Masks on in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3_1("Mandatory masks in public in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio4_1("Closing bars/restaurants in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
 
@@ -172,9 +173,12 @@ if consent:
     
     
     st.subheader("Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
-    
-    phase1_rolling = generate_rolling_cases_interactive('Arizona', '01-10-2020', '01-10-2020', False)
+    start = st.slider("Choose when you think restaurants/bars closed, if at all", 0, 160, 1)
+    end = st.slider("Choose when you think restaurants/bars opened, if at all", 0, 175, 170)
+    phase1_rolling = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
+    shading = create_shading_layer(180, 4000, start, end)
     x = st.altair_chart(phase1_rolling)
+#    y = st.altair_chart(shading)
 #    st.write(dir(x))
 #    st.write(dir(phase1_rolling))
 #    st.write(x.vega_lite_chart)
@@ -264,7 +268,7 @@ if consent:
         
         radio1phase3("Stay-at-home if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio2phase3("Social distancing if everyone follows(Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio3phase3("Masks on if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3("Mandatory masks in public in if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio4phase3("Closing bars/restaurants if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
@@ -276,11 +280,14 @@ if consent:
         
         radio1phase3_1("Stay-at-home in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio2phase3_1("Social distancing in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio3phase3_1("Masks on in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3_1("Mandatory masks in public in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         
-        phase3_rolling = generate_rolling_cases_interactive('Arizona', '01-10-2020', '01-10-2020', False)
-        x_phase3 = st.altair_chart(phase3_rolling)
+        start_phase3 = st.slider("Choose when you think restaurants/bars closed, if at all ", 0, 160, 1)
+        end_phase3 = st.slider("Choose when you think estaurants/bars opened, if at all ", 0, 175, 170)
+        phase3_rolling = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start_phase3), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end_phase3), False, False)
+        shading = create_shading_layer(180, 4000, start, end)
+        x = st.altair_chart(phase3_rolling)
 
 
         st.header("Conclusion")
