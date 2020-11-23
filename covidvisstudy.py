@@ -172,8 +172,10 @@ if consent:
     
     
     st.subheader("Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
-    start = st.slider("Choose when you think restaurants/bars closed, if at all", 0, 160, 1)
-    end = st.slider("Choose when you think restaurants/bars opened, if at all", 0, 175, 170)
+    start_phase1 = record(st.slider, "Start - phase1")
+    end_phase1 = record(st.slider, "End - phase1")
+    start = start_phase1("Choose when you think restaurants/bars closed, if at all", 0, 160, 1)
+    end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 175, 170)
     phase1_rolling = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
     shading = create_shading_layer(180, 4000, start, end)
     x = st.altair_chart(phase1_rolling)
@@ -282,8 +284,10 @@ if consent:
         radio3phase3_1("Mandatory masks in public in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         
-        start_phase3 = st.slider("Choose when you think restaurants/bars closed, if at all ", 0, 160, 1)
-        end_phase3 = st.slider("Choose when you think estaurants/bars opened, if at all ", 0, 175, 170)
+        record_start_phase3 = record(st.slider, "start-phase3")
+        record_end_phase3 = record(st.slider, "end-phase3")
+        start_phase3 = record_start_phase3("Choose when you think restaurants/bars closed, if at all ", 0, 160, 1)
+        end_phase3 = record_end_phase3("Choose when you think estaurants/bars opened, if at all ", 0, 175, 170)
         phase3_rolling = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start_phase3), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end_phase3), False, False)
         shading = create_shading_layer(180, 4000, start, end)
         x = st.altair_chart(phase3_rolling)
