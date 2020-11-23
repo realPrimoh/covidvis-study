@@ -153,6 +153,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date):
     base = alt.Chart(df).mark_line().encode(
                 x='Day:Q',
                 y='New_Cases_Rolling:Q',
+                tooltip=['sum(New_Cases_Rolling):Q']
             ).properties(
                 width=600,
                 height=400
