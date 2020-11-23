@@ -35,7 +35,7 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
         state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
-        state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
         colors = ['lockdown_off' if (x < (start_day + 1) or x > (end_day - 1)) else 'lockdown_on' for x in range(state_image.shape[0])]
         state_image["color"] = colors
         return state_image

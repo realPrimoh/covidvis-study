@@ -151,7 +151,7 @@ if consent:
     radio3("Masks on if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     radio4("Closing bars/restaurants if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     
-    st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented today (if you feel there is a difference)?")
+    st.subheader(str(i) + ". For each of the following orders, how effective are they to you in reality (if you feel there is a difference)?")
     radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
     radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
     radio3_1 = record(st.selectbox, "Mask On Effectiveness")
@@ -159,10 +159,10 @@ if consent:
 
     i += 1
 
-    radio1_1("Stay-at-home if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio2_1("Social distancing if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio3_1("Masks on if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio4_1("Closing bars/restaurants if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio1_1("Stay-at-home in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio2_1("Social distancing in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3_1("Masks on in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio4_1("Closing bars/restaurants in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
 
     st.info("There are three phases to this survey. In Phase 1, you will be answering questions based on visualizations presented to you. In Phase 2, you will get to interact with some visualizations. In Phase 3, you will answer questions again based on visualizations shown to you.")
@@ -248,27 +248,6 @@ if consent:
                 else:
                     pass
 
-    
-
-    # FLOW: 1. Pick a state:
-    # 2. Here's the trajectory of the state. Once you're done looking, click next.
-    # 3. What is the trajectory closest to you
-
-    #st.subheader("Below, we present you with some actual trajectories of confirmed cases for various states. Please study them\
-    #              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
-    #              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
-    #
-    #phase2state = st.selectbox("State (Normal)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-    #alt_chart1 = generate_actual_state_log_chart(phase2state, state_intervention[phase2state])
-    #st.altair_chart(alt_chart1)
-    #
-    #st.subheader("Below, we present you with some actual trajectories of average daily cases for various states. Please study them\
-    #              carefully, and take note of whether seeing these trajectories causes you to change your answers from Phase 1.\
-    #              In Phase 3, we will be asking you to reconsider your answers from Phase 1.")
-    #state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
-    #phase2stateRolling = st.selectbox("State (Rolling)", ('California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana'))
-    #alt_chart2 = generate_new_cases_rolling(phase2stateRolling, state_intervention_day[phase2stateRolling], width=600, height=400)
-    #st.altair_chart(alt_chart2)
 
     if show_phase3:
         st.header("Phase 3")
@@ -283,10 +262,10 @@ if consent:
         radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3-effective)")
         i += 1
         
-        radio1phase3("Stay-at-home (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio2phase3("Social distancing (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio3phase3("Masks on (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio4phase3("Closing bars/restaurants (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio1phase3("Stay-at-home if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio2phase3("Social distancing if everyone follows(Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3("Masks on if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio4phase3("Closing bars/restaurants if everyone follows (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
         radio1phase3_1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
@@ -295,10 +274,10 @@ if consent:
         radio4phase3_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
         i += 1
         
-        radio1phase3_1("Stay-at-home (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio2phase3_1("Social distancing (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio3phase3_1("Masks on (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-        radio4phase3_1("Closing bars/restaurants (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio1phase3_1("Stay-at-home in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio2phase3_1("Social distancing in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio3phase3_1("Masks on in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         
         phase3_rolling = generate_rolling_cases_interactive('Arizona', '01-10-2020', '01-10-2020', False)
         x_phase3 = st.altair_chart(phase3_rolling)
