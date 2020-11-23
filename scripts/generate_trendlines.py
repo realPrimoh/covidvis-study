@@ -52,7 +52,7 @@ def add_image_col_to_df_with_date(state_cases_df, start_date, end_date=None):
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
         state_image.loc[state_cases_df['Date'] == start_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
-        state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
         bools1, bools2 = state_cases_df['Date'] <= start_date, state_cases_df['Date'] >= end_date
         bools = [x or y for (x, y) in zip(bools1, bools2)] # Should do a pairwise or of the list elements
         colors = ['off' if x else 'on' for x in bools]
