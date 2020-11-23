@@ -13,7 +13,7 @@ def create_state_df(state):
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
     state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("08-1-2020"))]
+    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("10-1-2020"))]
     # Convert timedelta to days
     # Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
     earliest_date = state_cases.sort_values('Date')['Date'].values[0]
@@ -145,14 +145,14 @@ def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day
 
 
 # Function below generates interactive brush selection chart for rolling cases
-def generate_rolling_cases_interactive(state, start_date, end_date):
+def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True):
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
     brush = alt.selection_interval(encodings=['x'], empty='all', mark=alt.BrushConfig(fill='red'))
     base = alt.Chart(df).mark_line().encode(
                 x='Day:Q',
-                y='New_Cases_Rolling:Q',
+                y=alt.Y('New_Cases_Rolling:Q', axis=alt.Axis(title="New COVID-19 Cases per Day")),
             ).properties(
                 width=600,
                 height=400
@@ -163,8 +163,8 @@ def generate_rolling_cases_interactive(state, start_date, end_date):
     img = create_image_layer(df, 'Day', 'New_Cases_Rolling', 'image_url')
 
     bars = alt.Chart(df).mark_bar().encode(
-        alt.Y('Province_State:N'),
-        alt.X('sum(New_Cases_Rolling):Q'),
+        alt.Y('Province_State:N', axis=alt.Axis(title="State")),
+        alt.X('sum(New_Cases_Rolling):Q', axis=alt.Axis(title='Total COVID-19 Cases in Selected Period')),
         opacity=alt.value(0.9)
     ).transform_filter(
         brush
@@ -173,6 +173,8 @@ def generate_rolling_cases_interactive(state, start_date, end_date):
         height=40
     )
 
+    if not show_bar:
+        return (base + img)
     return (base + img) & bars
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
