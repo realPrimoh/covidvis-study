@@ -13,7 +13,7 @@ def create_state_df(state):
     jhu_df = jhu_df[(jhu_df.Country_Region == 'United States') & jhu_df.Province_State.notnull()]
     state_cases = jhu_df[jhu_df["Province_State"] == state].sort_values("Date")
     state_cases["Date"] = pd.to_datetime(state_cases["Date"])
-    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("05-1-2020"))]
+    state_cases = state_cases[(state_cases["Date"] > pd.to_datetime("03-9-2020")) & (state_cases["Date"] < pd.to_datetime("08-1-2020"))]
     # Convert timedelta to days
     # Source https://stackoverflow.com/questions/18215317/extracting-days-from-a-numpy-timedelta64-value
     earliest_date = state_cases.sort_values('Date')['Date'].values[0]
@@ -47,14 +47,25 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
         state_image["color"] = colors
         return state_image
 
-def add_image_col_to_df_with_date(state_cases_df, date):
-    state_image = state_cases_df.copy()
-    state_image["image_url"] = "" # Will automatically fill up all columns
-    state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
-    bools = state_cases_df['Date'] <= date
-    colors = ['before' if x else 'after' for x in bools]
-    state_image["color"] = colors
-    return state_image
+def add_image_col_to_df_with_date(state_cases_df, start_date, end_date=None):
+    if end_date:
+        state_image = state_cases_df.copy()
+        state_image["image_url"] = "" # Will automatically fill up all columns
+        state_image.loc[state_cases_df['Date'] == start_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        bools1, bools2 = state_cases_df['Date'] <= start_date, state_cases_df['Date'] >= end_date
+        bools = [x or y for (x, y) in zip(bools1, bools2)] # Should do a pairwise or of the list elements
+        colors = ['off' if x else 'on' for x in bools]
+        state_image["color"] = colors
+        return state_image
+    else:
+        state_image = state_cases_df.copy()
+        state_image["image_url"] = "" # Will automatically fill up all columns
+        state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        bools = state_cases_df['Date'] <= date
+        colors = ['before' if x else 'after' for x in bools]
+        state_image["color"] = colors
+        return state_image
 
 def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=None, title=""):
     if is_selection:
@@ -134,9 +145,9 @@ def create_shading_layer(max_x, max_y_axis, lockdown_start_day, lockdown_end_day
 
 
 # Function below generates interactive brush selection chart for rolling cases
-def generate_rolling_cases_interactive(state, inflection_date):
+def generate_rolling_cases_interactive(state, start_date, end_date):
     df = create_state_df(state)
-    df = add_image_col_to_df_with_date(df, inflection_date)
+    df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
     brush = alt.selection_interval(encodings=['x'], empty='all', mark=alt.BrushConfig(fill='red'))
     base = alt.Chart(df).mark_line().encode(

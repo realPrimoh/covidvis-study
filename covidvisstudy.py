@@ -144,10 +144,10 @@ if consent:
 
     i += 1
     
-    radio1("Stay-at-home", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio2("Social distancing", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio3("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio4("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio1("Stay-at-home if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio2("Social distancing if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3("Masks on if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio4("Closing bars/restaurants if everyone follows", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
     
     st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented today (if you feel there is a difference)?")
     radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
@@ -157,10 +157,10 @@ if consent:
 
     i += 1
 
-    radio1_1("Stay-at-home", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio2_1("Social distancing", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio3_1("Masks on", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-    radio4_1("Closing bars/restaurants", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio1_1("Stay-at-home if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio2_1("Social distancing if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio3_1("Masks on if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+    radio4_1("Closing bars/restaurants if implemented today", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
     # TODO: Use a more basic graph
     st.subheader("Below, we present the trajectory for confirmed cases in Georgia on a logarithmic scale. Once you have\
@@ -312,110 +312,56 @@ if consent:
 
 
     state_restaurant_close_dates = {"New York": '03-17-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '03-31-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'} # Bars/nightclubs in Florida = March 17
-    state_restaurant_end_dates = {"New York": '06-22-2020', "California": '05-26-2020', "Georgia": '04-24-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
+    state_restaurant_open_dates = {"New York": '06-22-2020', "California": '05-26-2020', "Georgia": '04-24-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '03-31-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
     state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
-    states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
-    st.write("Look through at least 3 states' graphs and try to see if you can find a pattern with the effects of lockdowns on the COVID-19 case trendline.")
+    states = ['California', 'Georgia', 'Florida', 'New York']
+    st.subheader("Choose a state from the drop-down menu to see the number of new cases each day (we provide a 7-day average\
+              Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
+              certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
+              demonstrating how to interact with the graph is also presented below. You must study at least three states\
+              before you can move on.")
+    st.video('./media/demo.mp4', format='video/mp4', start_time=7)
     phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
     #but = False
     if not session_state._next:
         if phase2_look1 in states:
             st.info("Observe the trajectory for the COVID-19 cases.")
-            alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_intervention[phase2_look1])
+            alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
             st.altair_chart(alt_chart1_)
             session_state.traj_looked_at += 1
             if session_state.traj_looked_at >= 3:
-                st.info("Nice job!")
-                st.subheader("Below, we present a choice of possible trajectories for Georgia, identical to what you saw in Phase 1.\
-                              Please choose the trajectory you think is correct.")
-                #These lines below signify where to put in your code for the "Phase 2 Questions" trendlines
-                georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-                georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
-                # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-                # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-                # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-                st.altair_chart(georgia_chart)
-                x = st.selectbox("Which number is the correct trendline for Georgia?", ["Select...", ] + [str(i) for i in range(1, 12)])
-                if x == "6":
-                    st.info("Correct! Nice work.")
-                    session_state._rolling = True
-                    #  These lines below signify where to put in your code for the "Phase 2 Questions" trendlines. This is question #2 which is after the person answers Question 1
-                    # georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-                    # georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
-                    # # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-                    # # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-                    # # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-                    # st.altair_chart(georgia_chart)
-                    #Change the wording of "Is this correct?"
-                    # y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
-                    # if y == '6': # May need to change for different state
-                    #     st.info("Correct! Now, you can move on to Phase 3.")
-                    #     session_state._rolling = True
-                    # elif y in [str(i) for i in range(1, 12) if i != 6]:
-                    #     st.info("Try again!")
-                    # else:
-                    #     pass
-                elif x in [str(i) for i in range(1, 12) if i != 6]:
+                st.info("Now, we will ask you some questions about the charts.")
+                st.subheader("Approximately how many new cases occurred in California while restaurants were closed?")
+                x = st.radio("Make your selection for California below.", 
+                    ["-", 10000, 38000, 100000, 120000, 200000])
+                if x == 100000:
+                    st.info("Correct! Nice work. Let's try a couple more.")
+                    st.subheader("Approximately how many new cases occurred in Florida between Day 90 and Day 130?")
+                    y = st.radio("Make your selection for Florida below.", 
+                    ["-", 53000, 122000, 190000, 240000, 300000])
+                    if y == 240000: # May need to change for different state
+                        st.info("Correct! Just one more.")
+                        st.subheader("About how many days after restaurants closed was the growth rate of the number of cases\
+                                      in Georgia the highest? Hint: Look for where the line is steepest.")
+                        z = st.radio("Make your selection for Georgia below.", 
+                        ["-", 20, 45, 70, 100, 200])
+                        if z == 70: # May need to change for different state
+                            st.info("Correct! You can now move on to Phase 3.")
+                            show_phase3 = True
+                        elif z in [20, 45, 100, 200]:
+                            st.info("Try again!")
+                        else:
+                            pass
+                    elif y in [53000, 122000, 190000, 300000]:
+                        st.info("Try again!")
+                    else:
+                        pass
+                elif x in [10000, 38000, 120000, 200000]:
                     st.info("Try again!")
                 else:
                     pass
 
-    if session_state._rolling:
-      state_intervention_day = {"New York": 12, "California": 9, "Georgia": 23, "Illinois": 11, "Florida": 22, "New Jersey": 11, "Arizona": 21, "Colorado": 16, 'Indiana': 15, 'Louisiana': 13}
-      states = ['California', 'Georgia', 'Illinois', 'New Jersey', 'Arizona', 'Colorado', 'Indiana', 'Louisiana']
-      st.write("Now, take a look at a minimum of 3 graphs below, which show the rolling average of daily cases in each state,\
-                along with when the lockdown order was placed.")
-      phase2_look1_roll = st.selectbox("Pick a state to view its rolling average chart.",  ["Select..."] + states)
-      #but = False
-      #if not session_state._next:
-      if phase2_look1_roll in states:
-          st.info("Consider the rate of change of daily cases with respect to the lockdown measure.")
-          rolling_chart1_ = generate_new_cases_rolling(phase2_look1_roll, state_intervention_day[phase2_look1_roll], width=600, height=400)
-          #alt_chart1_ = generate_actual_state_log_chart(phase2_look1, state_intervention[phase2_look1])
-          st.altair_chart(rolling_chart1_)
-          session_state.roll_looked_at += 1
-          if session_state.roll_looked_at >= 3:
-              st.info("Nice job!")
-              st.subheader("Below, we present a choice of possible lockdown dates for Arizona's chart of daily cases, identical to what you saw in Phase 1.\
-                            Please choose the option you think is correct.")
-              pick_az_img = st.radio("", ["-", "Day 10", "Day 21", "Day 38"])
-              col1, col2, col3 = st.beta_columns(3)
-              az_new_cases_fake1 = generate_new_cases_rolling("Arizona", 10, width=400, height=300, title="Day 10")
-              col1.altair_chart(az_new_cases_fake1)
-              col2.text("")
-              az_new_cases_actual = generate_new_cases_rolling("Arizona", 21, width=400, height=300, title="Day 21")
-              col3.altair_chart(az_new_cases_actual)
-              az_new_cases_fake2 = generate_new_cases_rolling("Arizona", 38, width=400, height=300, title="Day 38")
-              st.altair_chart(az_new_cases_fake2)
-              if pick_az_img == "Day 21":
-                  st.info("Correct! Nice job.")
-                  show_phase3 = True
-              elif pick_az_img in ["Day 10", "Day 38"]:
-                  st.info("Try again!")
-              else:
-                  pass
-              #     georgia_generated_trendlines = pd.read_csv("data/georgia_generated_trendlines.csv")
-              #     georgia_chart = generate_altair_slider_log_chart_KEEP_ACTUAL(georgia_generated_trendlines)
-              #     # georgia_generated_trendlines.loc[:, ["image_url"]] = georgia_generated_trendlines["image_url"].fillna("")
-              #     # base = create_base_log_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed")
-              #     # img = create_image_layer(georgia_generated_trendlines[georgia_generated_trendlines["Type"] == "actual"], "Day", "Confirmed", "image_url")
-              #     st.altair_chart(georgia_chart)
-              #     y = st.selectbox("Which number is the correct trendline for [insert]?", ["Select...", ] + [str(i) for i in range(1, 12)])
-              #     if y == '6': # May need to change for different state
-              #         st.info("Correct! Now, you can move on to Phase 3.")
-              #         session_state._rolling = True
-              #     elif y in [str(i) for i in range(1, 12) if i != 6]:
-              #         st.info("Try again!")
-              #     else:
-              #         pass
-              # elif x in [str(i) for i in range(1, 12) if i != 6]:
-              #     st.info("Try again!")
-              # else:
-              #     pass
-
-
-
-
+    
 
     # FLOW: 1. Pick a state:
     # 2. Here's the trajectory of the state. Once you're done looking, click next.
