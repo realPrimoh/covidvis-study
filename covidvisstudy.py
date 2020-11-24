@@ -214,16 +214,22 @@ if consent:
             session_state = SessionState.get(traj_looked_at=0, roll_looked_at=0, _next = False, _rolling = False)
 
 
-            state_restaurant_close_dates = {"New York": '03-17-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '06-29-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020', "Texas": '03-19-2020', "Washington": '03-23-2020', "Pennsylvania": '04-01-2020'} # Bars/nightclubs in Florida = March 17
-            state_restaurant_open_dates = {"New York": '06-22-2020', "California": '05-26-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-12-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
+            state_restaurant_close_dates = {"New York": '03-20-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '06-29-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020', "Texas": '03-31-2020', "Washington": '03-23-2020', "Pennsylvania": '04-01-2020'} # Bars/nightclubs in Florida = March 17
+            state_restaurant_open_dates = {"New York": '05-15-2020', "California": '05-26-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-3-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
 
             # Georgia: https://www.acluga.org/en/timeline-georgia-government-actions-regarding-covid-19
             # Texas: https://www.texastribune.org/2020/07/31/coronavirus-timeline-texas/
             # Florida: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Florida#Response
+            # New York: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_York_(state)#Government_response
             # Washington: https://www.seattlemet.com/health-and-wellness/2020/08/seattle-s-coronavirus-timeline-from-toilet-paper-to-mask-laws
             # Pennsylvania: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pennsylvania#Government_response (REMOVE b/c of too many "phases")
             state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
-            states = ['California', 'Georgia', 'Florida', 'New York', 'Illinois', 'Arizona', 'Texas', 'Indiana', 'New Jersey', 'Washington', 'Pennsylvania']
+            states = ['New York', 'Florida', 'Texas']
+            # Florida: April 1st was statewide stay-at-home-order> Bars/nightclubs had already closed by this day. Phase 2 reopening June 3rd
+            # Texas: March 19th (restaurants, bars, schools, closed). March 31st Texans told to stay home but not called "stay-at-home order",
+            # and on June 3rd almost all businesses at 50% capacity. On June 12th, restaurants at 75% capacity.
+            # New York: March 20th stay at home order, it officially ends May 15th but no real "reopening of whole state" occurred
+
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
@@ -237,7 +243,21 @@ if consent:
                         session_state.traj_looked_at = 5
                         show_phase3 = True
                 if phase2_look1 in states:
-                    st.info("Observe the trajectory for the COVID-19 cases.")
+                    if phase2_look1 == 'New York':
+                      st.info("New York implemented a state-wide stay-at-home order on Day 12, which closed all non-essential businesses and\
+                              canceled/postponed all non-essential gatherings. New York did not ever reopen the entire state, but we mark Day 66\
+                              as the end date, as that was when the first counties were allowed to enter some phase of reopening.")
+                    if phase2_look1 == 'Florida':
+                      st.info("We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
+                              that bars and restaurants had already closed previously. We mark Day 104 as the end day, as that is when Florida\
+                              entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
+                              to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov\
+                              .com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
+                    if phase2_look1 == 'Texas':
+                      st.info("Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
+                              Texans were told to stay home for all non-essential reasons. It is worth noting that the governor declined to call\
+                              this an official stay-at-home order. We mark Day 85 as the end day, as Texas allowed almost all businesses to resume\
+                              operations at 50 percent capacity. On Day 94, restaurants were allowed to open at 75 percent capacity.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
                     st.altair_chart(alt_chart1_)
                     session_state.traj_looked_at += 1
