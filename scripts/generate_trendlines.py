@@ -146,8 +146,11 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
 
 
 # Function below generates interactive brush selection chart for rolling cases
-@st.cache(allow_output_mutation=True, persist=True)
+@st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True)
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
+    warning = None
+    if start_date > end_date:
+        warning = "WARNING: Start of restaurant closures cannot be after the end of restaurant closures. You will not be able to move forward until this is fixed."
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
@@ -185,7 +188,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
     )
 
     if not show_bar:
-        return (base + img)
+        return (base, img, warning)
     return (base + img) & bars
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
