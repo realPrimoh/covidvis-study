@@ -146,7 +146,7 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
 
 
 # Function below generates interactive brush selection chart for rolling cases
-@st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True, persist=True)
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
