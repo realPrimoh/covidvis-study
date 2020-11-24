@@ -136,7 +136,7 @@ if consent:
 #
 #    i += 1
 
-    demographic_complete = True
+    demographic_complete = False
     if platform != "-" and demo_gender != 'Select...' and demo_party != "Select..." and demo_race != "Select..." and demo_edu != "Select..." and demo_occu != "Select...":
         demographic_complete = st.checkbox("I have completed the demographics survey above.")
 
