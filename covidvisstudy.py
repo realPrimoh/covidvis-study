@@ -249,7 +249,7 @@ if consent:
                               as the end date, as that was when the first counties were allowed to enter some phase of reopening.")
                     if phase2_look1 == 'Florida':
                       st.info("We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
-                              that bars and restaurants had already closed previously. We mark Day 104 as the end day, as that is when Florida\
+                              that bars and restaurants had already closed previously. We mark Day 85 as the end day, as that is when Florida\
                               entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
                               to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov\
                               .com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
