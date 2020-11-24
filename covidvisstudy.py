@@ -206,10 +206,10 @@ if consent:
     # Pennsylvania: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pennsylvania#Government_response (REMOVE b/c of too many "phases")
     state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
     states = ['California', 'Georgia', 'Florida', 'New York', 'Illinois', 'Arizona', 'Texas', 'Indiana', 'New Jersey', 'Washington', 'Pennsylvania']
-    st.subheader("Choose a state from the drop-down menu to see the number of new cases each day (we provide a 7-day average\
+    st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
               Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
               certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
-              demonstrating how to interact with the graph is also presented below. You must study at least three states\
+              demonstrating how to interact with the graph is also presented below. \n\nYou must study at least three states\
               before you can move on.")
     st.video('./media/demo.mp4', format='video/mp4', start_time=7)
     phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
