@@ -5,12 +5,16 @@ import csv
 import datetime
 import collections
 import requests
+import time
 
 from random import random
 import SessionState
 from functools import reduce
 
 from scripts.generate_trendlines import *
+
+
+testing = False
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -54,6 +58,8 @@ st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
 
 consent = st.checkbox("I consent")
+if testing:
+    consent = True
 if consent:
     widget_values = collections.defaultdict(list)
 
@@ -137,7 +143,9 @@ if consent:
 #    i += 1
 
     demographic_complete = False
-    if platform != "-" and demo_gender != 'Select...' and demo_party != "Select..." and demo_race != "Select..." and demo_edu != "Select..." and demo_occu != "Select...":
+    if testing:
+        demographic_complete = True
+    if demo_gender != 'Select...' and demo_party != "Select..." and demo_race != "Select..." and demo_edu != "Select..." and demo_occu != "Select...":
         demographic_complete = st.checkbox("I have completed the demographics survey above.")
 
     if demographic_complete:
@@ -225,6 +233,9 @@ if consent:
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
             #but = False
             if not session_state._next:
+                if testing:
+                        session_state.traj_looked_at = 5
+                        show_phase3 = True
                 if phase2_look1 in states:
                     st.info("Observe the trajectory for the COVID-19 cases.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
@@ -328,14 +339,24 @@ if consent:
                             writer = csv.DictWriter(csvfile, fieldnames=field_names)
                             writer.writeheader()
                             writer.writerows([widget_values])
+                            
 
                         response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
+                        bar = st.progress(0)
+                        for percent_complete in range(100):
+                            time.sleep(0.05)
+                            bar.progress(percent_complete + 1)
                         if platform == "MTurk":
                             st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+                            st.balloons()
 
                             st.info(str(response.content.decode('UTF-8')))
                         elif platform == "Prolific":
                             st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+                            st.balloons()
+                        else:
+                            st.info("Thanks for taking our survey!")
+                            st.balloons()
 
 
 
