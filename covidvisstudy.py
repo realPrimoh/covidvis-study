@@ -34,7 +34,7 @@ st.title('CovidVis: The Impact of Visualizations on Perception of COVID-19 Inter
 st.info("Welcome to the Covidvis User Study. In this study, we are trying to measure the effects of seeing visualizations of COVID's ascent throughout the world on people's opinions about COVID interventions. Your data will be kept as confidential as possible.")
 
 st.subheader("Consent to take part in the study")
-st.markdown("We are asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. We will describe this study to you and answer any of your questions. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
+st.markdown("We are asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
 
 st.subheader("What the study is about")
 st.markdown("The purpose of this research is to examine the impact of visualizations on COVID-19 intervention perception.")
@@ -52,7 +52,7 @@ st.markdown("There are no direct benefits to you from this research. It is our h
 #st.markdown("Your involvement in this research is voluntary, and you may refuse to participate before the study begins or discontinue at any time. You will only receive compensation for this study if you complete all tasks and survey questions.")
 
 st.subheader("If you have questions")
-st.markdown("The main researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
+st.markdown("The primary researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
 
 st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
@@ -148,7 +148,7 @@ if consent:
     if demo_gender != 'Select...' and demo_party != "Select..." and demo_race != "Select..." and demo_edu != "Select..." and demo_occu != "Select...":
         demographic_complete = st.checkbox("I have completed the demographics survey above.")
 
-    if demographic_complete:
+    if True:#demographic_complete:
         st.info("There are three phases to this survey. In Phase 1, you will be answering questions based on visualizations presented to you. In Phase 2, you will get to interact with some visualizations. In Phase 3, you will answer questions again based on visualizations shown to you.")
 
 
@@ -251,8 +251,10 @@ if consent:
                       st.info("We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
                               that bars and restaurants had already closed previously. We mark Day 85 as the end day, as that is when Florida\
                               entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
-                              to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov\
-                              .com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
+                              to resume operations at 50 percent capacity.")
+                      # link = '[Florida Phase 2 Details](https://www.flgov\
+                      #         .com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf)'
+                      # st.markdown(link, unsafe_allow_html=True)
                     if phase2_look1 == 'Texas':
                       st.info("Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
                               Texans were told to stay home for all non-essential reasons. It is worth noting that the governor declined to call\
