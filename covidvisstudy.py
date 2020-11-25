@@ -339,10 +339,15 @@ if consent:
 
                 
                 if not warning_phase3:
+                    
+                    record_phase3_vizchange = record(st.radio, "Effect of Phase 2")
+                    rpv = record_phase3_vizchange("How did Phase 2 affect your opinion about COVID-19 interventions?", ('-', 'Reinforced my views', 'Changed my views', 'Didn\'t change my views'))
 
                     st.header("Conclusion")
+                    
+                    text_record = record(st.text_input, "Conclusion_Share")
 
-                    st.text_input("Is there anything else you would like to share with us regarding this study?")
+                    text_r = text_record("Is there anything else you would like to share with us regarding this study?")
 
 
                     st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
@@ -368,15 +373,12 @@ if consent:
                             bar.progress(percent_complete + 1)
                         if platform == "MTurk":
                             st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
-                            st.balloons()
 
                             st.info(str(response.content.decode('UTF-8')))
                         elif platform == "Prolific":
                             st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-                            st.balloons()
                         else:
                             st.info("Thanks for taking our survey!")
-                            st.balloons()
 
 
 
