@@ -126,7 +126,7 @@ if consent:
 
     st.subheader(str(i) + ". What is the highest level of education you have completed or are currently completing?")
     eduSel = record(st.selectbox, "Education Level")
-    demo_edu = eduSel("Education Level", ("Select...", "No schooling completed", "High School", "Undergraduate", "Graduate"))
+    demo_edu = eduSel("Education Level", ("Select...", "No schooling completed", "High School Diploma", "Undergraduate Degree", "Advanced Degree"))
 
     i += 1
 

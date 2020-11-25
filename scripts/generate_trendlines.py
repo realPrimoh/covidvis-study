@@ -145,7 +145,7 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
     return shading_chart
 
 
-# Function below generates interactive brush selection chart for rolling cases
+
 @st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True)
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     warning = None
@@ -175,10 +175,19 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
             )
 
     img = create_image_layer(df, 'Day', 'New_Cases_Rolling', 'image_url')
+    # alt.Chart(df).mark_line().encode(
+#             alt.X('Day:Q',
+#                  scale=alt.Scale(domain=(0, max(df[x_label])))
+#             ),
+#             alt.Y('Confirmed:Q',
+#                  scale=alt.Scale(type='log', base=10, domain=[1, 10000000])
+#             ),
+# Function below generates interactive brush selection chart for rolling cases
 
     bars = alt.Chart(df).mark_bar().encode(
         alt.Y('Province_State:N', axis=alt.Axis(title="State")),
-        alt.X('sum(New_Cases_Rolling):Q', axis=alt.Axis(title='Total COVID-19 Cases in Selected Period')),
+        alt.X('sum(New_Cases_Rolling):Q', axis=alt.Axis(title='Total COVID-19 Cases in Selected Period'),
+              scale=alt.Scale(domain=(0, sum(df['New_Cases_Rolling'])))),
         opacity=alt.value(0.9)
     ).transform_filter(
         brush
