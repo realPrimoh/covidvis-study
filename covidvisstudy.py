@@ -23,6 +23,9 @@ st.markdown(
             div[role="radiogroup"] >  :first-child{
                 display: none !important;
             }
+            .Widget>label {
+                font-size: 17px;
+            }
         </style>
         """,
     unsafe_allow_html=True
@@ -150,7 +153,7 @@ if consent:
     if demographic_complete:
         st.header("Phase 1")
         
-        st.info("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
+        st.warning("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
 
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
         radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
@@ -206,7 +209,7 @@ if consent:
         if not warning:
 
             st.header("Phase 2")
-            st.info("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. There are no answers that will be recorded here. Instead, we advise trying your best to understand the charts shown.")
+            st.warning("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. There are no answers that will be recorded here. Instead, we advise trying your best to understand the charts shown.")
 
             # MIDDLE
             # -----------------------
@@ -293,7 +296,7 @@ if consent:
 
             if show_phase3:
                 st.header("Phase 3")
-                st.info("In Phase 3, you will be presented with the same questions you answered from Phase 1. Based on the information you have received in Phase 2, please answer the questions again, regardless of whether your answers have changed or not.")
+                st.warning("In Phase 3, you will be presented with the same questions you answered from Phase 1. Based on the information you have received in Phase 2, please answer the questions again, regardless of whether your answers have changed or not.")
 
 
                 st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
@@ -337,7 +340,8 @@ if consent:
                 if not warning_phase3:
                     
                     record_phase3_vizchange = record(st.radio, "Effect of Phase 2")
-                    rpv = record_phase3_vizchange("How did Phase 2 affect your opinion about COVID-19 interventions?", ('-', 'Reinforced my views', 'Changed my views', 'Didn\'t change my views'))
+                    st.subheader(str(i) + ". How did Phase 2 affect your opinion about COVID-19 interventions?")
+                    rpv = record_phase3_vizchange("Phase 2 Effect", ('-', 'Reinforced my views', 'Changed my views', 'Didn\'t change my views'))
 
                     st.header("Conclusion")
                     
@@ -350,20 +354,8 @@ if consent:
                     widget_values["id"] = 10
                     import json 
                     if st.button("Submit"):
-                        field_names = list(widget_values.keys())
-                    #    field_names.append("timestamp")
-                    #    field_names.append("id")
-                    #    now = datetime.datetime.now()
-                    #    widget_values["timestamp"] = now.strftime("%Y-%b-%d, %A %I:%M:%S$p")
-                    #    widget_values["id"] = random()
-                        with open('data.csv', 'w') as csvfile:
-                            writer = csv.DictWriter(csvfile, fieldnames=field_names)
-                            writer.writeheader()
-                            writer.writerows([widget_values])
-                            
-
-                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
                         bar = st.progress(0)
+                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
                         for percent_complete in range(100):
                             time.sleep(0.05)
                             bar.progress(percent_complete + 1)
