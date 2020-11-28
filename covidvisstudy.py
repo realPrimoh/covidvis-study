@@ -149,10 +149,10 @@ if consent:
         demographic_complete = st.checkbox("I have completed the demographics survey above.")
 
     if demographic_complete:
-        st.info("There are three phases to this survey. In Phase 1, you will be answering questions based on visualizations presented to you. In Phase 2, you will get to interact with some visualizations. In Phase 3, you will answer questions again based on visualizations shown to you.")
-
 
         st.header("Phase 1")
+        
+        st.info("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
 
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
         radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
@@ -208,6 +208,7 @@ if consent:
         if not warning:
 
             st.header("Phase 2")
+            st.info("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. There are no answers that will be recorded here. Instead, we advise trying your best to understand the charts shown.")
 
             # MIDDLE
             # -----------------------
@@ -244,20 +245,18 @@ if consent:
                         show_phase3 = True
                 if phase2_look1 in states:
                     if phase2_look1 == 'New York':
-                      st.info("New York implemented a state-wide stay-at-home order on Day 12, which closed all non-essential businesses and\
-                              canceled/postponed all non-essential gatherings. New York did not ever reopen the entire state, but we mark Day 66\
-                              as the end date, as that was when the first counties were allowed to enter some phase of reopening.")
+                      st.info("Closed: New York implemented a state-wide stay-at-home order on Day 12, which closed all non-essential businesses and\
+                              canceled/postponed all non-essential gatherings. \n\n Opened: New York did not ever reopen the entire state formally, but we mark Day 66\
+                              as the open day, as that was when the first counties were allowed to enter some phase of reopening.")
                     if phase2_look1 == 'Florida':
-                      st.info("We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
-                              that bars and restaurants had already closed previously. We mark Day 85 as the end day, as that is when Florida\
+                      st.info("Closed: We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
+                              that some bars and restaurants had already closed previously. \n\n Opened: We mark Day 85 as the open day, as that is when Florida\
                               entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
-                              to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov\
-                              .com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
+                              to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov.com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
                     if phase2_look1 == 'Texas':
-                      st.info("Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
+                      st.info("Closed: Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
                               Texans were told to stay home for all non-essential reasons. It is worth noting that the governor declined to call\
-                              this an official stay-at-home order. We mark Day 85 as the end day, as Texas allowed almost all businesses to resume\
-                              operations at 50 percent capacity. On Day 94, restaurants were allowed to open at 75 percent capacity.")
+                              this an official stay-at-home order. \n\n Opened: We mark Day 85 as the open day, as Texas allowed almost all businesses to resume operations at 50 percent capacity. On Day 94, restaurants were allowed to open at 75 percent capacity.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
                     st.altair_chart(alt_chart1_)
                     session_state.traj_looked_at += 1
@@ -296,8 +295,7 @@ if consent:
 
             if show_phase3:
                 st.header("Phase 3")
-                st.subheader("Below, you will be presented with the same questions you answered from Phase 1. If your answers to these questions are the same as in Phase 1, please select them again. Use the slider to view the range of different options, and make your selection\
-                              using the drop-down menu.")
+                st.info("In Phase 3, you will be presented with the same questions you answered from Phase 1. Based on the information you have received in Phase 2, please answer the questions again, regardless of whether your answers have changed or not.")
 
 
                 st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
