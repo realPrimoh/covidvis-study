@@ -184,7 +184,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
 #             ),
 # Function below generates interactive brush selection chart for rolling cases
 
-    bars = alt.Chart(df).mark_bar().encode(
+    sum_bars = alt.Chart(df).mark_bar().encode(
         alt.Y('Province_State:N', axis=alt.Axis(title="State")),
         alt.X('sum(New_Cases_Rolling):Q', axis=alt.Axis(title='Total COVID-19 Cases in Selected Period'),
               scale=alt.Scale(domain=(0, sum(df['New_Cases_Rolling'])))),
@@ -195,10 +195,21 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         width=600,
         height=40
     )
-
+    mean_bars = alt.Chart(df).mark_bar().encode(
+        alt.Y('Province_State:N', axis=alt.Axis(title="State")),
+        alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Selected Period'),
+              scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
+        opacity=alt.value(0.9),
+        color=alt.value('red')
+    ).transform_filter(
+        brush
+    ).properties(
+        width=600,
+        height=40
+    )
     if not show_bar:
         return (base, img, warning)
-    return (base + img) & bars
+    return (base + img) & sum_bars & mean_bars
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
 def generate_altair_slider_log_chart(df, title=""):
