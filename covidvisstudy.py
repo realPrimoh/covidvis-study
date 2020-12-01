@@ -24,38 +24,30 @@ st.markdown(
                 display: none !important;
             }
             .Widget>label {
-                font-size: 17px;
+                display: none;
             }
+            
         </style>
         """,
     unsafe_allow_html=True
 )
 
 i = 1
-st.title('CovidVis: The Impact of Visualizations on Perception of COVID-19 Intervention Measures')
+st.title('A User Study of COVID-19 Intervention Measures')
 
-st.info("Welcome to the Covidvis User Study. In this study, we are trying to measure the effects of seeing visualizations of COVID's ascent throughout the world on people's opinions about COVID interventions. Your data will be kept as confidential as possible.")
+st.info("In this study, we are trying examine the best way to convey information about COVID-19 to the general public. Your data will be kept as confidential as possible.")
 
-st.subheader("Consent to take part in the study")
-st.markdown("We are asking you to participate in a research study titled “The Impact of Visualizations on Perception of COVID-19 Intervention Measures”. \n\n This study is being led by Aditya Parameswaran, Priyam Mohanty, Murtaza Ali, Doris Lee, and B. Aditya Prakash, a research team from UC Berkeley and Georgia Tech.")
-
-st.subheader("What the study is about")
-st.markdown("The purpose of this research is to examine the impact of visualizations on COVID-19 intervention perception.")
+st.subheader("Details")
+st.markdown("The primary researchers conducting this study Murtaza Ali and Priyam Mohanty. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
 
 st.subheader("What we will ask you to do")
-st.markdown("If you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 15 minutes and will be conducted online.")
+st.markdown("If you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 7-10 minutes and will be conducted online.")
 
 st.subheader("Risks and discomforts")
-st.markdown("There is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on a password protected laptop. None of your personal information is collected.")
+st.markdown("There is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on an encrypted database online. None of your personal information is collected.")
 
 st.subheader("Benefits")
-st.markdown("There are no direct benefits to you from this research. It is our hope that the research will benefit the scientific community and lead to a greater understanding of visualizations and their effects on people's understanding of COVID interventions.")
-
-#st.subheader("Taking part is voluntary")
-#st.markdown("Your involvement in this research is voluntary, and you may refuse to participate before the study begins or discontinue at any time. You will only receive compensation for this study if you complete all tasks and survey questions.")
-
-st.subheader("If you have questions")
-st.markdown("The primary researchers conducting this study Aditya Parameswaran, Priyam Mohanty, and Murtaza Ali. Please ask any questions you have now. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
+st.markdown("It is our hope that the research will benefit the scientific community in better understanding COVID-19. You will be compensated $1.50 for completion of this study. This study is expected to take 7-10 minutes to complete.")
 
 st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
@@ -80,7 +72,7 @@ if consent:
 
     st.subheader("What platform are you using?")
     platformSel = record(st.radio, "Platform")
-    platform = platformSel("Platform", ("-", "MTurk", "Prolific", "Other"))
+    platform = platformSel("Please select only one option.", ("-", "MTurk", "Prolific", "Other"))
 
     if platform != "Other" and platform != "-":
         st.subheader("Enter your " + platform + " ID here.")
@@ -97,7 +89,7 @@ if consent:
 
     # TODO: International or reduce target pop. to USA
 
-    st.subheader(str(i) + ". What state are you from?")
+    st.subheader(str(i) + ". What state are you residing in right now?")
     stateSelect = record(st.selectbox, "State")
     demo_state = stateSelect("State", ['Select...', "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", 
               "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
@@ -116,13 +108,29 @@ if consent:
 
     st.subheader(str(i) + ". What political party do you affiliate with?")
     partySel = record(st.selectbox, "Political Party")
-    demo_party = partySel("Party", ('Select...', 'Democrat', 'Republican', 'Independent'))
+    demo_party = partySel("Party", ('Select...', 'Democrat', 'Republican', 'Independent', 'Libertarian', 'Green Party', 'Other'))
+    
+    partyOtherSel = record(st.text_input, "Political Party (Other)")
+    demo_partyOther = None
+    
+    if demo_party == 'Other':
+        demo_partyOther = partyOtherSel("Political Party (Other)")
+    
+    # TODO (priyam): add check for other
 
     i += 1
 
     st.subheader(str(i) + ". What is your race?")
     raceSel = record(st.selectbox, "Race")
     demo_race = raceSel("Race", ("Select...", "Asian / Pacific Islander", "White", "Black or African-American", "Native American or American Indian", "Hispanic or Latino", "Other"))
+    
+    raceOtherSel = record(st.text_input, "Race (Other)")
+    demo_raceOther = None
+    
+    if demo_race == 'Other':
+        demo_raceOther = raceOtherSel("Race (Other)")
+    
+    # TODO (priyam): add check for other
 
     i += 1
 
@@ -163,9 +171,13 @@ if consent:
 
         i += 1
 
+        st.write("Lockdown order (mandatory stay-at-home) if everyone obeys the directive")
         radio1("Lockdown order (mandatory stay-at-home) if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Social distancing if everyone obeys the directive")
         radio2("Social distancing if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Mandatory masks in public if everyone obeys the directive")
         radio3("Mandatory masks in public if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Closing bars/restaurants if everyone obeys the directive")
         radio4("Closing bars/restaurants if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you in reality (if you feel there is a difference)?")
@@ -174,26 +186,34 @@ if consent:
         radio3_1 = record(st.selectbox, "Mask On Effectiveness")
         radio4_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness")
 
+        # TODO (priyam): Add school closings?
         i += 1
 
+        st.write("Lockdown order (mandatory stay-at-home) in reality")
         radio1_1("Lockdown order (mandatory stay-at-home) in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Social distancing in reality")
         radio2_1("Social distancing in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Mandatory masks in public in reality")
         radio3_1("Mandatory masks in public in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Closing bars/restaurants in reality")
         radio4_1("Closing bars/restaurants in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         show_phase2 = False
 
 
-        st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
+        st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select a spot where RESTAURANTS/BARS were potentially CLOSED and a spot where they OPENED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
+        # TODO (priyam, murtaza): fix the wording "select an area"
+        # TODO (priyam): Description of days on x-axis
         start_phase1 = record(st.slider, "Start - phase1")
         end_phase1 = record(st.slider, "End - phase1")
         start = start_phase1("Choose when you think restaurants/bars closed, if at all", 0, 160, 1)
-        end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 175, 170)
+        end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 170, 170)
         phase1_base, phase1_img, warning = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
 #        shading = create_shading_layer(180, 4000, start, end)
         if warning:
             st.warning(warning)
         x = st.altair_chart(phase1_base + phase1_img)
+        st.info("Day 0 is a March 10, 2020.")
         i += 1
     #    y = st.altair_chart(shading)
     #    st.write(dir(x))
@@ -238,7 +258,9 @@ if consent:
                       demonstrating how to interact with the graph is also presented below. \n\nYou must study at least three states\
                       before you can move on.")
             st.video('./media/demo.mp4', format='video/mp4', start_time=7)
+            st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
+            # TODO (priyam): geographical sampling, make sure to get states in the news and also states in all different areas of the US
             #but = False
             if not session_state._next:
                 if testing:
@@ -253,13 +275,14 @@ if consent:
                       st.info("Closed: We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
                               that some bars and restaurants had already closed previously. \n\n Opened: We mark Day 85 as the open day, as that is when Florida\
                               entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
-                              to resume operations at 50 percent capacity. For details about Florida\'s Phase 2, see this link: https://www.flgov.com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
+                              to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov.com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
                     if phase2_look1 == 'Texas':
                       st.info("Closed: Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
                               Texans were told to stay home for all non-essential reasons. It is worth noting that the governor declined to call\
                               this an official stay-at-home order. \n\n Opened: We mark Day 85 as the open day, as Texas allowed almost all businesses to resume operations at 50 percent capacity. On Day 94, restaurants were allowed to open at 75 percent capacity.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
                     st.altair_chart(alt_chart1_)
+                    st.info("Day 0 is a March 10, 2020.")
                     session_state.traj_looked_at += 1
                     if session_state.traj_looked_at >= 3:
                         st.info("Now, we will ask you some questions about the charts.")
@@ -306,9 +329,13 @@ if consent:
                 radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3-effective)")
                 i += 1
 
+                st.write("Lockdown order (mandatory stay-at-home) if everyone obeys the directive (Phase 3)")
                 radio1phase3("Lockdown order (mandatory stay-at-home) if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Social distancing if everyone obeys the directive (Phase 3)")
                 radio2phase3("Social distancing if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Mandatory masks in public in if everyone obeys the directive (Phase 3)")
                 radio3phase3("Mandatory masks in public in if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Closing bars/restaurants if everyone obeys the directive (Phase 3)")
                 radio4phase3("Closing bars/restaurants if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
@@ -318,9 +345,13 @@ if consent:
                 radio4phase3_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
                 i += 1
 
+                st.write("Lockdown order (mandatory stay-at-home) in reality (Phase 3)")
                 radio1phase3_1("Lockdown order (mandatory stay-at-home) in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Social distancing in reality (Phase 3)")
                 radio2phase3_1("Social distancing in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Mandatory masks in public in reality (Phase 3)")
                 radio3phase3_1("Mandatory masks in public in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("Closing bars/restaurants in reality (Phase 3)")
                 radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
@@ -328,13 +359,14 @@ if consent:
                 record_start_phase3 = record(st.slider, "start-phase3")
                 record_end_phase3 = record(st.slider, "end-phase3")
                 start_phase3 = record_start_phase3("Choose when you think restaurants/bars closed, if at all ", 0, 160, 1)
-                end_phase3 = record_end_phase3("Choose when you think restaurants/bars opened, if at all ", 0, 175, 170)
+                end_phase3 = record_end_phase3("Choose when you think restaurants/bars opened, if at all ", 0, 170, 170)
                 phase3_base, phase3_img, warning_phase3 = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start_phase3), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end_phase3), False, False)
     #            shading = create_shading_layer(180, 4000, start, end)
     
                 if warning_phase3:
                     st.warning(warning_phase3)
                 x = st.altair_chart(phase3_base + phase3_img)
+                st.info("Day 0 is a March 10, 2020.")
 
                 
                 if not warning_phase3:
