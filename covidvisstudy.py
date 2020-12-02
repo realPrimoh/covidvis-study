@@ -373,12 +373,13 @@ if consent:
                     
                     record_phase3_vizchange = record(st.radio, "Effect of Phase 2")
                     st.subheader(str(i) + ". How did Phase 2 affect your opinion about COVID-19 interventions?")
-                    rpv = record_phase3_vizchange("Phase 2 Effect", ('-', 'Reinforced my views', 'Changed my views', 'Didn\'t change my views'))
+                    rpv = record_phase3_vizchange("Phase 2 Effect", ('-', 'Reinforced my views', 'Changed my views', 'Convinced me ot seek more information', 'Didn\'t change my views'))
 
                     st.header("Conclusion")
                     
                     text_record = record(st.text_input, "Conclusion_Share")
 
+                    st.write("Is there anything else you would like to share with us regarding this study?")
                     text_r = text_record("Is there anything else you would like to share with us regarding this study?")
 
 
