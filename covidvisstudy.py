@@ -14,7 +14,7 @@ from functools import reduce
 from scripts.generate_trendlines import *
 
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
