@@ -14,7 +14,7 @@ from functools import reduce
 from scripts.generate_trendlines import *
 
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -31,6 +31,9 @@ st.markdown(
         """,
     unsafe_allow_html=True
 )
+
+
+st.write(st.server)
 
 i = 1
 st.title('A User Study of COVID-19 Intervention Measures')
@@ -291,9 +294,9 @@ if consent:
                     session_state.traj_looked_at += 1
                     if session_state.traj_looked_at >= 3:
                         st.info("Now, we will ask you some questions about the charts.")
-                        st.subheader("Approximately how many new cases occurred in California while restaurants were closed?")
-                        x = st.radio("Make your selection for California below.", 
-                            ["-", 10000, 38000, 100000, 120000, 200000])
+                        st.subheader("Approximately how many new cases occurred in Texas while restaurants were closed?")
+                        x = st.radio("Make your selection for Texas below.", 
+                            ["-", 10000, 38000, 120000, 200000])
                         if x == 100000:
                             st.info("Correct! Nice work. Let's try a couple more.")
                             st.subheader("Approximately how many new cases occurred in Florida between Day 90 and Day 130?")
