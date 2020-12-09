@@ -32,9 +32,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-st.write(st.server)
-
 i = 1
 st.title('A User Study of COVID-19 Intervention Measures')
 
