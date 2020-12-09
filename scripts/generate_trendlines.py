@@ -22,7 +22,7 @@ def create_state_df(state):
     # Add new cases each day
     state_cases["New_Cases"] = state_cases["Confirmed"].diff().fillna(0)
     state_cases = state_cases.drop(["Unnamed: 0", 'Country_Region', 'Recovered',\
-        'Active', 'Deaths'], axis=1)
+        'Active'], axis=1)
     # Necessary for methods below to work properly; index should match day
     state_cases = state_cases.reset_index().drop("index", axis=1) 
     return state_cases
@@ -146,7 +146,7 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
 
 
 
-@st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
+@st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True)
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     warning = None
     if start_date > end_date:
@@ -154,6 +154,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
+    df["New_Deaths_Rolling"] = df["New_Deaths"].rolling(window=7, min_periods=1).mean()
     brush = alt.selection_interval(encodings=['x'], empty='all', mark=alt.BrushConfig(fill='red'))
     base = alt.Chart(df).mark_line().encode(
                 x='Day:Q',
