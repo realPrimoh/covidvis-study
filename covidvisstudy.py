@@ -14,7 +14,7 @@ from functools import reduce
 from scripts.generate_trendlines import *
 
 
-testing = True
+testing = False
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -23,7 +23,7 @@ st.markdown(
             div[role="radiogroup"] >  :first-child{
                 display: none !important;
             }
-            .Widget>label {
+            .stSelectbox>label {
                 display: none;
             }
             
@@ -236,8 +236,9 @@ if consent:
             session_state = SessionState.get(traj_looked_at=0, roll_looked_at=0, _next = False, _rolling = False)
 
 
-            state_restaurant_close_dates = {"New York": '03-20-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '06-29-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020', "Texas": '03-31-2020', "Washington": '03-23-2020', "Pennsylvania": '04-01-2020'} # Bars/nightclubs in Florida = March 17
-            state_restaurant_open_dates = {"New York": '05-15-2020', "California": '05-26-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-3-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
+            state_restaurant_close_dates = {"New York": '03-20-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '06-29-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020', "Texas": '03-31-2020', "Washington": '03-23-2020', "Pennsylvania": '04-01-2020', "South Dakota": '03-01-2020'} # Bars/nightclubs in Florida = March 17
+            
+            state_restaurant_open_dates = {"New York": '05-15-2020', "California": '05-26-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-3-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020', "South Dakota": '12-12-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
 
             # Georgia: https://www.acluga.org/en/timeline-georgia-government-actions-regarding-covid-19
             # Texas: https://www.texastribune.org/2020/07/31/coronavirus-timeline-texas/
@@ -246,11 +247,9 @@ if consent:
             # Washington: https://www.seattlemet.com/health-and-wellness/2020/08/seattle-s-coronavirus-timeline-from-toilet-paper-to-mask-laws
             # Pennsylvania: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pennsylvania#Government_response (REMOVE b/c of too many "phases")
             state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
-            states = ['New York', 'Florida', 'Texas']
-            # Florida: April 1st was statewide stay-at-home-order> Bars/nightclubs had already closed by this day. Phase 2 reopening June 3rd
-            # Texas: March 19th (restaurants, bars, schools, closed). March 31st Texans told to stay home but not called "stay-at-home order",
-            # and on June 3rd almost all businesses at 50% capacity. On June 12th, restaurants at 75% capacity.
-            # New York: March 20th stay at home order, it officially ends May 15th but no real "reopening of whole state" occurred
+
+            states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York']
+            # Green: New York, Red: , Orange: Texas, Blue: Florida
 
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
@@ -280,6 +279,12 @@ if consent:
                       st.info("Closed: Texas closed restaurants, bars, and schools on Day 9. However, we mark Day 21 as the start date, as that is when\
                               Texans were told to stay home for all non-essential reasons. It is worth noting that the governor declined to call\
                               this an official stay-at-home order. \n\n Opened: We mark Day 85 as the open day, as Texas allowed almost all businesses to resume operations at 50 percent capacity. On Day 94, restaurants were allowed to open at 75 percent capacity.")
+                    if phase2_look1 == 'Georgia':
+                      st.info("Closed: Georgia closed restaurants, bars, and schools on Day 11, as part of a statewide shelter-in-place order.\n\n Opened: We mark Day 94 as the open day, as that is when Gov. Brian Kemp of Georgia started allowing bars to host up to 35% capacity and restaurants no longer had a limit.")
+                    if phase2_look1 == 'Washington':
+                      st.info("Closed: Washington closed restaurants, bars, and schools on Day 15. \n\n Opened: We mark Day 83 as the open day, as that is when the statewide stay-at-home order expired, allowing restaurants and bars across the state to open up. Select counties, like King County, stayed closed until Day 101. It is worth noting that statewide protests occurred on Days 80-82 where thousands crowded the streets for social justice causes.")
+                    if phase2_look1 == 'South Dakota':
+                      st.info("South Dakota has not put any COVID-19 intervention measures in place.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
                     st.altair_chart(alt_chart1_)
                     st.info("Day 0 is a March 10, 2020.")
@@ -329,13 +334,13 @@ if consent:
                 radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3-effective)")
                 i += 1
 
-                st.write("Lockdown order (mandatory stay-at-home) if everyone obeys the directive (Phase 3)")
+                st.write("Lockdown order (mandatory stay-at-home) if everyone obeys the directive")
                 radio1phase3("Lockdown order (mandatory stay-at-home) if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Social distancing if everyone obeys the directive (Phase 3)")
+                st.write("Social distancing if everyone obeys the directive")
                 radio2phase3("Social distancing if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Mandatory masks in public in if everyone obeys the directive (Phase 3)")
+                st.write("Mandatory masks in public in if everyone obeys the directive")
                 radio3phase3("Mandatory masks in public in if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Closing bars/restaurants if everyone obeys the directive (Phase 3)")
+                st.write("Closing bars/restaurants if everyone obeys the directive")
                 radio4phase3("Closing bars/restaurants if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
@@ -345,13 +350,13 @@ if consent:
                 radio4phase3_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
                 i += 1
 
-                st.write("Lockdown order (mandatory stay-at-home) in reality (Phase 3)")
+                st.write("Lockdown order (mandatory stay-at-home) in reality")
                 radio1phase3_1("Lockdown order (mandatory stay-at-home) in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Social distancing in reality (Phase 3)")
+                st.write("Social distancing in reality")
                 radio2phase3_1("Social distancing in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Mandatory masks in public in reality (Phase 3)")
+                st.write("Mandatory masks in public in reality")
                 radio3phase3_1("Mandatory masks in public in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
-                st.write("Closing bars/restaurants in reality (Phase 3)")
+                st.write("Closing bars/restaurants in reality")
                 radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
