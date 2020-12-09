@@ -154,7 +154,6 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
-    df["New_Deaths_Rolling"] = df["New_Deaths"].rolling(window=7, min_periods=1).mean()
     brush = alt.selection_interval(encodings=['x'], empty='all', mark=alt.BrushConfig(fill='red'))
     base = alt.Chart(df).mark_line().encode(
                 x='Day:Q',
