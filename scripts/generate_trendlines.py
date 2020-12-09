@@ -146,7 +146,7 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
 
 
 
-@st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True)
+@st.cache(allow_output_mutation=True, persist=True, suppress_st_warning=True, show_spinner=False)
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     warning = None
     if start_date > end_date:

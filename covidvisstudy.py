@@ -163,11 +163,13 @@ if consent:
         
         st.warning("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
 
+        # TODO (PRIYAM)
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
         radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
         radio2 = record(st.selectbox, "Social Distancing Effectiveness (Phase 1-effective)")
         radio3 = record(st.selectbox, "Mask On Effectiveness (Phase 1-effective)")
         radio4 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 1-effective)")
+        radio5 = record(st.selectbox, "Closing Schools Effectiveness (Phase 1-effective)")
 
         i += 1
 
@@ -179,14 +181,19 @@ if consent:
         radio3("Mandatory masks in public if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("Closing bars/restaurants if everyone obeys the directive")
         radio4("Closing bars/restaurants if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Closing schools if everyone obeys the directive")
+        radio5("Closing schools if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
+        # TODO (PRIYAM)
         st.subheader(str(i) + ". For each of the following orders, how effective are they to you in reality (if you feel there is a difference)?")
         radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
         radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
         radio3_1 = record(st.selectbox, "Mask On Effectiveness")
         radio4_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness")
+        radio5_1 = record(st.selectbox, "Closing Schools Effectiveness")
 
-        # TODO (priyam): Add school closings?
+        # TODO (priyam): Add school closings, gatherings
+        # TODO (priyam): add a, b,c, d...
         i += 1
 
         st.write("Lockdown order (mandatory stay-at-home) in reality")
@@ -197,6 +204,8 @@ if consent:
         radio3_1("Mandatory masks in public in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("Closing bars/restaurants in reality")
         radio4_1("Closing bars/restaurants in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("Closing schools in reality")
+        radio5_1("Closing schools in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         show_phase2 = False
 
@@ -206,6 +215,8 @@ if consent:
         # TODO (priyam): Description of days on x-axis
         start_phase1 = record(st.slider, "Start - phase1")
         end_phase1 = record(st.slider, "End - phase1")
+        #TODO (PRIYAM): Use the SLIDER to change.
+        # FLOW: here's the average number of cases per day in the US. Now looking at the graph, choose open and close.
         start = start_phase1("Choose when you think restaurants/bars closed, if at all", 0, 160, 1)
         end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 170, 170)
         phase1_base, phase1_img, warning = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
@@ -214,6 +225,7 @@ if consent:
             st.warning(warning)
         x = st.altair_chart(phase1_base + phase1_img)
         st.info("Day 0 is a March 10, 2020.")
+        # TODO (PRIYAM): legend for icons, or change icons.
         i += 1
     #    y = st.altair_chart(shading)
     #    st.write(dir(x))
@@ -229,7 +241,7 @@ if consent:
         if not warning:
 
             st.header("Phase 2")
-            st.warning("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. There are no answers that will be recorded here. Instead, we advise trying your best to understand the charts shown.")
+            st.warning("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. Your answers aren't recorded here. We would like you to explore the visualizations depicting COVID-19 spread below.")
 
             # MIDDLE
             # -----------------------
@@ -248,7 +260,7 @@ if consent:
             # Pennsylvania: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pennsylvania#Government_response (REMOVE b/c of too many "phases")
             state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
 
-            states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York']
+            states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York', 'California']
             # Green: New York, Red: , Orange: Texas, Blue: Florida
 
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
@@ -256,6 +268,7 @@ if consent:
                       certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
                       demonstrating how to interact with the graph is also presented below. \n\nYou must study at least three states\
                       before you can move on.")
+            # TODO PRIYAM: video and study THREE STATES
             st.video('./media/demo.mp4', format='video/mp4', start_time=7)
             st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.",  ["Select..."] + states)
@@ -292,9 +305,10 @@ if consent:
                     if session_state.traj_looked_at >= 3:
                         st.info("Now, we will ask you some questions about the charts.")
                         st.subheader("Approximately how many new cases occurred in Texas while restaurants were closed?")
+                        # TODO (PRIYAM): test.
                         x = st.radio("Make your selection for Texas below.", 
                             ["-", 10000, 38000, 120000, 200000])
-                        if x == 100000:
+                        if x == 120000:
                             st.info("Correct! Nice work. Let's try a couple more.")
                             st.subheader("Approximately how many new cases occurred in Florida between Day 90 and Day 130?")
                             y = st.radio("Make your selection for Florida below.", 
