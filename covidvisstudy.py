@@ -14,7 +14,7 @@ from functools import reduce
 from scripts.generate_trendlines import *
 
 
-testing = True
+testing = False
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -38,16 +38,16 @@ st.title('A User Study of COVID-19 Intervention Measures')
 st.info("In this study, we are trying examine the best way to convey information about COVID-19 to the general public. Your data will be kept as confidential as possible.")
 
 st.subheader("Details")
-st.markdown("The primary researchers conducting this study Murtaza Ali and Priyam Mohanty. If you have questions later, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a subject in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
+st.markdown("The primary researchers conducting this study are Murtaza Ali and Priyam Mohanty. If you have questions at any point, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a participant in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
 
 st.subheader("What we will ask you to do")
-st.markdown("If you agree to take part, you will be asked to complete a questionnaire and provide your opinions. The survey will last approximately 7-10 minutes and will be conducted online.")
+st.markdown("If you agree to take part, you will be asked to complete a questionnaire. The survey will last approximately 7-10 minutes and will be conducted online.")
 
 st.subheader("Risks and discomforts")
-st.markdown("There is little risk to you in taking part in this research. As with all research there is a chance that confidentiality may be compromised; however, we will take the following precautions to minimize this risk: Your study data will be treated as confidentially as possible. The data will be stored on an encrypted database online. None of your personal information is collected.")
+st.markdown("There is little risk to you in taking part in this research. Your study data will be treated as confidentially as possible. The data will be stored on an encrypted database online. None of your personal information is collected.")
 
 st.subheader("Benefits")
-st.markdown("It is our hope that the research will benefit the scientific community in better understanding COVID-19. You will be compensated $1.50 for completion of this study. This study is expected to take 7-10 minutes to complete.")
+st.markdown("It is our hope that the research will benefit the scientific community in better understanding societal implications of COVID-19 interventions. You will be compensated $3 for completion of this study. This study is expected to take 7-10 minutes to complete.")
 
 st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
