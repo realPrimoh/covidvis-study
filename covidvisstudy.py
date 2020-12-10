@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -171,12 +171,13 @@ if consent:
         
         st.warning("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
 
-        st.subheader(str(i) + ". For each of the following orders (a-e), how effective are they to you if implemented properly and everyone follows them?")
+        st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if implemented properly and everyone follows them?")
         radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
         radio2 = record(st.selectbox, "Social Distancing Effectiveness (Phase 1-effective)")
         radio3 = record(st.selectbox, "Mask On Effectiveness (Phase 1-effective)")
         radio4 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 1-effective)")
         radio5 = record(st.selectbox, "Closing Schools Effectiveness (Phase 1-effective)")
+        radio6 = record(st.selectbox, "Restricting Indoor Gatherings Effectiveness (Phase 1-effective)")
 
         i += 1
 
@@ -190,15 +191,17 @@ if consent:
         radio4("Closing bars/restaurants if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("e. Closing schools if everyone obeys the directive")
         radio5("Closing schools if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("f. Restricting Indoor Gatherings if everyone obeys the directive")
+        radio5("Restricting Indoor Gatherings if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
-        st.subheader(str(i) + ". For each of the following orders (a-e), how effective are they to you if they were implemented in the US today?")
+        st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if they were implemented in the US today?")
         radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
         radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
         radio3_1 = record(st.selectbox, "Mask On Effectiveness")
         radio4_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness")
         radio5_1 = record(st.selectbox, "Closing Schools Effectiveness")
+        radio6_1 = record(st.selectbox, "Restricting Indoor Gatherings Effectiveness")
 
-        # TODO (priyam): Add school closings, gatherings
         i += 1
 
         st.write("a. Lockdown order (mandatory stay-at-home) in reality")
@@ -211,6 +214,8 @@ if consent:
         radio4_1("Closing bars/restaurants in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("e. Closing schools in reality")
         radio5_1("Closing schools in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        st.write("f. Restricting Indoor Gatherings in reality")
+        radio5_1("Restricting Indoor Gatherings in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         show_phase2 = False
 
@@ -266,8 +271,8 @@ if consent:
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
                       demonstrating how to interact with the graph is also presented below.")
-            # TODO PRIYAM: video and study THREE STATES
-            st.video('./media/demo.mp4', format='video/mp4', start_time=7)
+            # TODO PRIYAM: video
+#            st.video('./media/demo.mp4', format='video/mp4', start_time=7)
             st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.You must study at least three states before you can move on.",  ["Select..."] + states)
             #but = False
@@ -339,12 +344,13 @@ if consent:
                 st.warning("In Phase 3, you will be presented with the same questions you answered from Phase 1. Based on the information you have received in Phase 2, please answer the questions again, regardless of whether your answers have changed or not.")
 
 
-                st.subheader(str(i) + ". For each of the following orders (a-e), how effective are they to you if implemented properly and everyone follows them?")
+                st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if implemented properly and everyone follows them?")
                 radio1phase3 = record(st.selectbox, "Lockdown (Mandatory stay-at-home) Effectiveness (Phase 3-effective)")
                 radio2phase3 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3-effective)")
                 radio3phase3 = record(st.selectbox, "Mask On Effectiveness (Phase 3-effective)")
                 radio4phase3 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3-effective)")
                 radio5phase3 = record(st.selectbox, "Closing Schools Effectiveness (Phase 3-effective)")
+                radio6phase3 = record(st.selectbox, "Restricting Indoor Gatherings Effectiveness (Phase 3-effective)")
                 i += 1
 
                 st.write("a. Lockdown order (mandatory stay-at-home) if everyone obeys the directive")
@@ -357,13 +363,17 @@ if consent:
                 radio4phase3("Closing bars/restaurants if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
                 st.write("e. Closing schools if everyone obeys the directive")
                 radio5phase3("Closing schools if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("f. Restricting Indoor Gatherings if everyone obeys the directive")
+                radio6phase3("Restricting Indoor Gatherings if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                
 
-                st.subheader(str(i) + ". For each of the following orders (a-e), how effective are they to you if they were implemented in the US today?")
+                st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if they were implemented in the US today?")
                 radio1phase3_1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
                 radio2phase3_1 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3)")
                 radio3phase3_1 = record(st.selectbox, "Mask On Effectiveness (Phase 3)")
                 radio4phase3_1 = record(st.selectbox, "Closing Bars/Restaurants Effectiveness (Phase 3)")
                 radio5phase3_1 = record(st.selectbox, "Closing Schools Effectiveness (Phase 3)")
+                radio6phase3_1 = record(st.selectbox, "Restricting Indoor Gatherings Effectiveness (Phase 3)")
                 i += 1
 
                 st.write("a. Lockdown order (mandatory stay-at-home) in reality")
@@ -376,6 +386,8 @@ if consent:
                 radio4phase3_1("Closing bars/restaurants in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
                 st.write("e. Closing schools in reality")
                 radio4phase3_1("Closing schools in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                st.write("f. Restricting Indoor Gatherings in reality")
+                radio4phase3_1("Restricting Indoor Gatherings in reality (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
 
