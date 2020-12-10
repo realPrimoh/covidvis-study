@@ -34,7 +34,7 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
     if end_day:
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
-        state_image.loc[start_day, "image_url"] = ".https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
+        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
         state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
         colors = ['lockdown_off' if (x < (start_day + 1) or x > (end_day - 1)) else 'lockdown_on' for x in range(state_image.shape[0])]
         state_image["color"] = colors
@@ -106,8 +106,8 @@ def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=No
 
 def create_image_layer(df, x_label, y_label, image_col_name):
     img = alt.Chart(df).mark_image(
-            width=28,
-            height=28
+            width=75,
+            height=75
         ).encode(
             x=x_label+':Q',
             y=y_label+':Q',
@@ -273,8 +273,8 @@ def generate_new_cases_rolling(state, intervention_day, width, height, title="")
     )
 
     img = alt.Chart(df).mark_image(
-        width=45,
-        height=45
+        width=75,
+        height=75
     ).encode(
         x='Day:Q',
         y='New_Cases_Rolling:Q',
