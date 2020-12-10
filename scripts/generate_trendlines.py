@@ -34,7 +34,7 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
     if end_day:
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
-        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[start_day, "image_url"] = ".https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
         state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
         colors = ['lockdown_off' if (x < (start_day + 1) or x > (end_day - 1)) else 'lockdown_on' for x in range(state_image.shape[0])]
         state_image["color"] = colors
@@ -42,7 +42,7 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
     else:
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
-        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
         colors = ['before' if x < (start_day+1) else 'after' for x in range(state_image.shape[0])]
         state_image["color"] = colors
         return state_image
@@ -51,7 +51,7 @@ def add_image_col_to_df_with_date(state_cases_df, start_date, end_date=None):
     if end_date:
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
-        state_image.loc[state_cases_df['Date'] == start_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[state_cases_df['Date'] == start_date, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
         state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
         bools1, bools2 = state_cases_df['Date'] <= start_date, state_cases_df['Date'] >= end_date
         bools = [x or y for (x, y) in zip(bools1, bools2)] # Should do a pairwise or of the list elements
@@ -61,7 +61,7 @@ def add_image_col_to_df_with_date(state_cases_df, start_date, end_date=None):
     else:
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
-        state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/x-shelter.png"
+        state_image.loc[state_cases_df['Date'] == date, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-img.png"
         bools = state_cases_df['Date'] <= date
         colors = ['before' if x else 'after' for x in bools]
         state_image["color"] = colors
