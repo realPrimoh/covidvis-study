@@ -35,7 +35,7 @@ def add_image_col_to_df(state_cases_df, start_day, end_day=None):
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
         state_image.loc[start_day, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-image.png"
-        state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
+        state_image.loc[end_day, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/open-image.png"
         colors = ['lockdown_off' if (x < (start_day + 1) or x > (end_day - 1)) else 'lockdown_on' for x in range(state_image.shape[0])]
         state_image["color"] = colors
         return state_image
@@ -52,7 +52,7 @@ def add_image_col_to_df_with_date(state_cases_df, start_date, end_date=None):
         state_image = state_cases_df.copy()
         state_image["image_url"] = "" # Will automatically fill up all columns
         state_image.loc[state_cases_df['Date'] == start_date, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-image.png"
-        state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/Murtz5253/covid19-vis/master/images/shelter.png"
+        state_image.loc[state_cases_df['Date'] == end_date, "image_url"] = "https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/open-image.png"
         bools1, bools2 = state_cases_df['Date'] <= start_date, state_cases_df['Date'] >= end_date
         bools = [x or y for (x, y) in zip(bools1, bools2)] # Should do a pairwise or of the list elements
         colors = ['off' if x else 'on' for x in bools]
@@ -106,8 +106,8 @@ def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=No
 
 def create_image_layer(df, x_label, y_label, image_col_name):
     img = alt.Chart(df).mark_image(
-            width=75,
-            height=75
+            width=50,
+            height=50
         ).encode(
             x=x_label+':Q',
             y=y_label+':Q',
@@ -273,8 +273,8 @@ def generate_new_cases_rolling(state, intervention_day, width, height, title="")
     )
 
     img = alt.Chart(df).mark_image(
-        width=75,
-        height=75
+        width=50,
+        height=50
     ).encode(
         x='Day:Q',
         y='New_Cases_Rolling:Q',
