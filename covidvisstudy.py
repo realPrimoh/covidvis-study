@@ -418,6 +418,11 @@ if consent:
 
                     st.write("Is there anything else you would like to share with us regarding this study?")
                     text_r = text_record("Is there anything else you would like to share with us regarding this study?")
+                    
+                    text_record2 = record(st.text_input, "Conclusion_Share")
+
+                    st.write("If you would like to volunteer for a post-study survey, please enter your email address below.")
+                    text_r2 = text_record2("If you would like to volunteer for a post-study survey, please enter your email address below.")
 
 
                     st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
