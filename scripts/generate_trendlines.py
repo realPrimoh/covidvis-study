@@ -159,7 +159,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
                 x='Day:Q',
                 y=alt.Y('New_Cases_Rolling:Q', axis=alt.Axis(title="New COVID-19 Cases per Day")),
             ).properties(
-                width=600,
+                width=650,
                 height=400
             ).add_selection(
                 brush
@@ -170,7 +170,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
                 x='Day:Q',
                 y=alt.Y('New_Cases_Rolling:Q', axis=alt.Axis(title="New COVID-19 Cases per Day")),
             ).properties(
-                width=600,
+                width=650,
                 height=400
             )
 
