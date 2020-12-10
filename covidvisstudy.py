@@ -239,9 +239,10 @@ if consent:
         # TODO (PRIYAM): legend for icons, or change icons.
         i += 1
         show_phase3 = False
-        phase1_done = st.checkbox("I am finished with Phase 1.")
-        if testing:
-            phase1_done = True
+        if not warning:
+            phase1_done = st.checkbox("I am finished with Phase 1.")
+            if testing:
+                phase1_done = True
         
         if not warning and phase1_done:
 
