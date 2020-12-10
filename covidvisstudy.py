@@ -171,7 +171,7 @@ if consent:
         
         st.warning("In Phase 1, you will be answering a few questions about your opinion on various aspects of the COVID-19 pandemic.")
 
-        st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if implemented properly and everyone follows them?")
+        st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
         radio1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 1-effective)")
         radio2 = record(st.selectbox, "Social Distancing Effectiveness (Phase 1-effective)")
         radio3 = record(st.selectbox, "Mask On Effectiveness (Phase 1-effective)")
@@ -194,7 +194,7 @@ if consent:
         st.write("f. Restricting Indoor Gatherings if everyone obeys the directive")
         radio5("Restricting Indoor Gatherings if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
-        st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if they were implemented in the US today?")
+        st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
         radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
         radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
         radio3_1 = record(st.selectbox, "Mask On Effectiveness")
@@ -344,7 +344,7 @@ if consent:
                 st.warning("In Phase 3, you will be presented with the same questions you answered from Phase 1. Based on the information you have received in Phase 2, please answer the questions again, regardless of whether your answers have changed or not.")
 
 
-                st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if implemented properly and everyone follows them?")
+                st.subheader(str(i) + ". For each of the following orders, how effective are they to you if implemented properly and everyone follows them?")
                 radio1phase3 = record(st.selectbox, "Lockdown (Mandatory stay-at-home) Effectiveness (Phase 3-effective)")
                 radio2phase3 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3-effective)")
                 radio3phase3 = record(st.selectbox, "Mask On Effectiveness (Phase 3-effective)")
@@ -367,7 +367,7 @@ if consent:
                 radio6phase3("Restricting Indoor Gatherings if everyone obeys the directive (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
                 
 
-                st.subheader(str(i) + ". For each of the following orders (a-f), how effective are they to you if they were implemented in the US today?")
+                st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
                 radio1phase3_1 = record(st.selectbox, "Stay-at-home Effectiveness (Phase 3)")
                 radio2phase3_1 = record(st.selectbox, "Social Distancing Effectiveness (Phase 3)")
                 radio3phase3_1 = record(st.selectbox, "Mask On Effectiveness (Phase 3)")
