@@ -196,6 +196,14 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         width=600,
         height=40
     )
+
+    mean_line = alt.Chart().mark_rule(color='red').encode(
+        y='mean(New_Cases_Rolling):Q',
+        size=alt.SizeValue(3)
+    ).transform_filter(
+        brush
+    )
+
     mean_bars = alt.Chart(df).mark_bar().encode(
         alt.Y('Province_State:N', axis=alt.Axis(title="State")),
         alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Selected Period'),
@@ -208,9 +216,20 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         width=600,
         height=40
     )
+
+    mean_bars_total = alt.Chart(df).mark_bar().encode(
+        alt.Y('Province_State:N', axis=alt.Axis(title="State")),
+        alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Entire Period'),
+              scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
+        opacity=alt.value(0.9),
+        color=alt.value('red')
+    ).properties(
+        width=600,
+        height=40
+    )
     if not show_bar:
         return (base, img, warning)
-    return (base + img) & sum_bars & mean_bars
+    return (base + img + mean_line) & mean_bars & mean_bars_total
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
 def generate_altair_slider_log_chart(df, title=""):
