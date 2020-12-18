@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -63,7 +63,6 @@ if testing:
 if consent:
     widget_values = collections.defaultdict(list)
 
-    # TODO: Record more data - record selections on the way (in order)
     def record(f, widgetLabel):
         """Return a function that wraps a streamlit widget and records the
         widget's values to a global dictionary.
@@ -105,7 +104,6 @@ if consent:
 
     i += 1
 #
-    # TODO: Prefer not to say, nonbinary, etc
     st.subheader(str(i) + ". What is your gender?")
     genderSel = record(st.selectbox, "Gender")
     demo_gender = genderSel("Gender", ('Select...','Male', 'Female', 'Nonbinary', 'Prefer not to say'))
@@ -152,6 +150,8 @@ if consent:
     demo_occu = occupation = occupationSel("Occupation")
 
     i += 1
+    
+    # TODO (Priyam): citizenship question?
 #
 #    st.subheader(str(i) + ". How many times a week do you view coronavirus related info (articles, data, press releases, etc.)?")
 #    virusInfoSel = record(st.selectbox, "Times a week consuming virus information")
@@ -194,7 +194,7 @@ if consent:
         st.write("f. Restricting Indoor Gatherings if everyone obeys the directive")
         radio5("Restricting Indoor Gatherings if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
-        st.subheader(str(i) + ". For each of the following orders, how effective are they to you if they were implemented in the US today?")
+        st.subheader(str(i) + ". For each of the following orders, how effective have they been in practice as implemented in the US?")
         radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
         radio2_1 = record(st.selectbox, "Social Distancing Effectiveness")
         radio3_1 = record(st.selectbox, "Mask On Effectiveness")
@@ -204,6 +204,7 @@ if consent:
 
         i += 1
 
+        # TODO (priyam): In practice
         st.write("a. Lockdown order (mandatory stay-at-home) in reality")
         radio1_1("Lockdown order (mandatory stay-at-home) in reality", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("b. Social distancing in reality")
@@ -220,11 +221,12 @@ if consent:
         show_phase2 = False
 
 
+        # TODO (Priyam): Change "Opened" text to green. Interaction should ADD the icons.
         st.subheader(str(i) + ". Below is a graph of new COVID-19 cases per day in a certain US state.")
         start_phase1 = record(st.slider, "Start - phase1")
         end_phase1 = record(st.slider, "End - phase1")
         test_chart = st.empty()
-        st.subheader("Based on your current knowledge and opinion of the pandemic, use the sliders below to pick a point where restaurants, bars, and other establishments were potentially CLOSED and a point where they OPENED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
+        st.subheader("Given the above graph and based on your current knowledge, use the sliders below to pick a point where restaurants, bars, and other establishments were CLOSED and a point where they OPENED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
         
         start = start_phase1("Choose when you think restaurants/bars closed, if at all.", 0, 170, 1)
         end = end_phase1("Choose when you think restaurants/bars opened, if at all.", 0, 170, 170)
@@ -268,11 +270,14 @@ if consent:
             states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York', 'California']
             # Green: New York, Red: South Dakota, Orange: Texas, Blue: Florida
 
+            # TODO (priyam): 
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
-                      certain region. You can move your selected square as well as change its size by scrolling up or down. A video\
-                      demonstrating how to interact with the graph is also presented below.")
-            # TODO PRIYAM: video
+                      certain region. A video demonstrating how to interact with the graph is also presented below.")
+            # TODO (PRIYAM): video
+            # TODO (Priyam): add explicit mentioning of the ICONS
+            # TODO (Priyam): Remove total covid19 cases, add an EXPLICIT number to the other one. Add a TEXT box to where the region selected shows the "x% of the total cases" of the graph above
+            # TODO (Priyam): last attention check question, fix the answer
 #            st.video('./media/demo.mp4', format='video/mp4', start_time=7)
             st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.You must study at least three states before you can move on.",  ["Select..."] + states)
@@ -412,6 +417,9 @@ if consent:
                     record_phase3_vizchange = record(st.radio, "Effect of Phase 2")
                     st.subheader(str(i) + ". How did Phase 2 affect your opinion about COVID-19 interventions?")
                     rpv = record_phase3_vizchange("Phase 2 Effect", ('-', 'Reinforced my views', 'Changed my views', 'Convinced me to seek more information', 'Didn\'t change my views'))
+                    
+                    # TODO (Priyam): add text box of WHY, required
+                    # TODO (Priyam): what did you think of 
 
                     st.header("Conclusion")
                     

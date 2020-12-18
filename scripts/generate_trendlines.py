@@ -116,6 +116,7 @@ def create_image_layer(df, x_label, y_label, image_col_name):
             width=600,
             height=400
         )
+#    rule = alt.Chart(df).mark_rule().encode(x=x_label+:':Q', url=image_col_name).transform_filter()
     return img
 
 # The below function creates an area chart that simulates "shading" for our charts
