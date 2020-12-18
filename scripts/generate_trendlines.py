@@ -30,6 +30,7 @@ def create_state_df(state):
 # The method below takes in a processed state_cases df and adds an image column
 # based on the day of the stay_at_home order
 # Returns a NEW dataframe; not a destructive method
+# image font is: JungleFever 115px
 def add_image_col_to_df(state_cases_df, start_day, end_day=None):
     if end_day:
         state_image = state_cases_df.copy()
@@ -106,8 +107,8 @@ def create_base_log_layer(df, x_label, y_label, is_selection=False, selection=No
 
 def create_image_layer(df, x_label, y_label, image_col_name):
     img = alt.Chart(df).mark_image(
-            width=50,
-            height=50
+            width=55,
+            height=55
         ).encode(
             x=x_label+':Q',
             y=y_label+':Q',
@@ -151,7 +152,7 @@ def create_shading_layer(max_x, max_y, lockdown_start_day, lockdown_end_day):
 def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=True, interactive=True):
     warning = None
     if start_date > end_date:
-        warning = "WARNING: Start of restaurant closures cannot be after the end of restaurant closures. You will not be able to move forward until this is fixed."
+        warning = "WARNING: Start of establishment closures cannot be after the end of establishment closures. You will not be able to move forward until this is fixed."
     df = create_state_df(state)
     df = add_image_col_to_df_with_date(df, start_date, end_date)
     df["New_Cases_Rolling"] = df["New_Cases"].rolling(window=7, min_periods=1).mean()
@@ -197,39 +198,48 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         height=40
     )
 
-    mean_line = alt.Chart().mark_rule(color='red').encode(
+    mean_line = alt.Chart().mark_rule(color='#ff8c00').encode(
         y='mean(New_Cases_Rolling):Q',
         size=alt.SizeValue(3)
     ).transform_filter(
         brush
     )
+    
+    mean_line_text = alt.Chart().mark_text(fontSize=30, align='center').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f')).transform_filter(
+        brush
+    )
+
 
     mean_bars = alt.Chart(df).mark_bar().encode(
         alt.Y('Province_State:N', axis=alt.Axis(title="State")),
         alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Selected Period'),
               scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
         opacity=alt.value(0.9),
-        color=alt.value('red')
+        color=alt.value('#ff8c00')
     ).transform_filter(
         brush
     ).properties(
         width=600,
         height=40
     )
+    
+    mean_bars_text = mean_bars.mark_text(dx=50, fontSize=20, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
 
     mean_bars_total = alt.Chart(df).mark_bar().encode(
         alt.Y('Province_State:N', axis=alt.Axis(title="State")),
         alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Entire Period'),
               scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
         opacity=alt.value(0.9),
-        color=alt.value('red')
+        color=alt.value('blue')
     ).properties(
         width=600,
         height=40
     )
+    
+    mean_bars_total_text = mean_bars_total.mark_text(dx=50, fontSize=20, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
     if not show_bar:
         return (base, img, warning)
-    return (base + img + mean_line) & mean_bars & mean_bars_total
+    return (base + img + mean_line) & (mean_bars+mean_bars_text) & (mean_bars_total + mean_bars_total_text)
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
 def generate_altair_slider_log_chart(df, title=""):
