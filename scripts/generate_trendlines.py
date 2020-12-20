@@ -161,7 +161,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
                 x='Day:Q',
                 y=alt.Y('New_Cases_Rolling:Q', axis=alt.Axis(title="New COVID-19 Cases per Day")),
             ).properties(
-                width=650,
+                width=570,
                 height=400
             ).add_selection(
                 brush
@@ -198,48 +198,48 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         height=40
     )
 
-    mean_line = alt.Chart().mark_rule(color='#ff8c00').encode(
+    mean_line = alt.Chart().mark_rule(color='#800000').encode(
         y='mean(New_Cases_Rolling):Q',
-        size=alt.SizeValue(3)
+        size=alt.SizeValue(2.2)
     ).transform_filter(
         brush
     )
     
-    mean_line_text = alt.Chart().mark_text(fontSize=30, align='center').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f')).transform_filter(
+    mean_line_text = alt.Chart().mark_text(fontSize=25, align='left').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f')).transform_filter(
         brush
     )
 
 
     mean_bars = alt.Chart(df).mark_bar().encode(
-        alt.Y('Province_State:N', axis=alt.Axis(title="State")),
-        alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Selected Period'),
+        alt.X('Province_State:N', axis=alt.Axis(title="State")),
+        alt.Y('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Selected Period'),
               scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
         opacity=alt.value(0.9),
-        color=alt.value('#ff8c00')
+        color=alt.value('#800000')
     ).transform_filter(
         brush
     ).properties(
-        width=600,
-        height=40
+        width=25,
+        height=400
     )
     
-    mean_bars_text = mean_bars.mark_text(dx=50, fontSize=20, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
+    mean_bars_text = mean_bars.mark_text(dx=50, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
 
     mean_bars_total = alt.Chart(df).mark_bar().encode(
-        alt.Y('Province_State:N', axis=alt.Axis(title="State")),
-        alt.X('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Entire Period'),
+        alt.X('Province_State:N', axis=alt.Axis(title="State")),
+        alt.Y('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Number of COVID-19 Cases per Day in Entire Period'),
               scale=alt.Scale(domain=(0, max(df['New_Cases_Rolling'])))),
         opacity=alt.value(0.9),
-        color=alt.value('blue')
+        color=alt.value('#000080')
     ).properties(
-        width=600,
-        height=40
+        width=25,
+        height=400
     )
     
-    mean_bars_total_text = mean_bars_total.mark_text(dx=50, fontSize=20, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
+    mean_bars_total_text = mean_bars_total.mark_text(dx=50, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
     if not show_bar:
         return (base, img, warning)
-    return (base + img + mean_line) & (mean_bars+mean_bars_text) & (mean_bars_total + mean_bars_total_text)
+    return (base + img + mean_line) | (mean_bars+mean_bars_text) | (mean_bars_total + mean_bars_total_text)
 
 # Function below creates log_trendline SLIDER charts using the data we loaded in from CSV files
 def generate_altair_slider_log_chart(df, title=""):

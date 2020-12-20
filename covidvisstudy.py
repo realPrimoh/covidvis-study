@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -235,14 +235,14 @@ if consent:
         st.subheader("Use the sliders below to pick a point on the graph where restaurants, bars, and other establishments were CLOSED and a point where they OPENED.")
 #        st.write("Leave blank (slider at -1) if you do not think restaurants/bars/other establishments were closed at any point in the graph. ")
         
-        start = start_phase1("Choose when you think restaurants/bars/other establishments closed, if at all. (-1 = never closed)", -1, 170, -1)
-        end = end_phase1("Choose when you think restaurants/bars/other establishments opened, if at all. (-1 = never opened)", -1, 170, -1)
+        start = start_phase1("Choose when you think restaurants/bars/other establishments closed, if at all (-1 = never closed).", -1, 170, -1)
+        end = end_phase1("Choose when you think restaurants/bars/other establishments opened, if at all (-1 = never opened).", -1, 170, -1)
         phase1_base, phase1_img, warning = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
         if start < 0 or end < 0 or start > 170 or end > 170:
             g.warning("You have chosen to part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
-        expand = st.beta_expander("Confused? Click for a quick explainer video.")
+        expand = st.beta_expander("Confused? Click here for a quick video explanation.")
         expand.markdown(
     """ <video width="640" height="349" controls><source src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4" type="video/mp4"> Your browser doesn't support the video tag. Please visit <a src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4">this link</a> to view the video.</video>
         """,
@@ -251,7 +251,7 @@ if consent:
         if warning:
             st.warning(warning)
         test_chart.altair_chart(phase1_base + phase1_img)
-        st.info("Note: Day 0 is a March 10, 2020. \n\nNote: There may be a small delay between the slider movement and the icon on the chart.")
+        st.info("Note: Day 0 is March 10, 2020. \n\nNote: There may be a small delay between the slider movement and the icon on the chart.")
 
 #        session_state.start = start_phase1("Choose when you think restaurants/bars closed, if at all", 0, 170, 1)
 #        session_state.end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 170, 170)
