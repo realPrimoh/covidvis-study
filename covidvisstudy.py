@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = True
+testing = False
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -218,7 +218,6 @@ if consent:
         show_phase2 = False
 
 
-        # TODO (Priyam): Change "Opened" text to green.
         st.subheader(str(i) + ". Below is a graph of new COVID-19 cases per day in a certain US state.")
         
         start_phase1 = record(st.slider, "Start - phase1")
@@ -295,6 +294,12 @@ if consent:
             # TODO (Priyam): Remove total covid19 cases, add an EXPLICIT number to the other one. Add a TEXT box to where the region selected shows the "x% of the total cases" of the graph above
             st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.You must study at least three states before you can move on.",  ["Select..."] + states)
+            expand2 = st.beta_expander("Confused? Click to view a short video explanation.")
+            expand2.markdown(
+    """ <video width="640" height="349" controls><source src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4" type="video/mp4"> Your browser doesn't support the video tag. Please visit <a src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4">this link</a> to view the video.</video>
+        """,
+    unsafe_allow_html=True
+)
             #but = False
             if not session_state._next:
                 if testing:
