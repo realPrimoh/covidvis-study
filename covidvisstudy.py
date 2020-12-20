@@ -359,7 +359,7 @@ if consent:
                         except ValueError:
                           st.info("Your answer must be an integer.")
                         #TODO (priyam): Instead of multiple choice, do a range?
-                        if type(x) == int and 800 <= x <= 1100:
+                        if type(x) == int and 900 <= x <= 1100:
                             st.info("Correct! Nice work. Let's try a couple more.")
                             st.subheader("On average, how many new cases each day occurred in Florida between Day 90 and Day 130?")
                             # y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
@@ -369,7 +369,7 @@ if consent:
                               y = int(y)
                             except ValueError:
                               st.info("Your answer must be an integer.")
-                            if type(y) == int and 5500 <= y <= 6500: #y == 6000: # May need to change for different state
+                            if type(y) == int and 5900 <= y <= 6100: #y == 6000: # May need to change for different state
                                 st.info("Correct! Just one more.")
                                 st.subheader("What was the average number of COVID-19 cases per day in the period after Georgia re-opened bars and restaurants?")
                                 # z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
@@ -379,7 +379,7 @@ if consent:
                                   z = int(z)
                                 except ValueError:
                                   st.info("Your answer must be an integer.")
-                                if type(z) == int and 2100 <= z <= 3100: #z == 2600: # May need to change for different state
+                                if type(z) == int and 2500 <= z <= 2700: #z == 2600: # May need to change for different state
                                     st.info("Correct! You can now move on to Phase 3.")
                                     show_phase3 = True
                                 elif type(z) == int and z > 0: #z in [200, 1000, 6300, 3200]:
@@ -448,7 +448,7 @@ if consent:
 
                 st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
 
-                st.subheader(str(i) + ". Below is a graph of new COVID-19 cases per day in a certain US state.")
+                st.subheader("Below is a graph of new COVID-19 cases per day in a certain US state.")
                 start_phase3 = record(st.slider, "Start - phase3")
                 end_phase3 = record(st.slider, "End - phase3")
                 test_chart3 = st.empty()

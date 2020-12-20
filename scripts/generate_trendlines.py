@@ -205,11 +205,6 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         brush
     )
     
-    mean_line_text = alt.Chart().mark_text(fontSize=25, align='left').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f')).transform_filter(
-        brush
-    )
-
-
     mean_bars = alt.Chart(df).mark_bar().encode(
         alt.X('Province_State:N', axis=alt.Axis(title="State")),
         alt.Y('mean(New_Cases_Rolling):Q', axis=alt.Axis(title='Average Cases per Day in Selected Period'),
@@ -224,7 +219,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         title="Selected Period"
     )
     
-    mean_bars_text = mean_bars.mark_text(dx=50, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
+    mean_bars_text = mean_bars.mark_text(dx=20, dy=-10, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
 
     mean_bars_total = alt.Chart(df).mark_bar().encode(
         alt.X('Province_State:N', axis=alt.Axis(title="State")),
@@ -238,7 +233,7 @@ def generate_rolling_cases_interactive(state, start_date, end_date, show_bar=Tru
         title="Entire Chart"
     )
     
-    mean_bars_total_text = mean_bars_total.mark_text(dx=50, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
+    mean_bars_total_text = mean_bars_total.mark_text(dx=20, dy=-10, fontSize=15, align='center', color='#000').encode(text=alt.Text('mean(New_Cases_Rolling):Q', format='.0f'))
     if not show_bar:
         return (base, img, warning)
     return (base + img + mean_line) | (mean_bars+mean_bars_text) | (mean_bars_total + mean_bars_total_text)
