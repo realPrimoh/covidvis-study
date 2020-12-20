@@ -224,6 +224,7 @@ if consent:
         start_phase1 = record(st.slider, "Start - phase1")
         end_phase1 = record(st.slider, "End - phase1")
         test_chart = st.empty()
+        g = st.empty()
         expand = st.beta_expander("Chart Legend")
         expand.markdown(
     """ <h4><img src="https://raw.githubusercontent.com/realPrimoh/covidvis-study/master/close-image.png" width=90 height=72 />: This marks where restaurants, bars, and other establishments were closed.<br/>
@@ -239,6 +240,8 @@ if consent:
         phase1_base, phase1_img, warning = generate_rolling_cases_interactive('Arizona', datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=start), datetime.datetime.strptime('03-10-2020', '%m-%d-%Y') + datetime.timedelta(days=end), False, False)
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
+        if start < 0 or end < 0 or start > 170 or end > 170:
+            g.warning("You have chosen to part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
         expand = st.beta_expander("Confused? Click for a quick explainer video.")
         expand.markdown(
     """ <video width="640" height="349" controls><source src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4" type="video/mp4"> Your browser doesn't support the video tag. Please visit <a src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4">this link</a> to view the video.</video>
@@ -247,8 +250,6 @@ if consent:
 )
         if warning:
             st.warning(warning)
-        if start < 0 or end < 0 or start > 170 or end > 170:
-            st.warning("You have chosen to part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
         test_chart.altair_chart(phase1_base + phase1_img)
         st.info("Note: Day 0 is a March 10, 2020. \n\nNote: There may be a small delay between the slider movement and the icon on the chart.")
 
