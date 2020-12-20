@@ -359,7 +359,7 @@ if consent:
                         except ValueError:
                           st.info("Your answer must be an integer.")
                         #TODO (priyam): Instead of multiple choice, do a range?
-                        if type(x) == int and 500 <= x <= 1500:
+                        if type(x) == int and 800 <= x <= 1100:
                             st.info("Correct! Nice work. Let's try a couple more.")
                             st.subheader("On average, how many new cases each day occurred in Florida between Day 90 and Day 130?")
                             # y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
@@ -495,18 +495,19 @@ if consent:
                     import json 
                     if st.button("Submit"):
                         bar = st.progress(0)
-                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
+                        response = requests.post("https://formspree.io/f/xvovvowl", data=widget_values)
+#                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
                         for percent_complete in range(100):
-                            time.sleep(0.05)
+                            time.sleep(0.005)
                             bar.progress(percent_complete + 1)
-                        if platform == "MTurk":
-                            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
-
-                            st.info(str(response.content.decode('UTF-8')))
-                        elif platform == "Prolific":
-                            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-                        else:
-                            st.info("Thanks for taking our survey!")
+#                        if platform == "MTurk":
+#                            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+#
+#                            st.info(str(response.content.decode('UTF-8')))
+#                        elif platform == "Prolific":
+#                            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+#                        else:
+#                            st.info("Thanks for taking our survey!")
 
 
                     if testing:
