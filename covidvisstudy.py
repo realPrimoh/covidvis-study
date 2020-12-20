@@ -248,6 +248,7 @@ if consent:
         if start < 0 or end < 0 or start > 170 or end > 170:
             g.warning("You have chosen to part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
         expand = st.beta_expander("Confused? Click here for a quick video explanation.")
+        # https://www.veed.io/download/7229df92-9b0a-4a92-98d2-d91814abebfa
         expand.markdown(
     """ <video width="640" height="349" controls><source src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4" type="video/mp4"> Your browser doesn't support the video tag. Please visit <a src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer1.mp4">this link</a> to view the video.</video>
         """,
@@ -291,13 +292,9 @@ if consent:
             states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York', 'California']
             # Green: New York, Red: South Dakota, Orange: Texas, Blue: Florida
 
-            # TODO (priyam): 
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. A video demonstrating how to interact with the graph is also presented below.")
-            # TODO (PRIYAM): video
-            # TODO (Priyam): add explicit mentioning of the ICONS
-            # TODO (Priyam): Remove total covid19 cases, add an EXPLICIT number to the other one. Add a TEXT box to where the region selected shows the "x% of the total cases" of the graph above
             st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.You must study at least three states before you can move on.",  ["Select..."] + states)
             expand2 = st.beta_expander("Confused? Click to view a quick video explanation.")
@@ -451,8 +448,13 @@ if consent:
                     st.subheader(str(i) + ". How did Phase 2 affect your opinion about COVID-19 interventions?")
                     rpv = record_phase3_vizchange("Phase 2 Effect", ('-', 'Reinforced my views', 'Changed my views', 'Convinced me to seek more information', 'Didn\'t change my views'))
                     
-                    # TODO (Priyam): add text box of WHY, required
-                    # TODO (Priyam): what did you think of 
+                    why_phase3 = record(st.text_input, "why_phase3")
+                    st.write("Why did you pick the answer you chose above?")
+                    why_phase3_r = why_phase3("Why did you pick the answer you chose above?")
+
+                    why_phase2 = record(st.text_input, "why_phase2")
+                    st.write("What did you think of the interactive visualizations in Phase 2?")
+                    why_phase2_r = why_phase2("What did you think of the interactive visualizations in Phase 2?")
 
                     st.header("Conclusion")
                     
@@ -488,11 +490,3 @@ if consent:
 
                     if testing:
                         st.write(widget_values)
-                # Overlays of lines to provide context to the user when picking (highlight line when picked)
-
-                # Generate random trends to reduce bias
-                # Generate lines independent of the true line, which of these random lines do you think are closest to the true line
-                # Random sample of trends (reduce bias of the true line, ex. no median picking should be the answer)
-
-                # Plot the rate of change versus cumulative (log scale)
-                #st.write("Recorded values: ", widget_values)
