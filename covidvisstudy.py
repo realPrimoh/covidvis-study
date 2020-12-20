@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -311,7 +311,7 @@ if consent:
                               canceled/postponed all non-essential gatherings. \n\n Opened: New York did not ever reopen the entire state formally, but we mark Day 66\
                               as the open day, as that was when the first counties were allowed to enter some phase of reopening.")
                     if phase2_look1 == 'Florida':
-                      st.info("Closed: We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issue. It is worth noting\
+                      st.info("Closed: We mark Day 22 as the start day, as that is when a state-wide stay-at-home order was issued. It is worth noting\
                               that some bars and restaurants had already closed previously. \n\n Opened: We mark Day 85 as the open day, as that is when Florida\
                               entered Phase 2 of reopening (except Broward, Miami-Dade, and Palm Beach counties), which allowed most businesses\
                               to resume operations at 50 percent capacity. For details about Florida's Phase 2, see this link: https://www.flgov.com/wp-content/uploads/covid19/Exec%20Order%20Phase%202%20FAQs.pdf")
@@ -335,38 +335,59 @@ if consent:
                     """,
                 unsafe_allow_html=True
                     )
+                    st.warning("The bar graphs to the right of the graph contain additional information about the average number of daily\
+                                cases. The dynamic maroon bar shows the average number for your selected time period, and the static blue\
+                                bar shows the average number for the total time period. Note that until you actively make a selection, the\
+                                default selection is the entire graph, which is why both bars start out identical.")
                     st.altair_chart(alt_chart1_)
                     
-                    st.info("Day 0 is a March 10, 2020.")
+                    st.info("Day 0 is March 10, 2020.")
                     session_state.traj_looked_at += 1
                     if session_state.traj_looked_at >= 3:
                         st.info("Now, we will ask you some questions about the charts.")
-                        st.subheader("Approximately how many new cases occurred in Texas while restaurants were closed?")
-                        x = st.radio("Hint: Click and drag the area from the 'closing' icon to the 'opening' icon on the Texas chart.", 
-                            ["-", 10000, 38000, 70000, 120000, 200000])
+                        st.subheader("On average, how many new cases each day occurred in Texas while restaurants were closed? Your answer does not have to\
+                                      be exact.")
+                        x, y, z = -1, -1, -1
+                        # x = st.radio("Hint: Click and drag the area from the 'closing' icon to the 'opening' icon on the Texas chart.", 
+                        #     ["-", 400, 1000, 3300, 5000, 6200])
+                        x = st.text_input("Enter your answer for Texas here.")
+                        try:
+                          x = int(x)
+                        except ValueError:
+                          st.info("Your answer must be an integer.")
                         #TODO (priyam): Instead of multiple choice, do a range?
-                        if x == 70000:
+                        if type(x) == int and 500 <= x <= 1500:
                             st.info("Correct! Nice work. Let's try a couple more.")
-                            st.subheader("Approximately how many new cases occurred in Florida between Day 90 and Day 130?")
-                            y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
-                            ["-", 53000, 122000, 190000, 240000, 300000])
-                            if y == 240000: # May need to change for different state
+                            st.subheader("On average, how many new cases each day occurred in Florida between Day 90 and Day 130?")
+                            # y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
+                            # ["-", 1000, 2200, 6000, 7500, 10000])
+                            y = st.text_input("Enter your answer for Florida here.")
+                            try:
+                              y = int(y)
+                            except ValueError:
+                              st.info("Your answer must be an integer.")
+                            if type(y) == int and 5500 <= y <= 6500: #y == 6000: # May need to change for different state
                                 st.info("Correct! Just one more.")
                                 st.subheader("What was the average number of COVID-19 cases per day in the period after Georgia re-opened bars and restaurants?")
-                                z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
-                                ["-", 200, 1000, 2600, 3200, 6300])
-                                if z == 2600: # May need to change for different state
+                                # z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
+                                # ["-", 200, 1000, 2600, 3200, 6300])
+                                z = st.text_input("Enter your answer for Georgia here.")
+                                try:
+                                  z = int(z)
+                                except ValueError:
+                                  st.info("Your answer must be an integer.")
+                                if type(z) == int and 2100 <= z <= 3100: #z == 2600: # May need to change for different state
                                     st.info("Correct! You can now move on to Phase 3.")
                                     show_phase3 = True
-                                elif z in [200, 1000, 6300, 3200]:
+                                elif type(z) == int and z > 0: #z in [200, 1000, 6300, 3200]:
                                     st.info("Try again!")
                                 else:
                                     pass
-                            elif y in [53000, 122000, 190000, 300000]:
+                            elif type(y) == int and y > 0: #y in [1000, 2200, 7500, 10000]:
                                 st.info("Try again!")
                             else:
                                 pass
-                        elif x in [10000, 38000, 120000, 200000]:
+                        elif type(x) == int and x > 0: #in [400, 3300, 5000, 6200]:
                             st.info("Try again!")
                         else:
                             pass
