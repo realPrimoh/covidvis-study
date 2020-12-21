@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = True
+testing = False
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -296,7 +296,7 @@ if consent:
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. A video demonstrating how to interact with the graph is also presented below.")
             st.write("Pick a state to view its trajectory and play around with it.")
-            phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it.You must study at least three states before you can move on.",  ["Select..."] + states)
+            phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.",  ["Select..."] + states)
             expand2 = st.beta_expander("Confused? Click to view a quick video explanation.")
             expand2.markdown(
     """ <video width="640" height="349" controls><source src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer2.mp4" type="video/mp4"> Your browser doesn't support the video tag. Please visit <a src="https://github.com/realPrimoh/covidvis-study/raw/master/explainer2.mp4">this link</a> to view the video.</video>
