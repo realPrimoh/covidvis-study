@@ -13,7 +13,7 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = False
+testing = True
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -246,7 +246,7 @@ if consent:
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
         #https://www.veed.io/download/52899626-ee76-4569-82c6-ab7cee173c06
         if start < 0 or end < 0 or start > 170 or end > 170:
-            g.warning("You have chosen to part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
+            g.warning("You have chosen to leave part or all of the graph blank. This means you do not think restaurants/bars/other establishments were closed at any point in the graph. Please confirm this is your choice before moving on.")
         expand = st.beta_expander("Confused? Click here for a quick video explanation.")
         # https://www.veed.io/download/7229df92-9b0a-4a92-98d2-d91814abebfa
         expand.markdown(
@@ -279,7 +279,7 @@ if consent:
 
             state_restaurant_close_dates = {"New York": '03-20-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '06-29-2020', "Colorado": '03-19-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020', "Texas": '03-31-2020', "Washington": '03-23-2020', "Pennsylvania": '04-01-2020', "South Dakota": '03-01-2020'} # Bars/nightclubs in Florida = March 17
             
-            state_restaurant_open_dates = {"New York": '05-15-2020', "California": '05-26-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-3-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020', "South Dakota": '12-12-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
+            state_restaurant_open_dates = {"New York": '05-15-2020', "California": '05-18-2020', "Georgia": '06-13-2020', "Illinois": '05-29-2020', "Florida": '06-03-2020', "New Jersey": '06-03-2020', "Arizona": '08-10-2020', "Colorado": '03-26-2020', 'Indiana': '07-04-2020', 'Louisiana': '05-15-2020', "Texas": '06-3-2020', "Washington": '06-01-2020', "Pennsylvania": '06-05-2020', "South Dakota": '12-12-2020'} # NY: July 10 for malls too, NJ: May 18 for beginning, September 1 for end (https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_Jersey#Government_response)
 
             # Georgia: https://www.acluga.org/en/timeline-georgia-government-actions-regarding-covid-19
             # Texas: https://www.texastribune.org/2020/07/31/coronavirus-timeline-texas/
@@ -287,6 +287,7 @@ if consent:
             # New York: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_New_York_(state)#Government_response
             # Washington: https://www.seattlemet.com/health-and-wellness/2020/08/seattle-s-coronavirus-timeline-from-toilet-paper-to-mask-laws
             # Pennsylvania: https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Pennsylvania#Government_response (REMOVE b/c of too many "phases")
+            # California: https://www.usnews.com/news/best-states/california/articles/2020-07-01/timeline-of-events-during-californias-coronavirus-outbreak
             state_intervention = {"New York": '03-22-2020', "California": '03-19-2020', "Georgia": '04-02-2020', "Illinois": '03-21-2020', "Florida": '04-01-2020', "New Jersey": '03-21-2020', "Arizona": '05-11-2020', "Colorado": '04-30-2020', 'Indiana': '03-25-2020', 'Louisiana': '03-23-2020'}
 
             states = ['Florida', 'Texas', 'Georgia', 'Washington', 'South Dakota', 'New York', 'California']
@@ -295,7 +296,7 @@ if consent:
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. A video demonstrating how to interact with the graph is also presented below.")
-            st.write("Pick a state to view its trajectory and play around with it.")
+            st.write("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.",  ["Select..."] + states)
             expand2 = st.beta_expander("Confused? Click to view a quick video explanation.")
             expand2.markdown(
@@ -329,7 +330,7 @@ if consent:
                     if phase2_look1 == 'South Dakota':
                       st.info("South Dakota has not put any COVID-19 intervention measures in place.")
                     if phase2_look1 == 'California':
-                      st.info("Closed: California closed restaurants, bars, and schools on Day 10, as part of a state-wide stay-at-home order. \n\n Opened: We mark Day 78 as the open day, as that is when restaurants, bars, and other establishments were able to open up, though not fully.")
+                      st.info("Closed: California closed restaurants, bars, and schools on Day 9, as part of a state-wide stay-at-home order. \n\n Opened: We mark Day 68 as the open day, as that is when restaurants, bars, and other establishments were able to open up, though not fully.")
                     alt_chart1_ = generate_rolling_cases_interactive(phase2_look1, state_restaurant_close_dates[phase2_look1], state_restaurant_open_dates[phase2_look1])
                     expand1 = st.beta_expander("Chart Legend")
                     expand1.markdown(
@@ -474,7 +475,8 @@ if consent:
                     why_phase3_r = why_phase3("Why did you pick the answer you chose above?")
 
                     why_phase2 = record(st.text_input, "why_phase2")
-                    st.write("What did you think of the interactive visualizations in Phase 2?")
+                    st.write("In Phase 2, were there any specific aspects of the visualizations you found particularly helpful\
+                              in understanding the data?")
                     why_phase2_r = why_phase2("What did you think of the interactive visualizations in Phase 2?")
 
                     st.header("Conclusion")
@@ -486,7 +488,7 @@ if consent:
                     
                     text_record2 = record(st.text_input, "Conclusion_Share")
 
-                    st.write("If you would like to volunteer for a post-study survey, please enter your email address below.")
+                    st.write("If you would like to volunteer for a paid post-study survey, please enter your email address below.")
                     text_r2 = text_record2("If you would like to volunteer for a post-study survey, please enter your email address below.")
 
 
