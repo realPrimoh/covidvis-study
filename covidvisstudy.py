@@ -13,7 +13,19 @@ from functools import reduce
 
 from scripts.generate_trendlines import *
 
-testing = True
+testing = False
+widget_values = collections.defaultdict(list)
+
+
+urlparams = st.experimental_get_query_params()
+platform = "Other"
+
+if "platform" in urlparams:
+    platform = urlparams["platform"][0]
+    
+widget_values["platform"] = platform
+
+widget_values["otherParams"] = urlparams
 
 # Hides first radio obutton option, which we set to "-"
 # Allows us to avoid a pre-selected value
@@ -52,13 +64,13 @@ st.subheader("Details")
 st.markdown("The primary researchers conducting this study are Murtaza Ali and Priyam Mohanty. If you have questions at any point, you may contact Priyam Mohanty at priyam.mohanty@berkeley.edu or Murtaza Ali at murtzali_5253@berkeley.edu.  If you have any questions or concerns regarding your rights as a participant in this study, you may contact the Institutional Review Board (IRB) for Human Participants at https://cphs.berkeley.edu.")
 
 st.subheader("What we will ask you to do")
-st.markdown("If you agree to take part, you will be asked to complete a questionnaire. The survey will last approximately 7-10 minutes and will be conducted online.")
+st.markdown("If you agree to take part, you will be asked to complete a questionnaire. The survey will last approximately 8-15 minutes and will be conducted online.")
 
 st.subheader("Risks and discomforts")
 st.markdown("There is little risk to you in taking part in this research. Your study data will be treated as confidentially as possible. The data will be stored on an encrypted database online. None of your personal information is collected.")
 
 st.subheader("Benefits")
-st.markdown("It is our hope that the research will benefit the scientific community in better understanding societal implications of COVID-19 interventions. You will be compensated $3 for completion of this study. This study is expected to take 7-10 minutes to complete.")
+st.markdown("It is our hope that the research will benefit the scientific community in better understanding societal implications of COVID-19 interventions. You will be compensated for completion of this study. This study is expected to take 8-15 minutes to complete.")
 
 st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
@@ -66,8 +78,8 @@ st.markdown("Please check the box below to continue. By continuing with this sur
 consent = st.checkbox("I consent")
 if testing:
     consent = True
+demographic_complete = False
 if consent:
-    widget_values = collections.defaultdict(list)
 
     def record(f, widgetLabel):
         """Return a function that wraps a streamlit widget and records the
@@ -80,15 +92,6 @@ if consent:
 
         return wrapper
 
-    st.subheader("What platform are you using?")
-    platformSel = record(st.radio, "Platform")
-    platform = platformSel("Please select only one option.", ("-", "MTurk", "Prolific", "Other"))
-
-    if platform != "Other" and platform != "-":
-        st.subheader("Enter your " + platform + " ID here.")
-        mturkSel = record(st.text_input, platform + " ID")
-        mturk = mturkSel(platform + " ID")
-    demographic_complete = False
     if testing:
         demographic_complete = True
         
@@ -186,17 +189,17 @@ if consent:
         i += 1
 
         st.write("a. Lockdown order (mandatory stay-at-home) if everyone obeys the directive")
-        radio1("Lockdown order (mandatory stay-at-home) if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r1 = radio1("Lockdown order (mandatory stay-at-home) if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("b. Social distancing if everyone obeys the directive")
-        radio2("Social distancing if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r2 = radio2("Social distancing if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("c. Mandatory masks in public if everyone obeys the directive")
-        radio3("Mandatory masks in public if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r3 = radio3("Mandatory masks in public if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("d. Closing bars/restaurants if everyone obeys the directive")
-        radio4("Closing bars/restaurants if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r4 = radio4("Closing bars/restaurants if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("e. Closing schools if everyone obeys the directive")
-        radio5("Closing schools if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r5 = radio5("Closing schools if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("f. Restricting Indoor Gatherings if everyone obeys the directive")
-        radio5("Restricting Indoor Gatherings if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r6 = radio6("Restricting Indoor Gatherings if everyone obeys the directive", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         st.subheader(str(i) + ". For each of the following orders, how effective have they been in practice as implemented in the US?")
         radio1_1 = record(st.selectbox, "Stay-at-home Effectiveness")
@@ -209,17 +212,17 @@ if consent:
         i += 1
 
         st.write("a. Lockdown order (mandatory stay-at-home) in practice")
-        radio1_1("Lockdown order (mandatory stay-at-home) in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r11 = radio1_1("Lockdown order (mandatory stay-at-home) in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("b. Social distancing in practice")
-        radio2_1("Social distancing in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r21 = radio2_1("Social distancing in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("c. Mandatory masks in public in practice")
-        radio3_1("Mandatory masks in public in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r31 = radio3_1("Mandatory masks in public in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("d. Closing bars/restaurants in practice")
-        radio4_1("Closing bars/restaurants in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r41 = radio4_1("Closing bars/restaurants in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("e. Closing schools in practice")
-        radio5_1("Closing schools in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r51 = radio5_1("Closing schools in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
         st.write("f. Restricting Indoor Gatherings in practice")
-        radio5_1("Restricting Indoor Gatherings in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+        r61 = radio6_1("Restricting Indoor Gatherings in practice", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
         show_phase2 = False
 
@@ -263,13 +266,15 @@ if consent:
 #        session_state.end = end_phase1("Choose when you think restaurants/bars opened, if at all", 0, 170, 170)
         i += 1
         show_phase3 = False
-        if not warning:
+        phase1_done = False
+        if not warning and r1 != "Select..." and r2 != "Select..." and r3 != "Select..." and r4 != "Select..." and r5 != "Select..." and r6 != "Select..." and r11 != "Select..." and r21 != "Select..." and r31 != "Select..." and r41 != "Select..." and r51 != "Select..." and r61 != "Select...":
             phase1_done = st.checkbox("I am finished with Phase 1.")
             if testing:
                 phase1_done = True
-        
+        else:
+            st.warning("Please complete Phase 1 to continue.")
         if not warning and phase1_done:
-
+            requests.post("https://formspree.io/f/xnqooqge", data=widget_values)
             st.header("Phase 2")
             st.warning("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. Your answers aren't recorded here. We would like you to explore the visualizations depicting COVID-19 spread below.")
 
@@ -338,9 +343,9 @@ if consent:
                     """,
                 unsafe_allow_html=True
                     )
-                    st.warning("The bar graphs to the right of the graph contain additional information about the average number of daily\
-                                cases. The dynamic maroon bar shows the average number for your selected time period, and the static blue\
-                                bar shows the average number for the total time period. Note that until you actively make a selection, the\
+                    st.warning("- The bar graphs to the right of the graph contain additional information about the average number of daily\
+                                cases. \n\n - The dynamic maroon bar shows the average number for your selected time period (click and drag on the graph). \n\n - The static blue\
+                                bar shows the average number of daily cases for the total time period. \n\n - Until you actively make a selection, the\
                                 default selection is the entire graph, which is why both bars start out identical.")
                     st.altair_chart(alt_chart1_)
                     
@@ -369,7 +374,7 @@ if consent:
                               y = int(y)
                             except ValueError:
                               st.info("Your answer must be an integer.")
-                            if type(y) == int and 5900 <= y <= 6100: #y == 6000: # May need to change for different state
+                            if type(y) == int and 5600 <= y <= 6300: #y == 6000: # May need to change for different state
                                 st.info("Correct! Just one more.")
                                 st.subheader("What was the average number of COVID-19 cases per day in the period after Georgia re-opened bars and restaurants?")
                                 # z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
@@ -476,39 +481,45 @@ if consent:
                     why_phase2 = record(st.text_input, "why_phase2")
                     st.write("What did you think of the interactive visualizations in Phase 2?")
                     why_phase2_r = why_phase2("What did you think of the interactive visualizations in Phase 2?")
+                    
 
                     st.header("Conclusion")
                     
-                    text_record = record(st.text_input, "Conclusion_Share")
+                    if why_phase2_r and why_phase3_r and rpv != '-':
+                        
+                        text_record = record(st.text_input, "Conclusion_Share")
 
-                    st.write("Is there anything else you would like to share with us regarding this study?")
-                    text_r = text_record("Is there anything else you would like to share with us regarding this study?")
-                    
-                    text_record2 = record(st.text_input, "Conclusion_Share")
+                        st.write("Is there anything else you would like to share with us regarding this study?")
+                        text_r = text_record("Is there anything else you would like to share with us regarding this study?")
 
-                    st.write("If you would like to volunteer for a post-study survey, please enter your email address below.")
-                    text_r2 = text_record2("If you would like to volunteer for a post-study survey, please enter your email address below.")
+                        text_record2 = record(st.text_input, "Conclusion_Share")
 
-
-                    st.info("Thank you so much for participating! Click submit below. \n\n After submitting your responses, you can protect your privacy by clearing your browser’s history, cache, cookies, and other browsing data. (Warning: This will log you out of online services.)")
-                    widget_values["id"] = 10
-                    import json 
-                    if st.button("Submit"):
-                        bar = st.progress(0)
-                        response = requests.post("https://formspree.io/f/xvovvowl", data=widget_values)
-#                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
-                        for percent_complete in range(100):
-                            time.sleep(0.005)
-                            bar.progress(percent_complete + 1)
-#                        if platform == "MTurk":
-#                            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
-#
-#                            st.info(str(response.content.decode('UTF-8')))
-#                        elif platform == "Prolific":
-#                            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-#                        else:
-#                            st.info("Thanks for taking our survey!")
+                        st.write("If you would like to volunteer for a post-study survey, please enter your email address below.")
+                        text_r2 = text_record2("If you would like to volunteer for a post-study survey, please enter your email address below.")
 
 
-                    if testing:
-                        st.write(widget_values)
+                        st.info("Thank you so much for participating! Click Submit below.")
+                        widget_values["id"] = 10
+                        import json 
+                        if st.button("Submit"):
+                            bar = st.progress(0)
+                            response = requests.post("https://formspree.io/f/xvovvowl", data=widget_values)
+    #                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
+                            for percent_complete in range(100):
+                                time.sleep(0.005)
+                                bar.progress(percent_complete + 1)
+    #                        if platform == "MTurk":
+    #                            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+    #
+    #                            st.info(str(response.content.decode('UTF-8')))
+    #                        elif platform == "Prolific":
+    #                            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+    #                        else:
+    #                            st.info("Thanks for taking our survey!")
+
+
+                        if testing:
+                            st.write(widget_values)
+                
+                    else:
+                        st.warning("To complete the survey, please finish Phase 3.")
