@@ -274,7 +274,7 @@ if consent:
         else:
             st.warning("Please complete Phase 1 to continue.")
         if not warning and phase1_done:
-            requests.post("https://formspree.io/f/xnqooqge", data=widget_values)
+            # requests.post("https://formspree.io/f/xnqooqge", data=widget_values)
             st.header("Phase 2")
             st.warning("In Phase 2, you will get a chance to experience a few data visualizations presenting the effect of restaurant/bar closures on the COVID-19 daily case rate. Your answers aren't recorded here. We would like you to explore the visualizations depicting COVID-19 spread below.")
 
@@ -506,18 +506,17 @@ if consent:
                         if st.button("Submit"):
                             bar = st.progress(0)
                             response = requests.post("https://formspree.io/f/xvovvowl", data=widget_values)
-    #                        response = requests.post('http://covidvis-api.herokuapp.com/send/', data=widget_values)
                             for percent_complete in range(100):
                                 time.sleep(0.005)
                                 bar.progress(percent_complete + 1)
-    #                        if platform == "MTurk":
-    #                            st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
-    #
-    #                            st.info(str(response.content.decode('UTF-8')))
-    #                        elif platform == "Prolific":
-    #                            st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-    #                        else:
-    #                            st.info("Thanks for taking our survey!")
+                           if platform == "MTurk":
+                               st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+    
+                               st.info(str(response.content.decode('UTF-8')))
+                           elif platform == "Prolific":
+                               st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+                           else:
+                               st.info("Thanks for taking our survey!")
 
 
                         if testing:
