@@ -509,14 +509,14 @@ if consent:
                             for percent_complete in range(100):
                                 time.sleep(0.005)
                                 bar.progress(percent_complete + 1)
-                           if platform == "MTurk":
-                               st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
+                            if platform == "MTurk":
+                                st.info("Please record this ID down and enter it in the appropriate place in MTurk to signify your completion.")
     
-                               st.info(str(response.content.decode('UTF-8')))
-                           elif platform == "Prolific":
-                               st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
-                           else:
-                               st.info("Thanks for taking our survey!")
+                                st.info(str(response.content.decode('UTF-8')))
+                            elif platform == "Prolific":
+                                st.info("If you're using Prolific, please click this link. https://app.prolific.co/submissions/complete?cc=7AC56F74")
+                            else:
+                                st.info("Thanks for taking our survey!")
 
 
                         if testing:
