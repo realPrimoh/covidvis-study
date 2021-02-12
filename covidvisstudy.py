@@ -305,7 +305,7 @@ if consent:
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. A video demonstrating how to interact with the graph is also presented below.")
-            st.write("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.")
+            st.write("Pick a state to view its trajectory and play around with it. You must study at least two states before you can move on.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.",  ["Select..."] + states)
             expand2 = st.beta_expander("Confused? Click to view a quick video explanation.")
             expand2.markdown(
@@ -316,7 +316,7 @@ if consent:
             #but = False
             if not session_state._next:
                 if testing:
-                        session_state.traj_looked_at = 5
+                        session_state.traj_looked_at = 0
                         show_phase3 = True
                 if phase2_look1 in states:
                     
@@ -358,7 +358,9 @@ if consent:
                     
                     st.info("Day 0 is March 10, 2020.")
                     session_state.traj_looked_at += 1
-                    if session_state.traj_looked_at >= 3:
+                    if session_state.traj_looked_at < 2:
+                        st.warning("You must look at 2 different states' graphs to move on.")
+                    if session_state.traj_looked_at >= 2:
                         st.info("Now, we will ask you some questions about the charts.")
                         st.subheader("On average, how many new cases each day occurred in Texas while restaurants were closed? Your answer does not have to\
                                       be exact.")
@@ -371,7 +373,7 @@ if consent:
                         try:
                           x = int(x)
                         except ValueError:
-                          st.info("Your answer must be an integer.")
+                          st.info("Your answer must be a whole number (no decimals).")
                         #TODO (priyam): Instead of multiple choice, do a range?
                         if type(x) == int and 900 <= x <= 1100:
                             st.info("Correct! Nice work. Let's try a couple more.")
@@ -384,7 +386,7 @@ if consent:
                             try:
                               y = int(y)
                             except ValueError:
-                              st.info("Your answer must be an integer.")
+                              st.info("Your answer must be a whole number (no decimals).")
                             if type(y) == int and 5600 <= y <= 6300: #y == 6000: # May need to change for different state
                                 st.info("Correct! Just one more.")
                                 st.subheader("What was the average number of COVID-19 cases per day in the period after Georgia re-opened bars and restaurants?")
@@ -396,7 +398,7 @@ if consent:
                                 try:
                                   z = int(z)
                                 except ValueError:
-                                  st.info("Your answer must be an integer.")
+                                  st.info("Your answer must be a whole number (no decimals).")
                                 if type(z) == int and 2450 <= z <= 2900: #z == 2600: # May need to change for different state
                                     st.info("Correct! You can now move on to Phase 3.")
                                     show_phase3 = True
