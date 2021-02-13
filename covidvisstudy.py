@@ -70,7 +70,7 @@ st.subheader("Risks and discomforts")
 st.markdown("There is little risk to you in taking part in this research. Your study data will be treated as confidentially as possible. The data will be stored on an encrypted database online. None of your personal information is collected.")
 
 st.subheader("Benefits")
-st.markdown("It is our hope that the research will benefit the scientific community in better understanding societal implications of COVID-19 interventions. You will be compensated for completion of this study. This study is expected to take 8-15 minutes to complete.")
+st.markdown("It is our hope that the research will benefit the scientific community in better understanding societal implications of COVID-19 interventions. You will be compensated for completion of this study. This study is expected to take 10-20 minutes to complete.")
 
 st.subheader("Statement of Consent")
 st.markdown("Please check the box below to continue. By continuing with this survey and submitting your response, you are consenting to the above statements. If you do not consent, please exit the survey now.")
@@ -305,7 +305,7 @@ if consent:
             st.subheader("Choose a state from the drop-down menu to see the number of new cases each day.\
                       Once you choose a state, you can click and drag on the graph to see the total number of cases that fall in a\
                       certain region. A video demonstrating how to interact with the graph is also presented below.")
-            st.write("Pick a state to view its trajectory and play around with it. You must study at least two states before you can move on.")
+            st.write("Pick a state to view its trajectory and play around with it.")
             phase2_look1 = st.selectbox("Pick a state to view its trajectory and play around with it. You must study at least three states before you can move on.",  ["Select..."] + states)
             expand2 = st.beta_expander("Confused? Click to view a quick video explanation.")
             expand2.markdown(
@@ -357,63 +357,58 @@ if consent:
                     st.altair_chart(alt_chart1_)
                     
                     st.info("Day 0 is March 10, 2020.")
-                    session_state.traj_looked_at += 1
-                    if session_state.traj_looked_at < 2:
-                        st.warning("You must look at 2 different states' graphs to move on.")
-                    if session_state.traj_looked_at >= 2:
-                        st.info("Now, we will ask you some questions about the charts.")
-                        st.subheader("On average, how many new cases each day occurred in Texas while restaurants were closed? Your answer does not have to\
-                                      be exact.")
-                        x, y, z = -1, -1, -1
-                        hint1 = st.beta_expander("Hint: (click to expand)")
-                        hint1.error("Click and drag the area from the 'Closed' icon to the 'Opened' icon on the Texas chart. The number is shown on the red bar on the right.")
-                        # hint1 = st.radio("Hint: Click and drag the area from the 'closing' icon to the 'opening' icon on the Texas chart.", 
-                        #     ["-", 400, 1000, 3300, 5000, 6200])
-                        x = st.text_input("Enter your answer for Texas here.")
+                    st.info("Now, we will ask you some questions about the charts.")
+                    st.subheader("On average, how many new cases each day occurred in Texas while restaurants were closed? Your answer does not have to\
+                                    be exact.")
+                    x, y, z = -1, -1, -1
+                    hint1 = st.beta_expander("Hint: (click to expand)")
+                    hint1.error("Click and drag the area from the 'Closed' icon to the 'Opened' icon on the Texas chart. The number is shown on the red bar on the right.")
+                    # hint1 = st.radio("Hint: Click and drag the area from the 'closing' icon to the 'opening' icon on the Texas chart.", 
+                    #     ["-", 400, 1000, 3300, 5000, 6200])
+                    x = st.text_input("Enter your answer for Texas here.")
+                    try:
+                        x = int(x)
+                    except ValueError:
+                        st.info("Your answer must be a whole number (no decimals).")
+                    if type(x) == int and 900 <= x <= 1100:
+                        st.info("Correct! Nice work. Let's try a couple more.")
+                        st.subheader("On average, how many new cases each day occurred in Florida between Day 90 and Day 130?")
+                        hint2 = st.beta_expander("Hint: (click to expand) ")
+                        hint2.error("Click and drag the area from the Day 90 to Day 130 on the Florida chart. The number is shown on the red bar on the right.")
+                        # y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
+                        # ["-", 1000, 2200, 6000, 7500, 10000])
+                        y = st.text_input("Enter your answer for Florida here.")
                         try:
-                          x = int(x)
+                            y = int(y)
                         except ValueError:
-                          st.info("Your answer must be a whole number (no decimals).")
-                        #TODO (priyam): Instead of multiple choice, do a range?
-                        if type(x) == int and 900 <= x <= 1100:
-                            st.info("Correct! Nice work. Let's try a couple more.")
-                            st.subheader("On average, how many new cases each day occurred in Florida between Day 90 and Day 130?")
-                            hint2 = st.beta_expander("Hint: (click to expand) ")
-                            hint2.error("Click and drag the area from the Day 90 to Day 130 on the Florida chart. The number is shown on the red bar on the right.")
-                            # y = st.radio("Hint: Click and drag the area from the Day 90 to Day 130 on the Florida chart.", 
-                            # ["-", 1000, 2200, 6000, 7500, 10000])
-                            y = st.text_input("Enter your answer for Florida here.")
+                            st.info("Your answer must be a whole number (no decimals).")
+                        if type(y) == int and 5600 <= y <= 6300: #y == 6000: # May need to change for different state
+                            st.info("Correct! Just one more.")
+                            st.subheader("What was the average number of COVID-19 cases per day in the period after Washington re-opened bars and restaurants?")
+                            hint3 = st.beta_expander("Hint: (click to expand)  ")
+                            hint3.error("Click and drag the area from the 'Opened' icon to the complete right side on the Washington chart. The number is shown on the red bar on the right.")
+                            # z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
+                            # ["-", 200, 1000, 2600, 3200, 6300])
+                            z = st.text_input("Enter your answer for Washington here.")
                             try:
-                              y = int(y)
+                                z = int(z)
                             except ValueError:
-                              st.info("Your answer must be a whole number (no decimals).")
-                            if type(y) == int and 5600 <= y <= 6300: #y == 6000: # May need to change for different state
-                                st.info("Correct! Just one more.")
-                                st.subheader("What was the average number of COVID-19 cases per day in the period after Georgia re-opened bars and restaurants?")
-                                hint3 = st.beta_expander("Hint: (click to expand)  ")
-                                hint3.error("Click and drag the area from the 'Opened' icon to the complete right side on the Georgia chart. The number is shown on the red bar on the right.")
-                                # z = st.radio("Hint: Click and drag the area from the 'opening' icon to the complete right side on the Georgia chart.", 
-                                # ["-", 200, 1000, 2600, 3200, 6300])
-                                z = st.text_input("Enter your answer for Georgia here.")
-                                try:
-                                  z = int(z)
-                                except ValueError:
-                                  st.info("Your answer must be a whole number (no decimals).")
-                                if type(z) == int and 2450 <= z <= 2900: #z == 2600: # May need to change for different state
-                                    st.info("Correct! You can now move on to Phase 3.")
-                                    show_phase3 = True
-                                elif type(z) == int and z > 0: #z in [200, 1000, 6300, 3200]:
-                                    st.info("Try again!")
-                                else:
-                                    pass
-                            elif type(y) == int and y > 0: #y in [1000, 2200, 7500, 10000]:
+                                st.info("Your answer must be a whole number (no decimals).")
+                            if type(z) == int and 500 <= z <= 625: #z == 2600: # May need to change for different state
+                                st.info("Correct! You can now move on to Phase 3.")
+                                show_phase3 = True
+                            elif type(z) == int and z > 0: #z in [200, 1000, 6300, 3200]:
                                 st.info("Try again!")
                             else:
                                 pass
-                        elif type(x) == int and x > 0: #in [400, 3300, 5000, 6200]:
+                        elif type(y) == int and y > 0: #y in [1000, 2200, 7500, 10000]:
                             st.info("Try again!")
                         else:
                             pass
+                    elif type(x) == int and x > 0: #in [400, 3300, 5000, 6200]:
+                        st.info("Try again!")
+                    else:
+                        pass
 
 
             if show_phase3:
