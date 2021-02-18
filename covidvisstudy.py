@@ -457,9 +457,9 @@ if consent:
                 st.write("d. Closing bars/restaurants in practice")
                 radio4phase3_1("Closing bars/restaurants in practice (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
                 st.write("e. Closing schools in practice")
-                radio4phase3_1("Closing schools in practice (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                radio5phase3_1("Closing schools in practice (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
                 st.write("f. Restricting Indoor Gatherings in practice")
-                radio4phase3_1("Restricting Indoor Gatherings in practice (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
+                radio6phase3_1("Restricting Indoor Gatherings in practice (Phase 3)", ["Select...", "Strongly Ineffective", "Slightly Ineffective", "Neutral", "Somewhat Effective", "Strongly Effective"])
 
                 st.subheader(str(i) + ". Below, you'll be presented with a graph of the AVERAGE number of COVID-19 cases recorded per day in a certain US state. Based on your current knowledge and opinion of the pandemic, select an area of where RESTAURANTS/BARS were potentially CLOSED. Leave blank if you do not think restaurants/bars were closed at any point in the graph.")
 
