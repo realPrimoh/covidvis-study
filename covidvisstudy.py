@@ -512,8 +512,8 @@ if consent:
 
                         text_record2 = record(st.text_input, "Conclusion_Share Email")
 
-                        st.write("If you would like to volunteer for a paid post-study survey, please enter your email address below.")
-                        text_r2 = text_record2("If you would like to volunteer for a paid post-study survey, please enter your email address below.")
+                        st.write("If you would like to volunteer for a paid post-study interview, please enter your email address below.")
+                        text_r2 = text_record2("If you would like to volunteer for a paid post-study interview, please enter your email address below.")
 
 
                         st.info("Thank you so much for participating! Click Submit below.")
